@@ -6,15 +6,15 @@ highlighter:      rouge
 
 # Permalinks
 permalink:  /:categories/:year/:month/:day/:title
-paginate_path:  /gis_in_action_r_spatial/page:num
+paginate_path:  /AWRA_GIS_R_Workshop/page:num
 
 # Setup
-title:            'R Spatial Workshop for 2017 GIS In Action'
+title:            'R Spatial Workshop for 2018 AWRA GIS Conference'
 tagline:          ''
-description:      'This material is for a workshop at the 2017 GIS In Action
-                  conference in Portland, OR, April 2017.'
-url:              http://mhweber.github.io/gis_in_action_r_spatial
-baseurl:          /gis_in_action_r_spatial
+description:      'This material is for a workshop at the 2018 AWRA GIS
+                  conference in Orlando, FL, April 2018.'
+url:              http://mhweber.github.io/AWRA_GIS_R_Workshop
+baseurl:          /AWRA_GIS_R_Workshop
 
 author:
   name:           'Marc Weber'

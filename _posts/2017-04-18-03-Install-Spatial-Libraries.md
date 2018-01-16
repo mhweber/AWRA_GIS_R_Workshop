@@ -1,12 +1,12 @@
 ---
 title: "03 - Install spatial libraries"
-author: "Marc Weber and Ben Weinstein"
+author: "Marc Weber"
 layout: post_page
 ---
   
 First we need to install several R libraries.  R operates on user-contributed libraries, and we'll be jumping into use of several of these spatial libraries in this workshop.  Several libraries we'll be making use of are `sp`, `rgdal`, `rgeos`, `raster`, and the new `sf` simple features library by Edzer Pebesma.  You should be able to use the packages tab in RStudio (see below) to install binaries in a straightforward way.  Mac and Linux users may have certain pre-requisites to fill, we'll assume you can navigate these on your own or can assist as needed (one of us is using a Linux system).
 
-![RStudio Console](/gis_in_action_r_spatial/figure/packages.png)
+![RStudio Console](/AWRA_GIS_R_Workshop/figure/packages.png)
 
 Install all of the following packages in R:
 {% highlight r %}

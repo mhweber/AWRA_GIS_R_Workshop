@@ -117,7 +117,7 @@ Simple plotting just as with `sp` spatial objects...note how it's easy to gratic
 plot(counties[1], main='Oregon Counties', graticule = st_crs(counties), axes=TRUE)
 ```
 
-![ORExplorerCounties](/gis_in_action_r_spatial/figure/GIS Explorer OR Counties.png)
+![ORExplorerCounties](/AWRA_GIS_R_Workshop/figure/GIS Explorer OR Counties.png)
 
 
 Let's download Oregon cities as well from Oregon Explorer and load into simple features object
@@ -145,7 +145,7 @@ And plotting with `plot` just like counties - notice use of pch to alter the plo
 plot(cities[1], main='Oregon Cities', axes=TRUE, pch=3)
 ```
 
-![GIS Explorer OR Cities](/gis_in_action_r_spatial/figure/GIS Explorer OR Cities.png)
+![GIS Explorer OR Cities](/AWRA_GIS_R_Workshop/figure/GIS Explorer OR Cities.png)
 
 Take a few minutes and try using some simple features functions like st_buffer on the cities or st_centrioid or st_union on the counties and plot to see if it works.
 

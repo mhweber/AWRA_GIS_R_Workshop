@@ -45,11 +45,11 @@ R runs on contributed packages - it has core functionality, but all the spatial 
 
 Download and extract data for exercises to your computer
 {% highlight r %}
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/WorkshopData.zip?raw=true",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/WorkshopData.zip?raw=true",
               "WorkshopData3.zip",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/HUCs.RData?raw=true",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/HUCs.RData?raw=true",
               "HUCs.RData",
               method="auto",
               mode="wb")
@@ -69,7 +69,7 @@ getwd()
 Which should return something like:
 
 {% highlight text %}
-## [1] "/home/marc/GitProjects/gis_in_action_r_spatial"
+## [1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
 {% endhighlight %}
 
 To see what is in the directory:
@@ -142,7 +142,7 @@ To start with, it's good to stop and ask yourself what it takes to define spatia
 
 `sp` objects inherit from the basic spatial class, which has two 'slots' in R new-style class lingo.  From the Bivand book above, here's what this looks like (Blue at top of each box is the class name, items in white are the slots, arrows show inheritance between classes):
 
-![SpatialClassesFig1](/gis_in_action_r_spatial/figure/SpatialClassesFig1.png)
+![SpatialClassesFig1](/AWRA_GIS_R_Workshop/figure/SpatialClassesFig1.png)
  
  
 - Let's explore this in R.  We can use the `getClass()` command to view the subclasses of a spatial object:
@@ -175,7 +175,7 @@ getClass("Spatial")
 
 Next we'll delve a bit deeper into the spatial objects inhereting from the base spatial class and try creating some simple objects.  Here's a schematic of how spatial lines and polygons inherit from the base spatial class - again, from the Bivand book:
 
-![SpatialClassesFig2](/gis_in_action_r_spatial/figure/SpatialClassesFig2.png)
+![SpatialClassesFig2](/AWRA_GIS_R_Workshop/figure/SpatialClassesFig2.png)
 
 And to explore a bit in R:
 
@@ -245,7 +245,7 @@ legend("topright", legend=breaks, pch=20, pt.cex=1+breaks/20000,
   col='red', bg='gray')
 {% endhighlight %}
 
-![BasicMap](/gis_in_action_r_spatial/figure/BasicMap.png)
+![BasicMap](/AWRA_GIS_R_Workshop/figure/BasicMap.png)
 
 Add a polygon to our map...
 {% highlight r %}
@@ -257,7 +257,7 @@ lines(x, lwd=3, col='red')
 points(x, cex=2, pch=20)
 {% endhighlight %}
 
-![BasicMap2](/gis_in_action_r_spatial/figure/BasicMap2.png)
+![BasicMap2](/AWRA_GIS_R_Workshop/figure/BasicMap2.png)
 
 So, is this sufficient for working with spatial data in R and doing spatial analysis?  What are we missing?
 
@@ -268,7 +268,7 @@ library(maps)
 map()
 {% endhighlight %}
 
-![globalmap](/gis_in_action_r_spatial/figure/globalmap.png)
+![globalmap](/AWRA_GIS_R_Workshop/figure/globalmap.png)
 
 {% highlight r %}
 map.text('county','oregon')
@@ -276,7 +276,7 @@ map.axes()
 title(main="Oregon State")
 {% endhighlight %}
 
-![OregonCounties](/gis_in_action_r_spatial/figure/OregonCounties.png)
+![OregonCounties](/AWRA_GIS_R_Workshop/figure/OregonCounties.png)
 
 `maps` package draws on a binary database - see Becker references in help(map) for more details. Creates a list of 4 vectors when you create a `maps` object in R.
 
@@ -316,7 +316,7 @@ summary(counties_sp)
 plot(counties_sp, col="grey", axes=TRUE)
 {% endhighlight %}
 
-![OregonCounties2](/gis_in_action_r_spatial/figure/OregonCounties2.png)
+![OregonCounties2](/AWRA_GIS_R_Workshop/figure/OregonCounties2.png)
 
 ## Exercise 3
 ### Reading and writing data and projections
@@ -413,14 +413,14 @@ We can use the generic plot function in R to produce a quick plot add axes as we
 plot(StreamGages, axes=TRUE, col='blue') 
 {% endhighlight %}
 
-![StreamGageMap](/gis_in_action_r_spatial/figure/StreamGageMap.png)
+![StreamGageMap](/AWRA_GIS_R_Workshop/figure/StreamGageMap.png)
 
 And we can combine and use state borders from maps package in our map
 {% highlight r %}
 map('state',regions=c('oregon','washington','idaho'),fill=FALSE, add=T)
 {% endhighlight %}
 
-![StreamGageMap2](/gis_in_action_r_spatial/figure/StreamGageMap2.png)
+![StreamGageMap2](/AWRA_GIS_R_Workshop/figure/StreamGageMap2.png)
 
 We can also use subsetting with plotting with this stream gage data to symbolize our gages by state for instance - try the following lines, try different colors or border states
 
@@ -430,7 +430,7 @@ plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 {% endhighlight %}
 
-![StreamGageMap3](/gis_in_action_r_spatial/figure/StreamGageMap3.png)
+![StreamGageMap3](/AWRA_GIS_R_Workshop/figure/StreamGageMap3.png)
 
 Now let's load the Rdata object we downloaded at beginning of this session - Rdata files are just a handy way of saving and reloading your workspace - remember, R works with objects in memory, you can save them out in this format or share with others this way.
 

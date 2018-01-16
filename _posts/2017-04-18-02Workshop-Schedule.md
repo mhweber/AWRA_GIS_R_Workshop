@@ -1,6 +1,6 @@
 ---
 title: "02 - R Spatial Workshop Schedule"
-author: Marc Weber and Ben Weinstein
+author: Marc Weber
 layout: post_page
 ---
 
@@ -37,26 +37,8 @@ In this workshop we will focus on some basics of using the R language, reading a
 
 ### 11:00 am - 12:00 pm:
 
-[**Lesson 03 - Exploring raster data in R:**](https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/06-Spatial-Data-Raster)
+[**Lesson 03 - Exploring raster data in R:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2017/04/18/06-Spatial-Data-Raster)
 
   - Raster data packages and working with rasters in R
   - Example raster data analyses in R
-
-[**Extra Credit - Other things to try:**](https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/07-Extra-Credit)
-
-  - Other packages and techniques to play with if time allows
-
-### 12:00 pm - 1:30 pm: 
-
-**Lunch**
-
-### 1:30 pm - 4:30 pm: 
-
-Advanced Visualization Techniques in R With Spatial Data
-
-This workshop will dive into mapping and visualization with R packages such as ggplot and Leaflet, and we will also cover creating interactive visualizations with Shiny. Familiarity with R or completion of the morning workshop is helpful preparation for this workshop.
-
-[Interactive Mapping in R](https://weinstein.shinyapps.io/foodcarts_interactive/)
-
-[Food Carts Data](https://raw.githubusercontent.com/mhweber/gis_in_action_r_spatial/Ben/FoodCarts/FoodCarts.csv)
 
