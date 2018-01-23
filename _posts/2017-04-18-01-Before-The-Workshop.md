@@ -24,12 +24,12 @@ Once everything is installed, follow the instructions below to test your install
 ## Open RStudio
 Once installed, RStudio should be accessible from the start menu.  Start up RStudio.  Once running it should look something like:
 
-![RStudio Window](/gis_in_action_r_spatial/figure/rstudio.png)
+![RStudio Window](/AWRA_GIS_R_Workshop/figure/rstudio.png)
 
 ## Find "Console" window
 By default the console window will be on the left side of RStudio.  Find that window.  It will looking something like:  
 
-![RStudio Console](/gis_in_action_r_spatial/figure/rstudio_console.png)
+![RStudio Console](/AWRA_GIS_R_Workshop/figure/rstudio_console.png)
 
 ## Copy and paste the code
 Click in the window and paste in the code from below:
