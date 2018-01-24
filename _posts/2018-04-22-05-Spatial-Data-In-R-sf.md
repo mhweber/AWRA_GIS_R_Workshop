@@ -82,40 +82,13 @@ str(wsa_plains)
 
 Note that this is now still a dataframe but with an additional geometry column.
 
-```r
-head(counties)
-```
-
-```
-## Simple feature collection with 6 features and 5 fields
-## geometry type:  POLYGON
-## dimension:      XY
-## bbox:           xmin: -124.7038 ymin: 41.99253 xmax: -119.3594 ymax: 43.61744
-## epsg (SRID):    4269
-## proj4string:    +proj=longlat +datum=NAD83 +no_defs
-##   OBJECTID SHAPE_Leng SHAPE_Area     unitID         instName
-## 1        1          0          0 1155133033 Josephine County
-## 2        1          0          0 1155129015     Curry County
-## 3        1          0          0 1135853029   Jackson County
-## 4        1          0          0 1135848011      Coos County
-## 5        1          0          0 1155134035   Klamath County
-## 6        1          0          0 1135854037      Lake County
-##                         geometry
-## 1 POLYGON((-123.229619367 42....
-## 2 POLYGON((-123.811553228 42....
-## 3 POLYGON((-122.282727755 42....
-## 4 POLYGON((-123.811553228 42....
-## 5 POLYGON((-121.332969065 43....
-## 6 POLYGON((-119.896580665 43....
-```
-
-Simple plotting just as with `sp` spatial objects...note how it's easy to graticules as a parameter for `plot` in `sf`.
+We can do simple plotting just as with `sp` spatial objects...note how it's easy to use graticules as a parameter for `plot` in `sf`.
 
 ```r
-plot(counties[1], main='Oregon Counties', graticule = st_crs(counties), axes=TRUE)
+plot(wsa_plains[,46], main='EPA Wadeable Stream Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
-![ORExplorerCounties](/AWRA_GIS_R_Workshop/figure/GIS Explorer OR Counties.png)
+![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
 
 
 Let's download Oregon cities as well from Oregon Explorer and load into simple features object
