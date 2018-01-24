@@ -12,7 +12,7 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 [Simple Features for R](https://github.com/edzer/sfr)
 
 ## Lesson Goals
-  - Learn about new simple features package
+  - Learn about new simple features package using some administrative boundaries, EPA data (Wadeable Streams Assessment sites) and some water quality data
 
 First, if not already installed, install `sf`
 
@@ -48,41 +48,39 @@ methods(class = "sf")
 ## see '?methods' for accessing help and source code
 ```
 
-To begin exploring, let's read in some spatial data. Download Oregon counties from the [Oregon Spatial Data Library](http://spatialdata.oregonexplorer.info/geoportal/catalog/main/home.page) and load into simple features object - first we get the url for zip file, download and unzip, and then read into a simple features object in R.
+To begin exploring, let's read in some spatial data. We'll grab EPA Wadeable Streams Assessment sites to begin looking at.
 
 ```r
+library(RCurl)
 library(sf)
-counties_zip <- 'http://oe.oregonexplorer.info/ExternalContent/SpatialDataforDownload/orcnty2015.zip'
-download.file(counties_zip, '/home/marc/OR_counties.zip')
-unzip('/home/marc/OR_counties.zip')
-counties <- st_read('orcntypoly.shp')
+library(ggplot2)
+download <- getURL("https://www.epa.gov/sites/production/files/2014-10/wsa_siteinfo_ts_final.csv")
+
+wsa <- read.csv(text = download)
+class(wsa)
 ```
 
-```
-## Reading layer `orcntypoly' from data source `J:\GitProjects\R-Spatial-Tutorials\orcntypoly.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 36 features and 12 fields
-## geometry type:  POLYGON
-## dimension:      XY
-## bbox:           xmin: -124.7038 ymin: 41.99208 xmax: -116.4632 ymax: 46.29239
-## epsg (SRID):    4269
-## proj4string:    +proj=longlat +datum=NAD83 +no_defs
-```
-
-```r
-class(counties)
-```
+Just a data frame that includes location and other identifying information about river and stream sampled sites from 2000 to 2004.
 
 ```
-## [1] "sf"         "data.frame"
+## [1] "data.frame"
 ```
+
+Before we go any further, let's subset our data to just the US plains ecoregions using the 'ECOWSA9' variable in the wsa dataset.
 
 ```r
-attr(counties, "sf_column")
+levels(wsa$ECOWSA9)
+wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 ```
 
+Because this data frame has coordinate information, we can then promotote it to an sf spatial object.
+
+```r
+wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
+str(wsa_plains)
 ```
-## [1] "geometry"
-```
+
+Note that this is now still a dataframe but with an additional geometry column.
 
 ```r
 head(counties)
@@ -224,7 +222,7 @@ And plot...
 plot(quakes_sf[,3],cex=log(quakes_sf$depth/100), pch=21, bg=24, lwd=.4, axes=T) 
 ```
 
-![Quakes](/gis_in_action_r_spatial/figure/Quakes.png)
+![Quakes](/AWRA_GIS_R_Workshop/figure/Quakes.png)
 
 - R `sf` Resources:
 
