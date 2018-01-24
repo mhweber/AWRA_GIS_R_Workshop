@@ -85,7 +85,7 @@ Note that this is now still a dataframe but with an additional geometry column.
 We can do simple plotting just as with `sp` spatial objects...note how it's easy to use graticules as a parameter for `plot` in `sf`.
 
 ```r
-plot(wsa_plains[,46], main='EPA Wadeable Stream Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains[,46], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
