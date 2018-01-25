@@ -91,23 +91,27 @@ plot(wsa_plains[,46], main='EPA WSA Sites in the Plains Ecoregions', graticule =
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
 
 
-Let's download Oregon cities as well from Oregon Explorer and load into simple features object
+Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine coordinate system and compare with coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
-cities_zip <- 'http://navigator.state.or.us/sdl/data/shapefile/m2/cities.zip'
-download.file(cities_zip, 'C:/users/mweber/temp/OR_cities.zip')
-unzip('C:/users/mweber/temp/OR_cities.zip')
-cities <- st_read("cities.shp")
+states  <- us_states()
+st_crs(states)
+st_crs(wsa_plains)
+# They're not equal, which we verify with:
+st_crs(states) == st_crs(wsa_plains)
+# We'll tranfsorm the WSA sites to same CRS as states
+wsa_plains <- st_transform(wsa_plains, st_crs(states))
 ```
 
-```
-## Reading layer `cities' from data source `J:\GitProjects\R-Spatial-Tutorials\cities.shp' using driver `ESRI Shapefile'
-## Simple feature collection with 898 features and 6 fields
-## geometry type:  POINT
-## dimension:      XY
-## bbox:           xmin: 238691 ymin: 92141.21 xmax: 2255551 ymax: 1641591
-## epsg (SRID):    NA
-## proj4string:    +proj=lcc +lat_1=43 +lat_2=45.5 +lat_0=41.75 +lon_0=-120.5 +x_0=399999.9999984001 +y_0=0 +datum=NAD83 +units=ft +no_defs
+
+```r
+states  <- us_states()
+st_crs(states)
+st_crs(wsa_plains)
+# They're not equal, which we verify with:
+st_crs(states) == st_crs(wsa_plains)
+# We'll tranfsorm the WSA sites to same CRS as states
+wsa_plains <- st_transform(wsa_plains, st_crs(states))
 ```
 
 And plotting with `plot` just like counties - notice use of pch to alter the plot symbols, I personally don't like the default circles for plotting points in `sf`.
