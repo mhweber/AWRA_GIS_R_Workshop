@@ -4,7 +4,7 @@ author: Marc Weber
 layout: post_page
 ---
 
-The `sf` Simple Features for R package by Edzer Pebesma is a new, very nice package that represents a changes of gears from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. This will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-know binary formats.
+The `sf` Simple Features for R package by Edzer Pebesma is a new, very nice package that represents a changes of gears from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. This will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-known binary formats.
 
 The big difference is the use of S3 classes in R rather than the S4, or new style classes of `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation as well as very speedy I/O along with [GEOS](https://trac.osgeo.org/geos), and also which is quite nice can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS).  
 
@@ -73,54 +73,74 @@ levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 ```
 
-Because this data frame has coordinate information, we can then promotote it to an sf spatial object.
+Because this dataframe has coordinate information, we can then promotote it to an sf spatial object.
 
 ```r
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
 ```
 
-Note that this is now still a dataframe but with an additional geometry column.
+Note that this is now still a dataframe but with an additional geometry column. `sf` objects are still a data frame, but have an additional list-column for geometry - it can 
 
-We can do simple plotting just as with `sp` spatial objects...note how it's easy to use graticules as a parameter for `plot` in `sf`.
+What is different about an `sf` dataframe, and what is code below doing?
 
 ```r
-plot(wsa_plains[,46], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
+head(wsa_plains[,c(1,60)])
+```
+
+```
+##Simple feature collection with 6 features and 1 field
+##Attribute-geometry relationship: 1 constant, 0 aggregate, 0 identity
+##geometry type:  POINT
+##dimension:      XY
+##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+##epsg (SRID):    4269
+##proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
+##        SITE_ID                    geometry
+##13        CC0001  POINT(-104.76432 39.35901)
+##14 IAW02344-0096 POINT(-94.089731 41.950878)
+##15 IAW02344-0096 POINT(-94.089731 41.950878)
+##16 IAW02344-0097 POINT(-95.400885 41.332723)
+##17 IAW02344-0097 POINT(-95.400885 41.332723)
+##18 IAW02344-0098   POINT(-91.92294 42.70254)
+```
+
+We can do simple plotting just as with `sp` spatial objects. `sf` by default creates a multi-panel lattice plot much like the `sp` package `spplot` function - either plot particular columns in multiple plots or specify the `geometry` column to make a single simple plot.  Note how it's easy to use graticules as a parameter for `plot` in `sf`. 
+
+```r
+plot(wsa_plains[46], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
 
+Try some of these variations and see if they make sense to you.
+
+```r
+plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
+```
 
 Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine coordinate system and compare with coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
 states  <- us_states()
+levels(as.factor(states$state_abbr))
+states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
+
 st_crs(states)
 st_crs(wsa_plains)
 # They're not equal, which we verify with:
 st_crs(states) == st_crs(wsa_plains)
 # We'll tranfsorm the WSA sites to same CRS as states
 wsa_plains <- st_transform(wsa_plains, st_crs(states))
+
+# Now we can plot together in base R
+plot(states$geometry, axes=TRUE)
+plot(wsa_plains$geometry, col='blue',add=TRUE)
 ```
 
+![States_WSASites](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
-```r
-states  <- us_states()
-st_crs(states)
-st_crs(wsa_plains)
-# They're not equal, which we verify with:
-st_crs(states) == st_crs(wsa_plains)
-# We'll tranfsorm the WSA sites to same CRS as states
-wsa_plains <- st_transform(wsa_plains, st_crs(states))
-```
-
-And plotting with `plot` just like counties - notice use of pch to alter the plot symbols, I personally don't like the default circles for plotting points in `sf`.
-
-```r
-plot(cities[1], main='Oregon Cities', axes=TRUE, pch=3)
-```
-
-![GIS Explorer OR Cities](/AWRA_GIS_R_Workshop/figure/GIS Explorer OR Cities.png)
 
 Take a few minutes and try using some simple features functions like st_buffer on the cities or st_centrioid or st_union on the counties and plot to see if it works.
 
