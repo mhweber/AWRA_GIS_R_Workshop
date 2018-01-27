@@ -139,7 +139,7 @@ plot(states$geometry, axes=TRUE)
 plot(wsa_plains$geometry, col='blue',add=TRUE)
 ```
 
-![States_WSASites](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
+![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
 
 Take a few minutes and try using some simple features functions like st_buffer on the cities or st_centrioid or st_union on the counties and plot to see if it works.
