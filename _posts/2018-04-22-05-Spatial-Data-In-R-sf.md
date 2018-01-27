@@ -152,6 +152,24 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
+Spatial subsetting is an essential spatial task and can be performed akin to attribute subsetting with `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites we've subset via an attribute query - it's as simple as:
+
+```r
+plains_states <- states[wsa_plains,]
+```
+
+There are actually several ways to achieve the same thing - here's another:
+
+```r
+plains_states <- states[wsa_plains,op = st_intersects]
+```
+
+And we can do another attribute subset and apply a spatial subset yet another way - verify this works for you by plotting results together
+
+```r
+iowa = states[states$state_abbr=='IA',]
+iowa_sites <- st_intersection(wsa_plains, iowa)
+```
 
 Take a few minutes and try using some simple features functions like st_buffer on the cities or st_centrioid or st_union on the counties and plot to see if it works.
 
