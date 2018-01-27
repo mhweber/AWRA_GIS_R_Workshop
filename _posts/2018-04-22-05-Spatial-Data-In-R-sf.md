@@ -120,6 +120,17 @@ plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
+And `ggplot' now supports directly plotting `sf` features using `sf_geom`:
+
+```r
+ggplot(wsa_plains) +
+  geom_sf() +
+  ggtitle("EPA WSA Sites in the Plains Ecoregions") +
+  theme_bw()
+```
+
+![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
+
 Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine coordinate system and compare with coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
