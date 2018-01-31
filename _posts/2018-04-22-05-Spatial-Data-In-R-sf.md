@@ -131,7 +131,7 @@ ggplot(wsa_plains) +
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
 
-Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine coordinate system and compare with coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
+Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine the coordinate system and compare with the coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
 states  <- us_states()
@@ -152,7 +152,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
-Spatial subsetting is an essential spatial task and can be performed akin to attribute subsetting with `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites we've subset via an attribute query - it's as simple as:
+Spatial subsetting is an essential spatial task and can be performed akin to attribute subsetting with `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
 ```r
 plains_states <- states[wsa_plains,]
@@ -164,91 +164,43 @@ There are actually several ways to achieve the same thing - here's another:
 plains_states <- states[wsa_plains,op = st_intersects]
 ```
 
-And we can do another attribute subset and apply a spatial subset yet another way - verify this works for you by plotting results together
+And we can do another attribute subset and then apply a spatial subset yet another way - verify this works for you by plotting results together
 
 ```r
 iowa = states[states$state_abbr=='IA',]
 iowa_sites <- st_intersection(wsa_plains, iowa)
 ```
 
-Take a few minutes and try using some simple features functions like st_buffer on the cities or st_centrioid or st_union on the counties and plot to see if it works.
+It's worth spending some time with the topological operations in `sf`.  `st_intersection` as used above returns an `sf` data frame of the `wsa_plains` sites that intersect the `iowa` polygon.  `st_intersects` on the other hand returns either a list or matrix of true / false values - for instance: 
 
-Let's construct an `sf`  spatial object in R from a data frame with coordinate information - we'll use the built-in dataset 'quakes' with information on earthquakes off the coast of Fiji.  Construct spatial points sp, spatial points data frame, and then promote it to a simple features object.
-
-```r
-data(quakes)
-head(quakes)
-```
-
-```
-##      lat   long depth mag stations
-## 1 -20.42 181.62   562 4.8       41
-## 2 -20.62 181.03   650 4.2       15
-## 3 -26.00 184.10    42 5.4       43
-## 4 -17.97 181.66   626 4.1       19
-## 5 -20.42 181.96   649 4.0       11
-## 6 -19.68 184.31   195 4.0       12
-```
+This first selection returns a list with a positive (1) value where there is an intersection and empty result where no intersection
 
 ```r
-class(quakes)
+sel_list <- st_intersects(wsa_plains, iowa)
 ```
 
+
+This second selection returns a matrix of true / false values for intersection and can be used for subsetting the original data
+
+```r
+sel_mat <- st_intersects(wsa_plains, iowa, sparse = FALSE)
+iowa_sites <- wsa_plains[sel_mat,]
+plot(plains_states$geometry, axes=T)
+plot(iowa_sites, add=T, col='blue')
 ```
-## [1] "data.frame"
+
+What about all our sites that AREN'T in Iowa?
+
+```r
+sel_mat <- st_disjoint(wsa_plains, iowa, sparse = FALSE)
+not_iowa_sites <- wsa_plains[sel_mat,]
+plot(plains_states$geometry, axes=T)
+plot(not_iowa_sites, add=T, col='red')
 ```
+
+
+
  
-Create a simple features object from quakes
-
-```r
-quakes_sf = st_as_sf(quakes, coords = c("long", "lat"), crs = 4326,agr = "constant")
-```
-
-
-```r
-## Classes ‘sf’ and 'data.frame':	1000 obs. of  4 variables:
-##  $ depth   : int  562 650 42 626 649 195 82 194 211 622 ...
-##  $ mag     : num  4.8 4.2 5.4 4.1 4 4 4.8 4.4 4.7 4.3 ...
-##  $ stations: int  41 15 43 19 11 12 43 15 35 19 ...
-##  $ geometry:sfc_POINT of length 1000; first list element: Classes 'XY',
-## 'POINT', 'sfg'  num [1:2] 181.6 -20.4
-## - attr(*, "sf_column")= chr "geometry"
-##  ..- attr(*, "names")= chr  "depth" "mag" "stations"
-```
-
-We can use `sf` methods on quakes now such as `st_bbox`, `st_coordinates`, etc.
-
-```r
-st_bbox(quakes_sf)
-```
-
-```r
-##         min    max
-## long 165.67 188.13
-## lat  -38.59 -10.72
-```
-
-```r
-head(st_coordinates(quakes_sf))
-```
-
-```r
-##       X      Y
-## 1 181.62 -20.42
-## 2 181.03 -20.62
-## 3 184.10 -26.00
-## 4 181.66 -17.97
-## 5 181.96 -20.42
-## 6 184.31 -19.68
-```
-
-And plot...
-
-```r
-plot(quakes_sf[,3],cex=log(quakes_sf$depth/100), pch=21, bg=24, lwd=.4, axes=T) 
-```
-
-![Quakes](/AWRA_GIS_R_Workshop/figure/Quakes.png)
 
 - R `sf` Resources:
 
