@@ -189,7 +189,9 @@ plot(plains_states$geometry, axes=T)
 plot(iowa_sites, add=T, col='blue')
 ```
 
-What about all our sites that AREN'T in Iowa?
+![Iowa_sites.png](/AWRA_GIS_R_Workshop/figure/Iowa_sites.png)
+
+What about all our sites that are not in Iowa?
 
 ```r
 sel_mat <- st_disjoint(wsa_plains, iowa, sparse = FALSE)
@@ -198,10 +200,9 @@ plot(plains_states$geometry, axes=T)
 plot(not_iowa_sites, add=T, col='red')
 ```
 
-
+![Not_Iowa_sites.png](/AWRA_GIS_R_Workshop/figure/Not_Iowa_sites.png)
 
  
-
 - R `sf` Resources:
 
     - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
