@@ -22,7 +22,7 @@ Second, why use R for spatial, or GIS, workflows?
 - Can handle vector and raster data, as well as work with spatial databases and pretty much any data format spatial data comes in
 - R's GIS capabilities growing rapidly right now - new packages added monthly - currently about 180 spatial packages
 
-Some drawbacks for using R for GIS work
+Some drawbacks to using R for GIS work
 
 - R not as good for interactive use as desktop GIS applications like ArcGIS or QGIS (i.e.  editing features, panning,zooming)
 - Steep learning curve

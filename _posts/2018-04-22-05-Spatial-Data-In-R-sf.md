@@ -83,14 +83,14 @@ levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 ```
 
-Because this dataframe has coordinate information, we can then promotote it to an sf spatial object.
+Because this dataframe has coordinate information, we can then promotote it to an `sf` spatial object.
 
 ```r
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
 ```
 
-Note that this is now still a dataframe but with an additional geometry column. `sf` objects are still a data frame, but have an additional list-column for geometry - it can 
+Note that this is now still a dataframe but with an additional geometry column. `sf` objects are still a data frame, but have an additional list-column for geometry. 
 
 What is different about an `sf` dataframe, and what is code below doing?
 
@@ -228,7 +228,8 @@ wsa_plains <- st_join(wsa_plains, plains_states)
 head(wsa_plains)
 ```
 
-##imple feature collection with 6 features and 16 fields
+```
+##simple feature collection with 6 features and 16 fields
 ##geometry type:  POINT
 ##dimension:      XY
 ##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
@@ -248,7 +249,7 @@ head(wsa_plains)
 ##16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
 ##17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
 ##18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
-
+```
 Let's dive a little deeper with spatial joins and bring in some water quality data using the [dataRetrieval](https://github.com/USGS-R/dataRetrieval) package to access data via web services on the [Water Quality Portal](https://www.waterqualitydata.us/). Steps shown here follow examples in the [tutorial](http://usgs-r.github.io/dataRetrieval).
  
 First we'll load the `dataRetrieval` library and pull down some nitrogen data for Iowa to play with.  Note how we pull out siteInfo velow - this is a data table attribute of distinct sites in the IowaNitrogen object pulled down - explore the object a bit (using `str' or `class' or other means) a bit.
