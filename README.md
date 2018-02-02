@@ -1,4 +1,4 @@
-gis_in_action_r_spatial
+AWRA GIS R Workshop
 ====
 R spatial workshop materials for R Spatial Workshop at AWRA GIS conference in Orlando, FL April 2017
 

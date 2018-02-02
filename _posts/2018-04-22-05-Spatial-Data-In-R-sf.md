@@ -12,8 +12,10 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 [Simple Features for R](https://github.com/edzer/sfr)
 
 ## Lesson Goals
-  - Learn about new simple features package using some administrative boundaries, EPA data (Wadeable Streams Assessment sites) and some water quality data
-
+  - Explore `sf` simple features package using some administrative boundaries, EPA data (Wadeable Streams Assessment sites) and some water quality data via the USGS `dataRetrieval` package
+  - Get to know the structure of `sf` objects
+  - Understand and use topological operations in `sf` such as spatial intersections, joins and aggregations
+  
 First, if not already installed, install `sf`
 
 ```r
@@ -108,7 +110,7 @@ head(wsa_plains[,c(1,60)])
 We can do simple plotting just as with `sp` spatial objects. `sf` by default creates a multi-panel lattice plot much like the `sp` package `spplot` function - either plot particular columns in multiple plots or specify the `geometry` column to make a single simple plot.  Note how it's easy to use graticules as a parameter for `plot` in `sf`. 
 
 ```r
-plot(wsa_plains[46], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains[c(46,56)], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
@@ -120,7 +122,7 @@ plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
-And `ggplot' now supports directly plotting `sf` features using `sf_geom`:
+And `ggplot2` now supports directly plotting `sf` features using `sf_geom`:
 
 ```r
 ggplot(wsa_plains) +
@@ -131,7 +133,7 @@ ggplot(wsa_plains) +
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
 
-Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine the coordinate system and compare with the coordinate system of the WSA data we already have loaded.  Remember, in sf, as with sp, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
+Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine the coordinate system and compare with the coordinate system of the WSA data we already have loaded.  Remember, in `sf`, as with `sp`, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
 states  <- us_states()
@@ -152,7 +154,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
-Spatial subsetting is an essential spatial task and can be performed akin to attribute subsetting with `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
+Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
 ```r
 plains_states <- states[wsa_plains,]
@@ -173,14 +175,13 @@ iowa_sites <- st_intersection(wsa_plains, iowa)
 
 It's worth spending some time with the topological operations in `sf`.  `st_intersection` as used above returns an `sf` data frame of the `wsa_plains` sites that intersect the `iowa` polygon.  `st_intersects` on the other hand returns either a list or matrix of true / false values - for instance: 
 
-This first selection returns a list with a positive (1) value where there is an intersection and empty result where no intersection
-
 ```r
 sel_list <- st_intersects(wsa_plains, iowa)
 ```
 
+This first selection returns a list with a positive (1) value where there is an intersection and empty result where no intersection
 
-This second selection returns a matrix of true / false values for intersection and can be used for subsetting the original data
+This second selection below returns a matrix of true / false values for intersections and can be used for subsetting the original data
 
 ```r
 sel_mat <- st_intersects(wsa_plains, iowa, sparse = FALSE)
@@ -202,6 +203,17 @@ plot(not_iowa_sites, add=T, col='red')
 
 ![Not_Iowa_sites.png](/AWRA_GIS_R_Workshop/figure/Not_Iowa_sites.png)
 
+Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. By default `st_joins` will perform an left join by default and use st_intersect by default as well for the spatial topological operation.  Note that you can also do an inner join as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
+
+For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently need - to assign attribute information from some spatial unit for points within the unit.
+
+```r
+# Use column indexing to subset just a couple attribute columns - need to keep geometry column!
+wsa_plains <- wsa_plains[c(1:4,60)]
+wsa_plains <- st_join(wsa_plains, plains_states)
+# verify your results
+head(wsa_plains)
+```
  
 - R `sf` Resources:
 
