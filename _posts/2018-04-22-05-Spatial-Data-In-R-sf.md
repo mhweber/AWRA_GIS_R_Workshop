@@ -252,7 +252,7 @@ head(wsa_plains)
 ```
 Let's dive a little deeper with spatial joins and bring in some water quality data using the [dataRetrieval](https://github.com/USGS-R/dataRetrieval) package to access data via web services on the [Water Quality Portal](https://www.waterqualitydata.us/). Steps shown here follow examples in the [tutorial](http://usgs-r.github.io/dataRetrieval).
  
-First we'll load the `dataRetrieval` library and pull down some nitrogen data for Iowa to play with.  Note how we pull out siteInfo velow - this is a data table attribute of distinct sites in the IowaNitrogen object pulled down - explore the object a bit (using `str' or `class' or other means) a bit.
+First we'll load the `dataRetrieval` library and pull down some nitrogen data for Iowa to play with.  Note how we pull out siteInfo below - this is a data table attribute of distinct sites in the IowaNitrogen object pulled down - explore the object a bit (using `str` or `class` or other means).
 
 ```r
 library(dataRetrieval)
@@ -264,7 +264,7 @@ siteInfo <- attr(IowaNitrogen, "siteInfo")
 unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
 ```
 
-Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - whey might that be needed as oppossed to typical way of calling functions?
+Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions?
 
 ```r
 IowaSummary <- IowaNitrogen %>%
@@ -294,7 +294,7 @@ plot(iowa_wq, add=T, col='red')
 
 ![Iowa_WQ_sites.png](/AWRA_GIS_R_Workshop/figure/Iowa_WQ_sites.png)
 
-Now let's try to join this water quality nitrogen data nearest to each WSA sampled site. We'll first need to transform the data to a projected coordinate system since we'll be using distance in our join this time.  `sf` can make use of both `proj4` strings and epsg codes - to find the epsg code for UTM zone 15 in Iowa which we're using here just search on [spatialreference.org](http://spatialreference.org/). Note our projection is in meters so we set our distance very high - obviously we wouldn't join water quality sites tens to hundreds of kilometers away to other sites using euclidean distance for a real application - this is just for illustrative purposes to show how we can do distance based joins in `sf`.
+Now let's try to join this water quality nitrogen data in a given proximity to WSA sampled sites. We'll first need to transform the data to a projected coordinate system since we'll be using distance in our join this time.  `sf` can make use of both `proj4` strings and epsg codes - to find the epsg code for UTM zone 15 in Iowa which we're using here just search on [spatialreference.org](http://spatialreference.org/). Note our projection is in meters so we set our distance very high - obviously we wouldn't join water quality sites tens to hundreds of kilometers away to other sites using euclidean distance for a real application - this is just for illustrative purposes to show how we can do distance based joins in `sf`.
 
 ```r
 wsa_iowa <- subset(wsa_plains, state_abbr=='IA')
@@ -310,6 +310,46 @@ You'll see if you do `head` on your data there are a LOT of fields in there now 
 ### Spatial operations - aggregation
 
 Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in previous step spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - see if you can figure out how on your own!
+
+For performing spatial aggregation, the idea is to take some spatial data, and summarize that data in relation to another spatial grouping variable (think city populations averaged by state).  Using some of the data we've used in previous steps, we can accomplish this in a couple of ways.
+
+Let's grab some chemistry data for the WSA sites we've been using so far:
+
+```r
+download <- getURL("https://www.epa.gov/sites/production/files/2014-10/waterchemistry.csv")
+
+wsa_chem <- read.csv(text = download)
+wsa$COND <- wsa_chem$COND[match(wsa$SITE_ID, wsa_chem$SITE_ID)]
+```
+
+Let's join the chemistry data to WSA sites - we're going to summarize the data by states, so let's also plot all the WSA sites with states to look at
+
+```r
+wsa = st_as_sf(wsa, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
+states <- st_transform(states, st_crs(wsa))
+plot(states$geometry, axes=TRUE)
+plot(wsa$geometry, add=TRUE)
+```
+
+![States_WSA.png](/AWRA_GIS_R_Workshop/figure/States_WSA.png)
+
+Now we'll roll together join and dplyr group-by and summarize to get a conducivity per state object which we'll map using ggplot and geom_sf
+```r
+avg_cond_state <- st_join(states, wsa) %>%
+  dplyr::group_by(name) %>%
+  dplyr::summarize(MeanCond = mean(COND, na.rm = TRUE))
+
+ggplot(avg_cond_state) +
+  geom_sf(aes(fill = MeanCond)) +
+  scale_fill_distiller("Conductivity", palette = "Greens") +
+  ggtitle("Averge Conductivity (uS/cm @ 25 C) per State") +
+  theme_bw()
+```
+
+![State_Cond.png](/AWRA_GIS_R_Workshop/figure/State_Cond.png)
+
+Your turn - try summarizing some other data and do perhaps a different summarization method, or change palette in ggplot, etc.
+
 
 - R `sf` Resources:
 

@@ -25,7 +25,7 @@ In this workshop we will focus on some basics of using the R language, reading a
 
 ### 9:45 am - 10:30 am: 
 
-[**Lesson 02 - A Gentle Introduction to the New Simple Features for R package:**](https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf) 
+[**Lesson 02 - Working with simple features in R using sf package:**](https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf) 
 
   - What are simple features?
   - What is advantage of learning this package compared to using the `sp` package and object structure?
