@@ -14,8 +14,14 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 ## Lesson Goals
   - Explore `sf` simple features package using some administrative boundaries, EPA data (Wadeable Streams Assessment sites) and some water quality data via the USGS `dataRetrieval` package
   - Get to know the structure of `sf` objects
+  - Basic plotting of `sf` objects
   - Understand and use topological operations in `sf` such as spatial intersections, joins and aggregations
-  
+
+## Quick Links to Exercises
+- [Exercise 1](#exercise-1): Getting to Know `sf`
+- [Exercise 2](#exercise-2): Spatial operations - spatial subsetting and intersecting
+- [Exercise 3](#exercise-3): Spatial operations - joins
+- [Exercise 4](#exercise-4): Spatial operations - aggregation
 First, if not already installed, install `sf`
 
 ```r
@@ -50,6 +56,8 @@ methods(class = "sf")
 ## see '?methods' for accessing help and source code
 ```
 
+## Exercise 1
+### Getting to Know `sf`
 To begin exploring, let's read in some spatial data. We'll grab EPA Wadeable Streams Assessment sites to begin looking at.
 
 ```r
@@ -133,6 +141,8 @@ ggplot(wsa_plains) +
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
 
+## Exercise 2
+### Spatial operations - spatial subsetting and intersecting
 Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine the coordinate system and compare with the coordinate system of the WSA data we already have loaded.  Remember, in `sf`, as with `sp`, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
@@ -153,6 +163,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 ```
 
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
+
 
 Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
@@ -203,6 +214,8 @@ plot(not_iowa_sites, add=T, col='red')
 
 ![Not_Iowa_sites.png](/AWRA_GIS_R_Workshop/figure/Not_Iowa_sites.png)
 
+## Exercise 3
+### Spatial operations - joins
 Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. By default `st_joins` will perform an left join by default and use st_intersect by default as well for the spatial topological operation.  Note that you can also do an inner join as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
 
 For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently need - to assign attribute information from some spatial unit for points within the unit.
@@ -214,12 +227,98 @@ wsa_plains <- st_join(wsa_plains, plains_states)
 # verify your results
 head(wsa_plains)
 ```
+
+##imple feature collection with 6 features and 16 fields
+##geometry type:  POINT
+##dimension:      XY
+##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+##epsg (SRID):    4326
+##proj4string:    +proj=longlat +datum=WGS84 +no_defs
+##         SITE_ID YEAR VISIT_NO               SITENAME statefp  statens    affgeoid geoid stusps     name lsad        aland
+##13        CC0001 2004        1           CHERRY CREEK      08 01779779 0400000US08    08     CO Colorado   00 268429343790
+##14 IAW02344-0096 2004        1          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+##15 IAW02344-0096 2004        2          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+##16 IAW02344-0097 2004        1 WEST NISHNABOTNA RIVER      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+##17 IAW02344-0097 2004        2       WEST NISHNABOTNA      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+##18 IAW02344-0098 2004        1  UNN TRIB. OTTER CREEK      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+##       awater state_name state_abbr jurisdiction_type                   geometry
+##13 1175112870   Colorado         CO             state POINT (-104.7643 39.35901)
+##14 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+##15 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+##16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+##17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+##18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
+
+Let's dive a little deeper with spatial joins and bring in some water quality data using the [dataRetrieval](https://github.com/USGS-R/dataRetrieval) package to access data via web services on the [Water Quality Portal](https://www.waterqualitydata.us/). Steps shown here follow examples in the [tutorial](http://usgs-r.github.io/dataRetrieval).
  
+First we'll load the `dataRetrieval` library and pull down some nitrogen data for Iowa to play with.  Note how we pull out siteInfo velow - this is a data table attribute of distinct sites in the IowaNitrogen object pulled down - explore the object a bit (using `str' or `class' or other means) a bit.
+
+```r
+library(dataRetrieval)
+IowaNitrogen<- readWQPdata(statecode='IA', characteristicName="Nitrogen")
+head(IowaNitrogen)
+names(IowaNitrogen)
+
+siteInfo <- attr(IowaNitrogen, "siteInfo") 
+unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
+```
+
+Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - whey might that be needed as oppossed to typical way of calling functions?
+
+```r
+IowaSummary <- IowaNitrogen %>%
+  dplyr::filter(ResultMeasure.MeasureUnitCode %in% c("mg/l","mg/l      ")) %>%
+  dplyr::group_by(MonitoringLocationIdentifier) %>%
+  dplyr::summarise(count=n(),
+            start=min(ActivityStartDateTime),
+            end=max(ActivityStartDateTime),
+            mean = mean(ResultMeasureValue, na.rm = TRUE)) %>%
+  dplyr::arrange(-count) %>%
+  dplyr::left_join(siteInfo, by = "MonitoringLocationIdentifier")
+```
+
+Now we just need to make the data spatial - we have coordinates so it's as simple as:
+
+```r
+iowa_wq = st_as_sf(IowaSummary, coords = c("dec_lon_va", "dec_lat_va"), crs = 4269,agr = "constant")
+```
+
+Let's plot it with our other data and see what we've got - tip for subsetting while plotting is from [rpubs here]( https://rpubs.com/cyclemumner/sf-plotting).
+
+```r
+plot(st_geometry(subset(states, state_abbr == 'IA')), axes=T)
+plot(st_geometry(subset(wsa_plains, STATE =='IA')), add=T, col='blue')
+plot(iowa_wq, add=T, col='red')
+```
+
+![Iowa_WQ_sites.png](/AWRA_GIS_R_Workshop/figure/Iowa_WQ_sites.png)
+
+Now let's try to join this water quality nitrogen data nearest to each WSA sampled site. We'll first need to transform the data to a projected coordinate system since we'll be using distance in our join this time.  `sf` can make use of both `proj4` strings and epsg codes - to find the epsg code for UTM zone 15 in Iowa which we're using here just search on [spatialreference.org](http://spatialreference.org/). Note our projection is in meters so we set our distance very high - obviously we wouldn't join water quality sites tens to hundreds of kilometers away to other sites using euclidean distance for a real application - this is just for illustrative purposes to show how we can do distance based joins in `sf`.
+
+```r
+wsa_iowa <- subset(wsa_plains, state_abbr=='IA')
+wsa_iowa <- st_transform(wsa_iowa, crs=26915)
+iowa_wq <- st_transform(iowa_wq, crs=26915)
+
+wsa_wq = st_join(wsa_iowa, iowa_wq, st_is_within_distance, dist = 50000)
+```
+
+You'll see if you do `head` on your data there are a LOT of fields in there now - what we're interested in is the mean field we calcluated earlier in `dplyr` steps that gives us mean nitrogren concentration at water quality sites.
+
+## Exercise 4
+### Spatial operations - aggregation
+
+Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in previous step spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - see if you can figure out how on your own!
+
 - R `sf` Resources:
 
     - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
     
+    - [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/)
+    
     - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
+    
+    
     
 
 
