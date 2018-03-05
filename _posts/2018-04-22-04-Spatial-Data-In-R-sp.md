@@ -129,6 +129,8 @@ Handling of spatial data in R has been standardized in recent years through the 
 The best source to learn about `sp` and fundamentals of spatial analysis in R is Roger Bivand's book [Applied Spatial Data Analysis in R](http://www.asdar-book.org/)
 
 Although we'll look at the new simple features object specification this morning as well, numerous packages are currently built using sp object structure so need to learn to navigate current R spatial ecosystem.
+
+![CRANdependencies](/AWRA_GIS_R_Workshop/figure/CRANdependencies.jpg)
  
  `sp` provides definitions for basic spatial classes (points, lines, polygons, pixels, and grids).
  
