@@ -128,7 +128,7 @@ Handling of spatial data in R has been standardized in recent years through the 
 
 The best source to learn about `sp` and fundamentals of spatial analysis in R is Roger Bivand's book [Applied Spatial Data Analysis in R](http://www.asdar-book.org/)
 
-Although we'll look at the new simple features object specification this morning as well, numerous packages are currently built using sp object structure so need to learn to navigate current R spatial ecosystem.
+Although we'll look at the new simple features object specification this morning as well, numerous packages are currently built using sp object structure so need to learn to navigate current R spatial ecosystem - image below from [Colin Gillespie's Tweet](https://twitter.com/csgillespie/status/854438264538845184):
 
 ![CRANdependencies](/AWRA_GIS_R_Workshop/figure/CRANdependencies.jpg)
  
