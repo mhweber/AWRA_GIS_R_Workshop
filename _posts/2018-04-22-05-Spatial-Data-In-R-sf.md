@@ -9,7 +9,7 @@ The `sf` Simple Features for R package by Edzer Pebesma is a new, very nice pack
 The big difference is the use of S3 classes in R rather than the S4, or new style classes of `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation as well as very speedy I/O along with [GEOS](https://trac.osgeo.org/geos), and also which is quite nice can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS). Additionally, as mentioned above, `sf` fits into the `tidyverse` design, and the list-column for geometry are officially considered a `tidy` data form.  See Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) for the description of `tidy` aspects of `sf`.
 
 Edzar Pebesma has extensive documentation, blog posts and vignettes available for `sf` here:
-[Simple Features for R](https://github.com/edzer/sfr)
+[Simple Features for R](https://github.com/edzer/sfr).  Additionally, see Edzar's [r-spatial blog](http://r-spatial.org/) which has numerous announcements, discussion pieces and tutorials on spatial work in R focused. 
 
 ## Lesson Goals
   - Explore `sf` simple features package using some administrative boundaries, EPA data (Wadeable Streams Assessment sites) and some water quality data via the USGS `dataRetrieval` package
