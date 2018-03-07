@@ -14,7 +14,7 @@ The [home page](https://cran.r-project.org/web/packages/raster/) for the `raster
 
 The `raster` package uses three classes / types of objects to represent raster data - `RasterLayer`, `RasterStack`, and `RasterBrick` - these are all `S4` new style classes in R, just like `sp` classes.
 
-All that said, `raster` has not been updated in the last year - there has been discussion in R spatial developer world among several folks of updating / modifying raster to be both `sf` and pipe-based workflow friendly - it looks like this is coalescing in the `stars: spatiotemporal tidy arrays for R` package being developed by Edzer Pebezma, Michael Sumer, and Etienne Racine.  Their [proposal](https://github.com/r-spatial/stars/blob/master/PROPOSAL.md) outlines approach they are taking - look for this package for raster processing in R soon!
+All that said, `raster` has not been updated in the last year - there has been discussion in the R spatial developer world among several folks of updating / modifying raster to be both `sf` and pipe-based workflow friendly - it looks like this is coalescing in the `stars: spatiotemporal tidy arrays for R` package being developed by Edzer Pebezma, Michael Sumer, and Etienne Racine.  Their [proposal](https://github.com/r-spatial/stars/blob/master/PROPOSAL.md) outlines the approach they are taking - look for this package for raster processing in R soon!
 
 ## Lesson Goals
 - Understand how to create, load, and analyze raster data in R

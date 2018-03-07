@@ -14,6 +14,18 @@ install.packages("rgdal")
 install.packages("rgeos")
 install.packages("raster")
 install.packages("sf")
+install.packages("gstat")
+install.packages("spdep")
+install.packages("maptools")
+install.packages("stringr")
+install.packages("reshape")
+install.packages("tidyverse")
+install.packages("micromap")
+install.packages("tmap")
+install.packages("geoknife")
+install.packages("RCurl")
+install.packages("ggplot2")
+install.packages("dataRetrieval")
 {% endhighlight %}
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency.  
