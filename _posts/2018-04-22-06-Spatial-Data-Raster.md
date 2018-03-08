@@ -274,10 +274,12 @@ What you end up should be a summary of percent of each land use for each of our 
     
     - [Wageningen University AdvancedRasterAnalysis](https://geoscripting-wur.github.io/AdvancedRasterAnalysis/)
 
-    - [The Visual Raster Cheat Sheet](https://cran.r-project.org/web/packages/raster/)
+    - [The Visual Raster Cheat Sheet](http://rpubs.com/etiennebr/visualraster)
     
     OR you can install this as a package and run examples yourself in R:
     
     - [The Visual Raster Cheat Sheet GitHub Repo](https://github.com/etiennebr/visualraster)
     
     - [Rastervis](https://oscarperpinan.github.io/rastervis/)
+    
+    - [Geocomputation with R - Raster data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)

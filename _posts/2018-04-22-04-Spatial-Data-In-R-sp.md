@@ -24,7 +24,10 @@ Second, why use R for spatial, or GIS, workflows?
 
 Some drawbacks to using R for GIS work
 
-- R not as good for interactive use as desktop GIS applications like ArcGIS or QGIS (i.e.  editing features, panning,zooming)
+- R not as good for interactive use as desktop GIS applications like ArcGIS or QGIS (i.e.  editing features, panning, zooming)
+- Limited vector data format support by most spatial packages and no on-the-fly data conversion between formats
+- Explicit coordinate system handling by the user, no on-the-fly projection support
+- In memory analysis does not scale well with large GIS vector and tabular data
 - Steep learning curve
 - Up to you to find packages to do what you need - help not always great
 

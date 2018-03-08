@@ -18,6 +18,11 @@ installed and tested.  You will need to have  R and RStudio.  Get the latest ver
     - [Windows](https://download1.rstudio.org/RStudio-1.0.136.exe)
     - [Mac](https://download1.rstudio.org/RStudio-1.0.136.dmg)
     - [Ubuntu (64 bit)](https://download1.rstudio.org/rstudio-1.0.136-amd64.deb)
+
+3. **ArcGIS and R-ArcGIS bridge:  (optional)** 
+    - If don’t already have ArcGIS, you can get a free 21 day trial [here](http://www.arcgis.com/features/free-trial.html)
+    - [Instructional videos on installing the R-ArcGIS bridge](https://community.esri.com/groups/rstats/content?filterID=contentstatus%5Bpublished%5D~objecttype~objecttype%5Bvideo%5D) 
+
   
 Once everything is installed, follow the instructions below to test your installation.
 
