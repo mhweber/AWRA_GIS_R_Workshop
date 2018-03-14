@@ -117,7 +117,6 @@ Note that R only allows us to plot our states and SRTM together because they are
 We can see that the tile we pulled only covers a small portion of PNW - let's pull in a few more tiles, and restrict ourselves to just Oregon so we don't have to pull too many tiles.  I'll leave it up to you to figure out how to create a new OR SpatialPolygonsDataFrame using same method we used to construct PNW from US.
 
 {% highlight r %}
-OR <- PNW[PNW$NAME_1 == 'Oregon',]
 srtm2 <- getData('SRTM', lon=-121, lat=42)
 srtm3 <- getData('SRTM', lon=-116, lat=47)
 srtm4 <- getData('SRTM', lon=-121, lat=47)
@@ -237,7 +236,7 @@ For this exercise, we'll use both the SRTM data from earlier and we'll grab some
 
 First, let's try calculating some zonal statistics using a couple Oregon counties as our 'zones' and our SRTM data from before as our value raster.
 
-Try working through this one on your own - the solution is posted in the [source code](https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/SourceCode.R) if you need help.  The steps you'll need to follow are:
+Try working through this one on your own - the solution is posted in the [source code](https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/SourceCode.R) if you need help.  The steps you'll need to follow are:
 
   1. Create a new `SpatialPolygonsDataFrame` from our earlier OR `SpatialPolygonsDataFrame` by subsetting like so:
 

@@ -1,7 +1,7 @@
 #####################################################
-# Source code for GIS in Action Conference April 2011
-# R - Fundamentals for Spatial Data
-# Marc Weber
+# Source code for AWRA GIS Conference April 2018
+# R and Spatial Data
+# Marc Weber, Mike McMannus, Steve Kopp
 #####################################################
 
 #######################
@@ -303,7 +303,7 @@ ndviCalc <- function(x) {
   ndvi <- (x[[4]] - x[[3]]) / (x[[4]] + x[[3]])
   return(ndvi)
 }
-ndvi <- calc(x=july, fun=ndviCalc)
+ndvi <- raster::calc(x=july, fun=ndviCalc)
 plot(ndvi)
 
 savi <- ((july[[4]] - july[[3]]) / (july[[4]] + july[[3]]) + 0.5)*1.5
