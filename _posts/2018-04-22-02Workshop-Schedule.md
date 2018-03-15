@@ -40,7 +40,7 @@ This workshop provides an introduction to working with spatial data in R and doi
   - Raster data packages and working with rasters in R
   - Example raster data analyses in R
 
-[**Lesson 04- Mappping in R:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/07-Quick-maps-in-R)
+[**Lesson 04- Mappping in R**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/07-Quick-maps-in-R)
 
 [**Lesson 05- Exploratory Spatial Analysis (ESDA) in R**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/08-ESDA-in-R)
 

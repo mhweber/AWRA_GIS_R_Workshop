@@ -28,7 +28,7 @@ All that said, `raster` has not been updated in the last year - there has been d
 
 Let's create an empty `RasterLayer` object-
 
-{% highlight r %}
+```r
 library(raster)
 r <- raster(ncol=10, nrow = 10, xmx=-116,xmn=-126,ymn=42,ymx=46)
 str(r)
@@ -36,7 +36,7 @@ r
 r[] <- runif(n=ncell(r))
 r
 plot(r)
-{% endhighlight %}
+```
 
 ![BasicRaster](/gis_in_action_r_spatial/figure/BasicRaster.png)
 
@@ -44,30 +44,30 @@ When you look at summary information for the `RasterLayer`, by simply typing "r"
 
 You can access raster values via direct indexing or line, column indexing - take a minute to see how this works using raster r we just created - syntax is:
 
-{% highlight r %}
+```r
 r[i]
 r[line, column]
-{% endhighlight %}
+```
 
 A  `RasterStack` is a raster object with multiple raster layers - essentially a multi-band raster.  `RasterStack` and `RasterBrick` are very similar and we won't delve into differences much here - basically, a `RasterStack` can virtually connect several `RasterLayer` objects in memory and allows pixel-based calculations on separate raster layers, while a `RasterBrick` has to refer to a single multi-layer file or multi-layer object.  Note that methods that operate on either a `RasterStack` or `RasterBrick` usually return a `RasterBrick`, and processing will be mor efficient on a `RasterBrick` object.  
 
 It's easy to manipulate our `RasterLayer` to make a couple new layers, and then stack layers:
 
-{% highlight r %}
+```r
 r2 <- r * 50
 r3 <- sqrt(r * 5)
 s <- stack(r, r2, r3)
 s
 plot(s)
-{% endhighlight %}
+```
 
 Same process for generating a raster brick (here I make layers and stack, or brick, in same step):
 
-{% highlight r %}
+```r
 b <- brick(x=c(r, r * 50, sqrt(r * 5)))
 b
 plot(b)
-{% endhighlight %}
+```
 
 ![RasterBrick](/gis_in_action_r_spatial/figure/RasterBrick.png)
 
@@ -77,22 +77,22 @@ plot(b)
 Let's play with some real datasets and perform some simple analyses on some raster data.  First let's grab some boundary spatial polygon data to use in conjuntion with raster data - we'll grab PNW states using the very handy getData function in `raster` (you can use `help(getData)` to learn more about the function). Here we use the global administrative boundaries, or GADM data, to load in US states and subset to the PNW - note how we subset the data and see if you follow how that works.
 
 
-{% highlight r %}
+```r
 US <- getData("GADM",country="USA",level=2)
 states    <- c('California', 'Nevada', 'Utah','Montana', 'Idaho', 'Oregon', 'Washington')
 PNW <- US[US$NAME_1 %in% states,]
 plot(PNW, axes=TRUE)
-{% endhighlight %}
+```
 
 ![PNW](/gis_in_action_r_spatial/figure/PNW.png)
 
 We won't delve into in this workshop, but if you end up working in R, learn ggplot!  For that matter, learn most of Hadley Wickham's packages which he has rolled into what he now calls [tidyverse](http://tidyverse.org/).  Here's example of plotting same data above using ggplot:
 
-{% highlight r %}
+```r
 library(ggplot2)
 ggplot(PNW) + geom_polygon(data=PNW, aes(x=long,y=lat,group=group),
   fill="cadetblue", color="grey") + coord_equal()
-{% endhighlight %}
+```
 
 ![PNW2](/gis_in_action_r_spatial/figure/PNW2.png)
 
@@ -104,11 +104,11 @@ We can also load some raster data using `getData` - with `getData`, you can load
 
 Let's first load some elevation data from SRTM - we need to pass lat and lon, we'll base roughly on PNW states we just defined:
 
-{% highlight r %}
+```r
 srtm <- getData('SRTM', lon=-116, lat=42)
 plot(srtm)
 plot(PNW, add=TRUE)
-{% endhighlight %}
+```
 
 ![SRTM](/gis_in_action_r_spatial/figure/SRTM.png)
 
@@ -116,7 +116,7 @@ Note that R only allows us to plot our states and SRTM together because they are
 
 We can see that the tile we pulled only covers a small portion of PNW - let's pull in a few more tiles, and restrict ourselves to just Oregon so we don't have to pull too many tiles.  I'll leave it up to you to figure out how to create a new OR SpatialPolygonsDataFrame using same method we used to construct PNW from US.
 
-{% highlight r %}
+```r
 srtm2 <- getData('SRTM', lon=-121, lat=42)
 srtm3 <- getData('SRTM', lon=-116, lat=47)
 srtm4 <- getData('SRTM', lon=-121, lat=47)
@@ -125,33 +125,33 @@ srtm_all <- mosaic(srtm, srtm2, srtm3, srtm4,fun=mean)
 
 plot(srtm_all)
 plot(OR, add=TRUE)
-{% endhighlight %}
+```
 
 
 We have full coverage now for Oregon - we can use `crop` in `raster` to crop the SRTM down to the bbox of our OR `SpatialPolygonsDataFrame`:
 
-{% highlight r %}
+```r
 srtm_crop_OR <- crop(srtm_all, OR)
 plot(srtm_crop_OR, main="Elevation (m) in Oregon")
 plot(OR, add=TRUE)
-{% endhighlight %}
+```
 
 ![ElevationOregon](/gis_in_action_r_spatial/figure/ElevationOregon.png)
 
 If we wanted to clip to exact boundary of Oregon we would follow `crop` with `mask`, but don't run this, takes too long for entire state of Oregon.
 
-{% highlight r %}
+```r
 srtm_mask_OR <- crop(srtm_crop_OR, OR)
-{% endhighlight %}
+```
 
 You can verify this by grabbing just a county, and cropping and masking SRTM data with that county:
-{% highlight r %}
+```r
 Benton <- OR[OR$NAME_2=='Benton',]
 srtm_crop_Benton <- crop(srtm_crop_OR, Benton)
 srtm_mask_Benton <- mask(srtm_crop_Benton, Benton)
 plot(srtm_mask_Benton, main="Elevation (m) in Benton County")
 plot(Benton, add=TRUE)
-{% endhighlight %}
+```
 
 ![ElevationBentonCounty](/gis_in_action_r_spatial/figure/ElevationBentonCounty.png)
 
@@ -159,40 +159,40 @@ We can play with a number of summary functions for rasters, but perhaps not quit
 
 If we want numbers, we'd instead use `cellStats`.  Glance at the help for `cellStats` if you need to find the syntax and find the mean, min, max, median and range of elevation in Oregon. You'll have to run the following first - raster values are integers and cellStats balks at this - convert to numeric:
 
-{% highlight r %}
+```r
 typeof(values(srtm_crop_OR))
 values(srtm_crop_OR) <- as.numeric(values(srtm_crop_OR))
 typeof(values(srtm_crop_OR))
-{% endhighlight %}
+```
 
 Try converting values in srtm_crop_OR to feet and then get summary numbers, see if they make sense.
 
 We can do some really cool stuff with the `rasterVis` package:
 
-{% highlight r %}
+```r
 library(rasterVis)
 histogram(srtm_crop_OR, main="Elevation In Oregon")
 densityplot(srtm_crop_OR, main="Elevation In Oregon")
 p <- levelplot(srtm_crop_OR, layers=1, margin = list(FUN = median))
 p + layer(sp.lines(OR, lwd=0.8, col='darkgray'))
-{% endhighlight %}
+```
 
 ![levelplotOregon](/gis_in_action_r_spatial/figure/levelplotOregon.png)
 
 It's trivial to generate terrain rasters from elevation using `raster`:
 
-{% highlight r %}
+```r
 Benton_terrain <- terrain(srtm_mask_Benton, opt = c("slope","aspect",
 "tpi","roughness","flowdir"))
 plot(Benton_terrain)
-{% endhighlight %}
+```
 
 ![BentonTerrain](/gis_in_action_r_spatial/figure/BentonTerrain.png)
 
-{% highlight r %}
+```r
 Benton_hillshade <- hillShade(Benton_terrain[['slope']],Benton_terrain[['aspect']])
 plot(Benton_hillshade, main="Hillshade Map for Benton County")
-{% endhighlight %}
+```
 
 ![BentonHillshade](/gis_in_action_r_spatial/figure/BentonHillshade.png)
 
@@ -203,7 +203,7 @@ Try making contours of the srtm data for Benton county.
 
 Let's try and calulate some different indices with Landsat 7 data usine Sarah Goslee's handy `landsat` package.  There are a couple sample scenes in the `landsat` package - each band is loaded as a separate `SpatialGridDataFrame`.  We'll read in each band of the July scene, convert to `raster`, and then make a `RasterStack`. Note that there is also another great package for acquiring Landscat imagery, `getlandsat`, from [ropenscilabs](https://github.com/ropenscilabs) to get Landsat 8 imagery from [AWS](https://aws.amazon.com/public-data-sets/landsat)
 
-{% highlight r %}
+```r
 library(landsat)
 data(july1,july2,july3,july4,july5,july61,july62,july7)
 july1 <- raster(july1)
@@ -217,7 +217,7 @@ july7 <- raster(july7)
 july <- stack(july1,july2,july3,july4,july5,july61,july62,july7)
 july
 plot(july)
-{% endhighlight %}
+```
 
 ![LandsatBands](/gis_in_action_r_spatial/figure/LandsatBands.png)
 
@@ -240,9 +240,9 @@ Try working through this one on your own - the solution is posted in the [source
 
   1. Create a new `SpatialPolygonsDataFrame` from our earlier OR `SpatialPolygonsDataFrame` by subsetting like so:
 
-{% highlight r %}
+```r
 ThreeCounties <- OR[OR$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
-{% endhighlight %}
+```
 
   2. Crop the earlier srtm_crop_OR `RasterLayer` using the new ThreeCounties `SpatialPolygonsDataFrame`
   
@@ -253,12 +253,12 @@ ThreeCounties <- OR[OR$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
 
 Next, let's try to tabulate NLCD land cover for the same three counties.  We'll use a version of NLCD 2011 I grabbed from the [Oregon Spatial Data Library](http://spatialdata.oregonexplorer.info/geoportal/catalog/main/home.page) and cropped down to our three counties (otherwise too big to work with for class).
 
-{% highlight r %}
+```r
 download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
               "NLCD2011.Rdata",
               method="auto",
               mode="wb")
-{% endhighlight %}
+```
 
 Tabulating land use in a raster by spatial polygon regions is a bit trickier than a straight zonal statistics operation in R - some of this may seem a bit confusing, but try and take your time and work through the process. Ideas for tabulating lands use from [here](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/introductionTalk.html) and [here](http://zevross.com/blog/2015/03/30/map-and-analyze-raster-data-in-r/).  Again, try looking through these examples, ask questions, try writing your own approach to solve this based on these examples, but you'll likely want to work through the [source code](https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/SourceCode.R) and see if you can follow how it's working.
 

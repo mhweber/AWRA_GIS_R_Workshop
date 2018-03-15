@@ -9,15 +9,17 @@ installed and tested.  You will need to have  R and RStudio.  Get the latest ver
 
 1. **R:** 
     - [General Info](http://cran.r-project.org/)
-    - [Windows](http://cran.r-project.org/bin/windows/base/R-3.2.0-win.exe)
-    - [Mac](http://cran.r-project.org/bin/macosx/R-3.3.2.pkg)
+    - [Windows](http://cran.r-project.org/bin/windows/base/R-3.4.4-win.exe)
+    - [Mac](http://cran.r-project.org/bin/macosx/R-3.4.4.pkg)
         - *Note:* Mac users will need to make sure they have XQuartz installed. You can check to see if you have it by looking in the directory `Applications/Utilities`.  If you need to install it, [follow this link](http://xquartz.macosforge.org/landing/).
+    - [Linux](https://cran.r-project.org/bin/linux/)
+        - Follow instructions and use file for your flavor of Linux
 
 2. **RStudio:** 
     - [General Info](http://www.rstudio.com/products/rstudio/download/)
-    - [Windows](https://download1.rstudio.org/RStudio-1.0.136.exe)
-    - [Mac](https://download1.rstudio.org/RStudio-1.0.136.dmg)
-    - [Ubuntu (64 bit)](https://download1.rstudio.org/rstudio-1.0.136-amd64.deb)
+    - [Windows](https://download1.rstudio.org/RStudio-1.1.442.exe)
+    - [Mac](https://download1.rstudio.org/RStudio-1.1.442.dmg)
+    - [Ubuntu (64 bit)](https://download1.rstudio.org/rstudio-1.1.442-amd64.deb)
 
 3. **ArcGIS and R-ArcGIS bridge:  (optional)** 
     - If don’t already have ArcGIS, you can get a free 21 day trial [here](http://www.arcgis.com/features/free-trial.html)
@@ -40,20 +42,16 @@ By default the console window will be on the left side of RStudio.  Find that wi
 Click in the window and paste in the code from below:
 
 
-{% highlight r %}
+```r
 version$version.string
-{% endhighlight %}
+```
 
-## It should say...
+## It should say (or slightly older version OK)...
 
-{% highlight text %}
-## [1] "R version 3.3.2 (2016-10-31)"
-{% endhighlight %}
+```r
+## [1] "R version 3.4.4 (2018-03-15)"
+```
 
-## Or...
 
-{% highlight text %}
-## [1] "R version 3.3.3 (2017-03-06)"
-{% endhighlight %}
 
 
