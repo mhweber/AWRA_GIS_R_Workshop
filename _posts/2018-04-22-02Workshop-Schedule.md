@@ -49,7 +49,7 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 [**Lesson 05- Exploratory Spatial Analysis (ESDA) in R:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/08-ESDA-in-R)
 
-[**Lesson 06- ArcGIS and R-ArcGIS Bridge (demonstration)](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/09 - R ArcGIS Bridge Demo):**
+[**Lesson 06- ArcGIS and R-ArcGIS Bridge (demonstration)](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/09R-ArcGIS-Bridge):**
 
   - Live demo of using the R / ArcGIS bride
 
