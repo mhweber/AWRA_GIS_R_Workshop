@@ -50,3 +50,5 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 **Lesson 06- Integrated Analysis with R and ArcGIS (demonstration):**
 
+  - Live demo of using the R / ArcGIS bride
+
