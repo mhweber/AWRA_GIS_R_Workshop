@@ -10,8 +10,9 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 ### TBD: 
 
-[**Introductions and Workshop Logistics:**](https://mhweber.github.io/gis_in_action_r_spatial/2018/04/22/Workshop-Schedule) 
+[**Introductions and Workshop Logistics:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/Workshop-Schedule) 
 
+  - Pre-workshop software installation instructions
   - Brief Introductions
   - Why we each use R working with spatial data
   - How R integrates with some example workflows
@@ -19,7 +20,7 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 ### TBD: 
 
-[**Lesson 01 - Spatial Objects and Libraries in R:**](https://mhweber.github.io/gis_in_action_r_spatial/2018/04/22/04-Spatial-Data-In-R-sp) 
+[**Lesson 01 - Spatial Objects and Libraries in R:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/04-Spatial-Data-In-R-sp) 
 
   - R primary spatial packages 
   - How spatial data is read into and structured in R
@@ -27,7 +28,7 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 ### TBD: 
 
-[**Lesson 02 - Working with simple features in R using sf package:**](https://mhweber.github.io/gis_in_action_r_spatial/2018/04/22/05-Spatial-Data-In-R-sf) 
+[**Lesson 02 - Working with simple features in R using sf package:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/05-Spatial-Data-In-R-sf) 
 
   - What are simple features?
   - What is advantage of learning this package compared to using the `sp` package and object structure?
@@ -48,7 +49,7 @@ This workshop provides an introduction to working with spatial data in R and doi
 
 [**Lesson 05- Exploratory Spatial Analysis (ESDA) in R:**](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/08-ESDA-in-R)
 
-**Lesson 06- Integrated Analysis with R and ArcGIS (demonstration):**
+[**Lesson 06- ArcGIS and R-ArcGIS Bridge (demonstration)](https://mhweber.github.io/AWRA_GIS_R_Workshop/2018/04/22/09 - R ArcGIS Bridge Demo):**
 
   - Live demo of using the R / ArcGIS bride
 

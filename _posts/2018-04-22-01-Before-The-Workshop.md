@@ -12,7 +12,7 @@ installed and tested.  You will need to have  R and RStudio.  Get the latest ver
     - [Windows](http://cran.r-project.org/bin/windows/base/R-3.2.0-win.exe)
     - [Mac](http://cran.r-project.org/bin/macosx/R-3.3.2.pkg)
         - *Note:* Mac users will need to make sure they have XQuartz installed. You can check to see if you have it by looking in the directory `Applications/Utilities`.  If you need to install it, [follow this link](http://xquartz.macosforge.org/landing/).
-        
+
 2. **RStudio:** 
     - [General Info](http://www.rstudio.com/products/rstudio/download/)
     - [Windows](https://download1.rstudio.org/RStudio-1.0.136.exe)
