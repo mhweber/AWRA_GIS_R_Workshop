@@ -9,7 +9,7 @@ So, to begin, what is R and why should we use R for spatial analysis?  Let's bre
 
 - A language and environment for statistical computing and graphics
 - R is lightweight, free, open-source and cross-platform
-- Works with contriburted packages - [currently](https://cran.r-project.org/web/packages/) 10,462 -extensibility
+- Works with contriburted packages - [currently](https://cran.r-project.org/web/packages/) 12,325 -extensibility
 - Automation and recording of workflow (reproducibility)
 - Optimized work flow - data manipulation, analysis andvisualization all in one place
 - R does not alter underlying data - manipulation and visualization in memory
@@ -45,8 +45,8 @@ R runs on contributed packages - it has core functionality, but all the spatial 
 - [Exercise 1](#exercise-1): Getting to Know of Spatial Objects
 - [Exercise 2](#exercise-2): Building and Manipulating Spatial Data in R
 - [Exercise 3](#exercise-3): Reading and writing data and projections
-- [Reading in Spatial Data](#Reading in Spatial Data): Reading in spatial data sets using rgdal
-- [R Spatial Resources](#R Spatial Resources)
+- [Reading in Spatial Data](#reading-in-Spatial-Data): Reading in spatial data sets using rgdal
+- [R Spatial Resources](#R-Spatial-Resources)
 
 Download and extract data for exercises to your computer
 ```r
