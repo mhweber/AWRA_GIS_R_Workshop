@@ -370,7 +370,7 @@ countries <- st_read("ne_110m_admin_0_countries.shp")
 plot(countries$geometry) # plot it!
 ```
 
-![countries](/AWRA_GIS_R_Workshop/figure/countires.png)
+![countries](/AWRA_GIS_R_Workshop/figure/countries.png)
 
 Reading in geodatabases - we'll just recycle geodatabase we use in the `sp` session:
 ```r
