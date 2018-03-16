@@ -22,6 +22,8 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 - [Exercise 2](#exercise-2): Spatial operations - spatial subsetting and intersecting
 - [Exercise 3](#exercise-3): Spatial operations - joins
 - [Exercise 4](#exercise-4): Spatial operations - aggregation
+- [R `sf` Resources](#R-sf-Resources)
+
 First, if not already installed, install `sf`
 
 ```r
@@ -351,13 +353,15 @@ ggplot(avg_cond_state) +
 Your turn - try summarizing some other data and do perhaps a different summarization method, or change palette in ggplot, etc.
 
 
-- R `sf` Resources:
+## R `sf` Resources<a name="R-sf-Resources"></a>:
 
-    - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
+- [GitHub Simple Features Repo](https://github.com/edzer/sfr)
+
+- [Spatial Data in R: New Directions](https://edzer.github.io/UseR2017/)
     
-    - [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/)
+- [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/)
     
-    - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
+- [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
     
     
     

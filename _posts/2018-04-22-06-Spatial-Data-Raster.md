@@ -14,7 +14,7 @@ The [home page](https://cran.r-project.org/web/packages/raster/) for the `raster
 
 The `raster` package uses three classes / types of objects to represent raster data - `RasterLayer`, `RasterStack`, and `RasterBrick` - these are all `S4` new style classes in R, just like `sp` classes.
 
-All that said, `raster` has not been updated in the last year - there has been discussion in the R spatial developer world among several folks of updating / modifying raster to be both `sf` and pipe-based workflow friendly - it looks like this is coalescing in the `stars: spatiotemporal tidy arrays for R` package being developed by Edzer Pebezma, Michael Sumer, and Etienne Racine.  Their [proposal](https://github.com/r-spatial/stars/blob/master/PROPOSAL.md) outlines the approach they are taking - look for this package for raster processing in R soon!
+All that said, `raster` has not been updated in the last year - there has been discussion in the R spatial developer world among several folks of updating / modifying raster to be both `sf` and pipe-based workflow friendly - it looks like this is coalescing in the `stars: spatiotemporal tidy arrays for R` package being developed by Edzer Pebezma, Michael Sumer, and Etienne Racine.  Their [proposal](https://github.com/r-spatial/stars/blob/master/PROPOSAL.md) outlines the approach they are taking - you can play with the [development version](https://www.r-spatial.org/r/2017/11/23/stars1.html) but it is still very much in alpha stages - 
 
 ## Lesson Goals
 - Understand how to create, load, and analyze raster data in R
@@ -25,6 +25,7 @@ All that said, `raster` has not been updated in the last year - there has been d
 - [Exercise 1](#exercise-1): Exploratory analysis on raster data
 - [Exercise 2](#exercise-2): Explore Landsat data
 - [Exercise 3](#exercise-3): Zonal Statistics
+- [R Raster Resources](#R-Raster-Resources)
 
 Let's create an empty `RasterLayer` object-
 
@@ -268,18 +269,20 @@ Note that you're also going to have to reconcile the projections - R won't allow
 What you end up should be a summary of percent of each land use for each of our 3 counties in a nice data frame format.
 
 
-- R `raster` Resources:
+## R Raster Resources<a name="#R-Raster-Resources"></a>:
 
-    - [Wageningen University IntrotoRaster](http://geoscripting-wur.github.io/IntroToRaster/)
+- [Wageningen University IntrotoRaster](http://geoscripting-wur.github.io/IntroToRaster/)
     
-    - [Wageningen University AdvancedRasterAnalysis](https://geoscripting-wur.github.io/AdvancedRasterAnalysis/)
+- [Wageningen University AdvancedRasterAnalysis](https://geoscripting-wur.github.io/AdvancedRasterAnalysis/)
 
-    - [The Visual Raster Cheat Sheet](http://rpubs.com/etiennebr/visualraster)
+- [The Visual Raster Cheat Sheet](http://rpubs.com/etiennebr/visualraster)
     
-    OR you can install this as a package and run examples yourself in R:
+OR you can install this as a package and run examples yourself in R:
     
-    - [The Visual Raster Cheat Sheet GitHub Repo](https://github.com/etiennebr/visualraster)
+- [The Visual Raster Cheat Sheet GitHub Repo](https://github.com/etiennebr/visualraster)
     
-    - [Rastervis](https://oscarperpinan.github.io/rastervis/)
+- [Rastervis](https://oscarperpinan.github.io/rastervis/)
     
-    - [Geocomputation with R - Raster data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)
+- [Geocomputation with R - Raster data](https://geocompr.robinlovelace.net/spatial-class.html#raster-data)
+    
+- [Data Carpentry - Manipulate Raster Data in R](http://www.datacarpentry.org/R-spatial-raster-vector-lesson/11-vector-raster-integration/)

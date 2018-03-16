@@ -81,7 +81,7 @@ getwd()
 
 Which should return something like:
 
-```r}
+```r
 ## [1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
 ```
 

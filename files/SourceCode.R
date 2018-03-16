@@ -9,15 +9,23 @@
 #######################
 
 # Download data
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/WorkshopData.zip?raw=true",
-              "WorkshopData3.zip",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/SourceCode.R?raw=true",
+              "SourceCode.R",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/HUCs.RData?raw=true",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/WorkshopData.zip?raw=true",
+              "WorkshopData.zip",
+              method="auto",
+              mode="wb")
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/HUCs.RData?raw=true",
               "HUCs.RData",
               method="auto",
               mode="wb")
-unzip("WorkshopData3.zip", exdir = "/home/marc") 
+download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+              "NLCD2011.Rdata",
+              method="auto",
+              mode="wb")
+unzip("WorkshopData.zip", exdir = "/home/marc")
 
 getwd()
 dir()
@@ -142,6 +150,28 @@ head(StreamGages@data)
 library(rgeos)
 HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
+
+# Reading in Spatial Data
+ogrDrivers()
+
+download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip", "/home/marc/citylim_2017.zip")
+unzip("citylim_2017.zip", exdir = "/home/marc") 
+citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
+plot(citylims, axes=T, main='Oregon City Limits') # plot it!
+
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+unzip("state_county_boundary.zip", exdir = "/home/marc")
+fgdb = "state_county_boundary.gdb"
+
+# List all feature classes in a file geodatabase
+fc_list = ogrListLayers(fgdb)
+print(fc_list)
+
+# Read the feature class
+state_poly = readOGR(dsn=fgdb,layer="state_poly")
+plot(state_poly, axes=TRUE)
+cob_poly = readOGR(dsn=fgdb,layer="cob_poly")
+plot(cob_poly, add=TRUE, col='red')
 
 #######################
 # SpatialData in R - sf
