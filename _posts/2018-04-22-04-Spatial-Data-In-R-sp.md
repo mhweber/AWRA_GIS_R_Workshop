@@ -497,7 +497,7 @@ HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
 ```
 
-## Reading in Spatial Data
+## Reading in Spatial Data<a name="reading-in-Spatial-Data"></a>
 You'll typically want to read and write shapefiles and geodatabase features when working in R - `rgdal` is the workhorse for this.  To see what vector data formats you can read / write using rdal, type:
 
 ```r
@@ -540,7 +540,7 @@ plot(cob_poly, add=TRUE, col='red')
 ```
 ![gdb_counties](/AWRA_GIS_R_Workshop/figure/gdb_counties.png)
 
-## R Spatial Resources:
+## R Spatial Resources<a name="R-Spatial-Resources"></a>:
 
 - [Bivand, R. S., Pebesma, E. J., & Gómez-Rubio, V. (2008). Applied spatial data analysis with R. New York: Springer.](http://www.asdar-book.org/)
     
