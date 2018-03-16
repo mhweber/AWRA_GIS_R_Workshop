@@ -41,22 +41,32 @@ R runs on contributed packages - it has core functionality, but all the spatial 
 - Learn to read vector spatial data into R
 - Perform some simple exploratory spatial data analysis with vector data in R
 
-## Quick Links to Exercises
+## Quick Links to Exercises and Material
 - [Exercise 1](#exercise-1): Getting to Know of Spatial Objects
 - [Exercise 2](#exercise-2): Building and Manipulating Spatial Data in R
-- [Exercise 3](#exercise-3): Reading and writing data and projections 
+- [Exercise 3](#exercise-3): Reading and writing data and projections
+- [Reading in Spatial Data](#spatial_data_readin): Reading in spatial data sets using rgdal
+- [R Spatial Resources](#resources)
 
 Download and extract data for exercises to your computer
 ```r
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/SourceCode.R?raw=true",
+              "SourceCode.R",
+              method="auto",
+              mode="wb")
 download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/WorkshopData.zip?raw=true",
-              "WorkshopData3.zip",
+              "WorkshopData.zip",
               method="auto",
               mode="wb")
 download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/HUCs.RData?raw=true",
               "HUCs.RData",
               method="auto",
               mode="wb")
-unzip("WorkshopData3.zip", exdir = "/home/marc")              
+              download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+              "NLCD2011.Rdata",
+              method="auto",
+              mode="wb")
+unzip("WorkshopData.zip", exdir = "/home/marc")              
 ```
 
 
@@ -487,7 +497,50 @@ HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
 ```
 
-- Good Intro to R Spatial Resources:
+## Reading in Spatial Data
+You'll typically want to read and write shapefiles and geodatabase features when working in R - `rgdal` is the workhorse for this.  To see what vector data formats you can read / write using rdal, type:
+
+```r
+ogrDrivers()
+```
+
+You have tons of options available!  Here are a couple quick examples for both shapefile and geodatabase features using rgdal (replace my example file paths with file paths to use to working directory on your computer:
+
+Reading in shapefiles:
+```r
+download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip", "/home/marc/citylim_2017.zip")
+unzip("citylim_2017.zip", exdir = "/home/marc") 
+citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
+plot(citylims, axes=T, main='Oregon City Limits') # plot it!
+```
+
+![citylimits](/AWRA_GIS_R_Workshop/figure/citylimits.png)
+
+Reading in geodatabases:
+```r
+# Geodatabase Example
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+unzip("state_county_boundary.zip", exdir = "/home/marc")
+fgdb = "state_county_boundary.gdb"
+
+# List all feature classes in a file geodatabase
+fc_list = ogrListLayers(fgdb)
+print(fc_list)
+
+# Read the feature class
+state_poly = readOGR(dsn=fgdb,layer="state_poly")
+plot(state_poly, axes=TRUE)
+```
+
+![state_poly](/AWRA_GIS_R_Workshop/figure/state_poly.png)
+
+```r
+cob_poly = readOGR(dsn=fgdb,layer="cob_poly")
+plot(cob_poly, add=TRUE, col='red')
+```
+![gdb_counties](/AWRA_GIS_R_Workshop/figure/gdb_counties.png)
+
+## R Spatial Resources:
 
     - [Bivand, R. S., Pebesma, E. J., & Gómez-Rubio, V. (2008). Applied spatial data analysis with R. New York: Springer.](http://www.asdar-book.org/)
     

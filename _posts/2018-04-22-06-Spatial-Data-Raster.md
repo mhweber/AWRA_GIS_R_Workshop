@@ -253,6 +253,7 @@ ThreeCounties <- OR[OR$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
 
 Next, let's try to tabulate NLCD land cover for the same three counties.  We'll use a version of NLCD 2011 I grabbed from the [Oregon Spatial Data Library](http://spatialdata.oregonexplorer.info/geoportal/catalog/main/home.page) and cropped down to our three counties (otherwise too big to work with for class).
 
+If you haven't downloaded already, download the NLCD2011 data for exercise:
 ```r
 download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
               "NLCD2011.Rdata",
