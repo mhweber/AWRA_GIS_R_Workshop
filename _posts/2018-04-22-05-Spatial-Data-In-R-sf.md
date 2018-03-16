@@ -22,6 +22,7 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 - [Exercise 2](#exercise-2): Spatial operations - spatial subsetting and intersecting
 - [Exercise 3](#exercise-3): Spatial operations - joins
 - [Exercise 4](#exercise-4): Spatial operations - aggregation
+- [Reading in Spatial Data with `sf`](#reading-in-Spatial-Data-sf): Reading in spatial data sets using rgdal
 - [R `sf` Resources](#R-sf-Resources)
 
 First, if not already installed, install `sf`
@@ -352,6 +353,47 @@ ggplot(avg_cond_state) +
 
 Your turn - try summarizing some other data and do perhaps a different summarization method, or change palette in ggplot, etc.
 
+## Reading in Spatial Data with `sf`<a name="reading-in-Spatial-Data-sf"></a>
+We showed earlier how to read in both shapefiles and geodatabase features using sp - let's do the same with `sf`. To see what vector data formats you can read / write with `sf`, type:
+
+```r
+st_drivers()
+```
+
+Again, lots and lots of options!  Here are a couple quick examples for both shapefile and geodatabase features using `st_read` in `sf` (replace my example file paths with file paths to use to working directory on your computer:
+
+Reading in shapefiles:
+```r
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_110m_admin_0_countries.zip", "/home/marc/ne_110m_admin_0_countries.zip")
+unzip("ne_110m_admin_0_countries.zip", exdir = "/home/marc") 
+countries <- st_read("ne_110m_admin_0_countries.shp") 
+plot(countries$geometry) # plot it!
+```
+
+![countries](/AWRA_GIS_R_Workshop/figure/countires.png)
+
+Reading in geodatabases - we'll just recycle geodatabase we use in the `sp` session:
+```r
+# Geodatabase Example - if you haven't already downloaded:
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+unzip("state_county_boundary.zip", exdir = "/home/marc")
+fgdb = "state_county_boundary.gdb"
+
+# List all feature classes in a file geodatabase
+st_layers(fgdb)
+```
+
+```r
+##  layer_name     geometry_type features fields
+##1 state_poly     Multi Polygon     2825      4
+##2   cob_poly     Multi Polygon       75      5
+##3    cob_arc Multi Line String      399      8
+```
+```r
+# Read the feature class
+state_poly = st_read(dsn=fgdb,layer="state_poly")
+state_poly$SHAPE
+```
 
 ## R `sf` Resources<a name="R-sf-Resources"></a>:
 

@@ -526,7 +526,17 @@ fgdb = "state_county_boundary.gdb"
 # List all feature classes in a file geodatabase
 fc_list = ogrListLayers(fgdb)
 print(fc_list)
+```
 
+```r
+##[1] "state_poly" "cob_poly"   "cob_arc"   
+##attr(,"driver")
+##[1] "OpenFileGDB"
+##attr(,"nlayers")
+##[1] 3
+```
+
+```r
 # Read the feature class
 state_poly = readOGR(dsn=fgdb,layer="state_poly")
 plot(state_poly, axes=TRUE)
