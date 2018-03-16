@@ -45,8 +45,8 @@ R runs on contributed packages - it has core functionality, but all the spatial 
 - [Exercise 1](#exercise-1): Getting to Know of Spatial Objects
 - [Exercise 2](#exercise-2): Building and Manipulating Spatial Data in R
 - [Exercise 3](#exercise-3): Reading and writing data and projections
-- [Reading in Spatial Data](#spatial_data_readin): Reading in spatial data sets using rgdal
-- [R Spatial Resources](#resources)
+- [Reading in Spatial Data](#Reading in Spatial Data): Reading in spatial data sets using rgdal
+- [R Spatial Resources](#R Spatial Resources)
 
 Download and extract data for exercises to your computer
 ```r
@@ -542,23 +542,23 @@ plot(cob_poly, add=TRUE, col='red')
 
 ## R Spatial Resources:
 
-    - [Bivand, R. S., Pebesma, E. J., & Gómez-Rubio, V. (2008). Applied spatial data analysis with R. New York: Springer.](http://www.asdar-book.org/)
+- [Bivand, R. S., Pebesma, E. J., & Gómez-Rubio, V. (2008). Applied spatial data analysis with R. New York: Springer.](http://www.asdar-book.org/)
     
-    - [R Spatial](http://rspatial.org/spatial/)
+- [R Spatial](http://rspatial.org/spatial/)
 
-    - [Classes and Methods for Spatial Data: the `sp` package](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf)
+- [Classes and Methods for Spatial Data: the `sp` package](https://cran.r-project.org/web/packages/sp/vignettes/intro_sp.pdf)
 
-    - [R spatial objects cheat sheet](https://www.dropbox.com/s/vv1ndtjrze0g8f2/RSpatialObjectsCheatSheet.ppt?dl=0)
+- [R spatial objects cheat sheet](https://www.dropbox.com/s/vv1ndtjrze0g8f2/RSpatialObjectsCheatSheet.ppt?dl=0)
     
-    - [Geospatial Data in R](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/introductionTalk.html)
+- [Geospatial Data in R](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/introductionTalk.html)
     
-    - [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)
+- [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)
 
-    - [National Park Service Spatial Data in R](https://science.nature.nps.gov/im/datamgmt/statistics/r/advanced/spatial.cfm)
+- [National Park Service Spatial Data in R](https://science.nature.nps.gov/im/datamgmt/statistics/r/advanced/spatial.cfm)
     
-    - [Using R as a GIS Tutorial](https://github.com/Pakillo/R-GIS-tutorial/blob/master/R-GIS_tutorial.md)
+- [Using R as a GIS Tutorial](https://github.com/Pakillo/R-GIS-tutorial/blob/master/R-GIS_tutorial.md)
     
-    - [The R Spatial Cheat Sheet](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html_)
+- [The R Spatial Cheat Sheet](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html_)
 
 
 
