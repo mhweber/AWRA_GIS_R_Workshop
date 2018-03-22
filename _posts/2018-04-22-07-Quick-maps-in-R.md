@@ -24,6 +24,14 @@ There are a number of packages available now in R for mapping and in particular 
 
 This first set of examples include gplot and ggmap, which aren't interactive, but shows using plotly with ggplot map for interactive map
 ```r
+library(ggplot2)
+library(plotly)
+library(mapview)
+library(tmap)
+library(leaflet)
+library(tidyverse)
+library(sf)
+library(USAboundaries)
 states <- us_states()
 states <-states %>%
   filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
@@ -47,8 +55,17 @@ ggplotly(g)
 ```
 ![plotly](/AWRA_GIS_R_Workshop/figure/plotly.png)
 
-## Exercise 1
-### ggplot and plotly
+
+
+## Exercise 2
+### mapview
+`mapview` is a nice package that makes use of `leaflet` package but simplifies mapping functions.  Here again we'll use the states data pulled in with the USAboundaries package. 
+
+```r
+mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
+```
+
+Spend some time playing with parameters in mapview - examine the interactive plot - try different backgrounds, see how you can toggle individual features on and off.  `mapview` can plot rasters as well - try generating a simple map like the one above using some of the raster data from the raster section.  After you plot a raster, see if you can plot multiple layers - `mapview` makes it easy to plot multiple layers together as described [here](https://github.com/r-spatial/mapview/blob/develop/vignettes/articles/mapview_02-advanced.Rmd)
 
 
 

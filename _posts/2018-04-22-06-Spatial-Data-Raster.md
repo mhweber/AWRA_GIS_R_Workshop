@@ -38,7 +38,7 @@ r
 plot(r)
 ```
 
-![BasicRaster](/gis_in_action_r_spatial/figure/BasicRaster.png)
+![BasicRaster](/AWRA_GIS_R_Workshop/figure/BasicRaster.png)
 
 When you look at summary information for the `RasterLayer`, by simply typing "r", you'll notice the main information defining a `RasterLayer` object described.  Minimal information needed to define a `RasterLayer` include the number of columns and rows, the bounding box or spatial extent of the raster, and the coordinate reference system.  What do you notice about the coordinate reference system of the raster we just generated from scratch?
 
@@ -69,7 +69,7 @@ b
 plot(b)
 ```
 
-![RasterBrick](/gis_in_action_r_spatial/figure/RasterBrick.png)
+![RasterBrick](/AWRA_GIS_R_Workshop/figure/RasterBrick.png)
 
 ## Exercise 1
 ### Exploratory analysis on raster data
@@ -84,7 +84,7 @@ PNW <- US[US$NAME_1 %in% states,]
 plot(PNW, axes=TRUE)
 ```
 
-![PNW](/gis_in_action_r_spatial/figure/PNW.png)
+![PNW](/AWRA_GIS_R_Workshop/figure/PNW.png)
 
 We won't delve into in this workshop, but if you end up working in R, learn ggplot!  For that matter, learn most of Hadley Wickham's packages which he has rolled into what he now calls [tidyverse](http://tidyverse.org/).  Here's example of plotting same data above using ggplot:
 
@@ -94,7 +94,7 @@ ggplot(PNW) + geom_polygon(data=PNW, aes(x=long,y=lat,group=group),
   fill="cadetblue", color="grey") + coord_equal()
 ```
 
-![PNW2](/gis_in_action_r_spatial/figure/PNW2.png)
+![PNW2](/AWRA_GIS_R_Workshop/figure/PNW2.png)
 
 We can also load some raster data using `getData` - with `getData`, you can load the following data directly into R to work with:
 
@@ -110,7 +110,7 @@ plot(srtm)
 plot(PNW, add=TRUE)
 ```
 
-![SRTM](/gis_in_action_r_spatial/figure/SRTM.png)
+![SRTM](/AWRA_GIS_R_Workshop/figure/SRTM.png)
 
 Note that R only allows us to plot our states and SRTM together because they are in the same CRS - typically, in R, we always need to check the CRS of any spatial dataset and project one dataset to CRS of another to plot together or analyze together.
 
@@ -136,7 +136,7 @@ plot(srtm_crop_OR, main="Elevation (m) in Oregon")
 plot(OR, add=TRUE)
 ```
 
-![ElevationOregon](/gis_in_action_r_spatial/figure/ElevationOregon.png)
+![ElevationOregon](/AWRA_GIS_R_Workshop/figure/ElevationOregon.png)
 
 If we wanted to clip to exact boundary of Oregon we would follow `crop` with `mask`, but don't run this, takes too long for entire state of Oregon.
 
@@ -153,7 +153,7 @@ plot(srtm_mask_Benton, main="Elevation (m) in Benton County")
 plot(Benton, add=TRUE)
 ```
 
-![ElevationBentonCounty](/gis_in_action_r_spatial/figure/ElevationBentonCounty.png)
+![ElevationBentonCounty](/AWRA_GIS_R_Workshop/figure/ElevationBentonCounty.png)
 
 We can play with a number of summary functions for rasters, but perhaps not quite intuitively, these functions (`min`,`max`,`mean`,`prod`,`sum`,`Median`,`cv`,`range`,`any`,`all`) applied directly to a `RasterLayer` will return another `RasterLayer`.
 
@@ -177,7 +177,7 @@ p <- levelplot(srtm_crop_OR, layers=1, margin = list(FUN = median))
 p + layer(sp.lines(OR, lwd=0.8, col='darkgray'))
 ```
 
-![levelplotOregon](/gis_in_action_r_spatial/figure/levelplotOregon.png)
+![levelplotOregon](/AWRA_GIS_R_Workshop/figure/levelplotOregon.png)
 
 It's trivial to generate terrain rasters from elevation using `raster`:
 
@@ -187,14 +187,14 @@ Benton_terrain <- terrain(srtm_mask_Benton, opt = c("slope","aspect",
 plot(Benton_terrain)
 ```
 
-![BentonTerrain](/gis_in_action_r_spatial/figure/BentonTerrain.png)
+![BentonTerrain](/AWRA_GIS_R_Workshop/figure/BentonTerrain.png)
 
 ```r
 Benton_hillshade <- hillShade(Benton_terrain[['slope']],Benton_terrain[['aspect']])
 plot(Benton_hillshade, main="Hillshade Map for Benton County")
 ```
 
-![BentonHillshade](/gis_in_action_r_spatial/figure/BentonHillshade.png)
+![BentonHillshade](/AWRA_GIS_R_Workshop/figure/BentonHillshade.png)
 
 Try making contours of the srtm data for Benton county.
 
@@ -219,7 +219,7 @@ july
 plot(july)
 ```
 
-![LandsatBands](/gis_in_action_r_spatial/figure/LandsatBands.png)
+![LandsatBands](/AWRA_GIS_R_Workshop/figure/LandsatBands.png)
 
 Your task: using the [USGS Landsat Product Guide](https://landsat.usgs.gov/sites/default/files/documents/si_product_guide.pdf) to get specifics of the following Landsat indices, create new `RasterLayers` of 
 
