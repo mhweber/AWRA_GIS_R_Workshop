@@ -1,5 +1,5 @@
 ---
-title: "07 - Spatial Data in R - Mapping"
+title: "Lesson 4 - Spatial Data in R - Mapping"
 author: Marc Weber
 layout: post_page
 ---
