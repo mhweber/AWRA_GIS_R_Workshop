@@ -1,5 +1,5 @@
 ---
-title: "05 - Spatial Data in R - simple features"
+title: "Lesson 2 - Spatial Data in R - simple features"
 author: Marc Weber
 layout: post_page
 ---
