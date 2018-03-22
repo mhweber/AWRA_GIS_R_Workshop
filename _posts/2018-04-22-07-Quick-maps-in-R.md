@@ -4,7 +4,7 @@ author: Marc Weber
 layout: post_page
 ---
 
-There are a number of packages available now in R for mapping and in particular interactive mapping and visualization of spatial data - we'll take a quick look at a few here. 
+There are a number of packages available now in R for mapping and in particular interactive mapping and visualization of spatial data - we'll take a quick look at a few here. Note that for this section, images on web page here are not interactive (long story....has to do with limitations to the way this GitHub blog site is rendered) - your results, except for using initial ggplot figure, will be interactive.
 
 
 
@@ -12,7 +12,7 @@ There are a number of packages available now in R for mapping and in particular 
 - Explore a sampling of interactive mapping libraries in R
 
 ## Quick Links to Exercises
-- [Exercise 1](#exercise-1): ggplot, plotly and ggmap
+- [Exercise 1](#exercise-1): ggplot and plotly
 - [Exercise 2](#exercise-2): mapview
 - [Exercise 3](#exercise-3): leaflet
 - [Exercise 4](#exercise-4): tmap
@@ -20,7 +20,7 @@ There are a number of packages available now in R for mapping and in particular 
 
 
 ## Exercise 1
-### ggplot, plotly and ggmap
+### ggplot and plotly
 
 This first set of examples include gplot and ggmap, which aren't interactive, but shows using plotly with ggplot map for interactive map
 ```r
@@ -36,23 +36,23 @@ g = ggplot(states) +
   scale_fill_distiller("perc_water",palette = "Spectral", direction = 1) +
   ggtitle("Percent Water by State")
 g
-
-ggplotly(g)
 ```
 
+![states_ggplot](/AWRA_GIS_R_Workshop/figure/states_ggplot.png)
+
+
+Use plotly to make interactive
+```r
+ggplotly(g)
+```
+![plotly](/AWRA_GIS_R_Workshop/figure/plotly.png)
+
+## Exercise 1
+### ggplot and plotly
 
 
 
-- R `raster` Resources:
 
-    - [Wageningen University IntrotoRaster](http://geoscripting-wur.github.io/IntroToRaster/)
-    
-    - [Wageningen University AdvancedRasterAnalysis](https://geoscripting-wur.github.io/AdvancedRasterAnalysis/)
 
-    - [The Visual Raster Cheat Sheet](https://cran.r-project.org/web/packages/raster/)
-    
-    OR you can install this as a package and run examples yourself in R:
-    
-    - [The Visual Raster Cheat Sheet GitHub Repo](https://github.com/etiennebr/visualraster)
-    
-    - [Rastervis](https://oscarperpinan.github.io/rastervis/)
+
+
