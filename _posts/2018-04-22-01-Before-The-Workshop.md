@@ -1,5 +1,5 @@
 ---
-title: "01 - Before The Workshop"
+title: "Before The Workshop"
 author: Marc Weber
 layout: post_page
 ---
