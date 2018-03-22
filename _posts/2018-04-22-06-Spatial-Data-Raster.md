@@ -1,5 +1,5 @@
 ---
-title: "06 - Spatial Data in R - Raster"
+title: "Lesson 3 - Spatial Data in R - Raster"
 author: Marc Weber
 layout: post_page
 ---
