@@ -65,7 +65,7 @@ ggplotly(g)
 mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
 ```
 
-Spend some time playing with parameters in mapview - examine the interactive plot - try different backgrounds, see how you can toggle individual features on and off.  `mapview` can plot rasters as well - try generating a simple map like the one above using some of the raster data from the raster section.  After you plot a raster, see if you can plot multiple layers - `mapview` makes it easy to plot multiple layers together as described [here](https://github.com/r-spatial/mapview/blob/develop/vignettes/articles/mapview_02-advanced.Rmd)
+Spend some time playing with parameters in mapview - examine the interactive plot - try different backgrounds, see how you can toggle individual features on and off.  `mapview` can plot rasters as well - try generating a simple map like the one above using one of the raster layers from the raster section.  After you plot a raster, see if you can plot multiple layers - `mapview` makes it easy to plot multiple layers together as described [here](https://github.com/r-spatial/mapview/blob/develop/vignettes/articles/mapview_02-advanced.Rmd)
 
 
 
