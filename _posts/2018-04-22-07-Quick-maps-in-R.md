@@ -16,8 +16,7 @@ There are a number of packages available now in R for mapping and in particular 
 - [Exercise 2](#exercise-2): mapview
 - [Exercise 3](#exercise-3): leaflet
 - [Exercise 4](#exercise-4): tmap
-- [Exercise 3](#exercise-3): add web services layer
-
+- [R Mapping Resources](#R-Mapping-Resources)
 
 ## Exercise 1
 ### ggplot and plotly
@@ -32,6 +31,7 @@ library(leaflet)
 library(tidyverse)
 library(sf)
 library(USAboundaries)
+library(rbokeh)
 states <- us_states()
 states <-states %>%
   filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
@@ -68,8 +68,37 @@ mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
 Spend some time playing with parameters in mapview - examine the interactive plot - try different backgrounds, see how you can toggle individual features on and off.  `mapview` can plot rasters as well - try generating a simple map like the one above using one of the raster layers from the raster section.  After you plot a raster, see if you can plot multiple layers - `mapview` makes it easy to plot multiple layers together as described [here](https://github.com/r-spatial/mapview/blob/develop/vignettes/articles/mapview_02-advanced.Rmd)
 
 
+## Exercise 3
+### leaflet
+`Leaflet` is an extremely popular open-source javascript library for interactive web mapping, and the `leaflet` R package allows R users to create `Leaflet` maps from R.
+
+The simplest of leaflet maps
+```r
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-123.290698, lat=44.565578, popup="Here's where I work")
+m  # Print the map
+```
+
+You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons.
+```r
+leaflet(states) %>%
+  addTiles() %>%
+  addPolygons()
+```
+
+Your turn - try adding our srtm raster data to a leaflet map and explore other provider tiles and try setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
+
+## Exercise 4
+### tmap
 
 
+
+
+
+## R Mapping Resources<a name="#R-Mapping-Resources"></a>:
+
+- [Leaflet for R](https://rstudio.github.io/leaflet/)
 
 
 
