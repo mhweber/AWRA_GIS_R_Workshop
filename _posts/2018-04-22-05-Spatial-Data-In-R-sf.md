@@ -149,6 +149,7 @@ ggplot(wsa_plains) +
 Now let's grab some administrative boundary data, for instance US states.  After bringing in, let's examine the coordinate system and compare with the coordinate system of the WSA data we already have loaded.  Remember, in `sf`, as with `sp`, we need to have data in the same CRS in order to do any kind of spatial operations involving both datasets.
 
 ```r
+library(USAboundaries)
 states  <- us_states()
 levels(as.factor(states$state_abbr))
 states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
