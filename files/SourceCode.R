@@ -118,7 +118,7 @@ plot(StreamGages, axes=TRUE, col='blue')
 
 map('state',regions=c('oregon','washington','idaho'),fill=FALSE, add=T)
 
-plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in blue on top of other sites
+plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in yellow on top of other sites
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
@@ -128,7 +128,7 @@ getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
 slotNames(HUCs) #get slots using method
 str(HUCs, 2)
-head(HUCS@data) #the data frame slot 
+head(HUCs@data) #the data frame slot 
 HUCs@bbox #call on slot to get bbox
 
 HUCs@polygons[[1]]
@@ -153,9 +153,8 @@ gArea(HUCs)
 
 # Reading in Spatial Data
 ogrDrivers()
-
-download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip", "/home/marc/citylim_2017.zip")
-unzip("citylim_2017.zip", exdir = "/home/marc") 
+download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip","citylim_2017.zip")
+unzip("citylim_2017.zip", exdir = ".") 
 citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
 plot(citylims, axes=T, main='Oregon City Limits') # plot it!
 
@@ -171,12 +170,15 @@ print(fc_list)
 state_poly = readOGR(dsn=fgdb,layer="state_poly")
 plot(state_poly, axes=TRUE)
 cob_poly = readOGR(dsn=fgdb,layer="cob_poly")
-plot(cob_poly, add=TRUE, col='red')
+plot(cob_poly, add=TRUE, border='red')
 
 #######################
 # SpatialData in R - sf
 #######################
 
+# From CRAN:
+install.packages("sf")
+# From GitHub:
 library(devtools)
 # install_github("edzer/sfr")
 library(sf)
@@ -200,7 +202,7 @@ str(wsa_plains)
 
 head(wsa_plains[,c(1,60)])
 
-plot(wsa_plains[c(46,56)], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains[c(46,56)], graticule = st_crs(wsa_plains), axes=TRUE)
 
 plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
@@ -211,6 +213,7 @@ ggplot(wsa_plains) +
   theme_bw()
 
 # Exercise 2
+library(USAboundaries)
 states  <- us_states()
 levels(as.factor(states$state_abbr))
 states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
@@ -303,8 +306,8 @@ ggplot(avg_cond_state) +
 
 st_drivers()
 
-download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_110m_admin_0_countries.zip", "/home/marc/ne_110m_admin_0_countries.zip")
-unzip("ne_110m_admin_0_countries.zip", exdir = "/home/marc") 
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip", "ne_110m_admin_0_countries.zip")
+unzip("ne_110m_admin_0_countries.zip", exdir = ".") 
 countries <- st_read("ne_110m_admin_0_countries.shp") 
 plot(countries$geometry) # plot it!
 
