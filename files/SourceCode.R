@@ -352,10 +352,10 @@ plot(b)
 
 # Exercise 1
 
-US <- getData("GADM",country="USA",level=2)
+US <- getData("GADM",country="USA",level=1)
 states    <- c('California', 'Nevada', 'Utah','Montana', 'Idaho', 'Oregon', 'Washington')
 PNW <- US[US$NAME_1 %in% states,]
-plot(PNW, axes=TRUE)
+plot(PNW$NAME_1, axes=TRUE)
 
 library(ggplot2)
 ggplot(PNW) + geom_polygon(data=PNW, aes(x=long,y=lat,group=group),
