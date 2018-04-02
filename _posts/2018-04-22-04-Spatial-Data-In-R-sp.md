@@ -62,7 +62,7 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-              download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
               "NLCD2011.Rdata",
               method="auto",
               mode="wb")
@@ -440,7 +440,7 @@ map('state',regions=c('oregon','washington','idaho'),fill=FALSE, add=T)
 We can also use subsetting with plotting with this stream gage data to symbolize our gages by state for instance - try the following lines, try different colors or border states
 
 ```r
-plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in blue on top of other sites
+plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in yellow on top of other sites
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 ```
@@ -458,7 +458,7 @@ getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
 slotNames(HUCs) #get slots using method
 str(HUCs, 2)
-head(HUCS@data) #the data frame slot 
+head(HUCs@data) #the data frame slot 
 HUCs@bbox #call on slot to get bbox
 ```
 
@@ -508,8 +508,8 @@ You have tons of options available!  Here are a couple quick examples for both s
 
 Reading in shapefiles:
 ```r
-download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip", "/home/marc/citylim_2017.zip")
-unzip("citylim_2017.zip", exdir = "/home/marc") 
+download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip","citylim_2017.zip")
+unzip("citylim_2017.zip", exdir = ".") 
 citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
 plot(citylims, axes=T, main='Oregon City Limits') # plot it!
 ```
@@ -546,7 +546,7 @@ plot(state_poly, axes=TRUE)
 
 ```r
 cob_poly = readOGR(dsn=fgdb,layer="cob_poly")
-plot(cob_poly, add=TRUE, col='red')
+plot(cob_poly, add=TRUE, border='red')
 ```
 ![gdb_counties](/AWRA_GIS_R_Workshop/figure/gdb_counties.png)
 

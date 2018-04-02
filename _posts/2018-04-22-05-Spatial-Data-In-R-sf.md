@@ -25,9 +25,12 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 - [Reading in Spatial Data with `sf`](#reading-in-Spatial-Data-sf): Reading in spatial data sets using rgdal
 - [R `sf` Resources](#R-sf-Resources)
 
-First, if not already installed, install `sf`
+First, if not already installed, install `sf`.  You can either install from CRAN or you can install the most current development version from Github - both methods shown below
 
 ```r
+# From CRAN:
+install.packages("sf")
+# From GitHub:
 library(devtools)
 # install_github("edzer/sfr")
 library(sf)
@@ -121,7 +124,7 @@ head(wsa_plains[,c(1,60)])
 We can do simple plotting just as with `sp` spatial objects. `sf` by default creates a multi-panel lattice plot much like the `sp` package `spplot` function - either plot particular columns in multiple plots or specify the `geometry` column to make a single simple plot.  Note how it's easy to use graticules as a parameter for `plot` in `sf`. 
 
 ```r
-plot(wsa_plains[c(46,56)], main='EPA WSA Sites in the Plains Ecoregions', graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains[c(46,56)], graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
@@ -150,6 +153,7 @@ Now let's grab some administrative boundary data, for instance US states.  After
 
 ```r
 library(sf)
+library(USAboundaries)
 states  <- us_states()
 levels(as.factor(states$state_abbr))
 states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
@@ -313,7 +317,7 @@ You'll see if you do `head` on your data there are a LOT of fields in there now 
 ## Exercise 4
 ### Spatial operations - aggregation
 
-Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in previous step spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - see if you can figure out how on your own!
+Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in the previous spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - see if you can figure out how on your own!
 
 For performing spatial aggregation, the idea is to take some spatial data, and summarize that data in relation to another spatial grouping variable (think city populations averaged by state).  Using some of the data we've used in previous steps, we can accomplish this in a couple of ways.
 
@@ -365,8 +369,8 @@ Again, lots and lots of options!  Here are a couple quick examples for both shap
 
 Reading in shapefiles:
 ```r
-download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_110m_admin_0_countries.zip", "/home/marc/ne_110m_admin_0_countries.zip")
-unzip("ne_110m_admin_0_countries.zip", exdir = "/home/marc") 
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip", "ne_110m_admin_0_countries.zip")
+unzip("ne_110m_admin_0_countries.zip", exdir = ".") 
 countries <- st_read("ne_110m_admin_0_countries.shp") 
 plot(countries$geometry) # plot it!
 ```

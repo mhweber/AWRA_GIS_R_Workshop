@@ -78,7 +78,7 @@ Let's play with some real datasets and perform some simple analyses on some rast
 
 
 ```r
-US <- getData("GADM",country="USA",level=2)
+US <- getData("GADM",country="USA",level=1)
 states    <- c('California', 'Nevada', 'Utah','Montana', 'Idaho', 'Oregon', 'Washington')
 PNW <- US[US$NAME_1 %in% states,]
 plot(PNW, axes=TRUE)

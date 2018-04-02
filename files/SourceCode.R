@@ -118,7 +118,7 @@ plot(StreamGages, axes=TRUE, col='blue')
 
 map('state',regions=c('oregon','washington','idaho'),fill=FALSE, add=T)
 
-plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in blue on top of other sites
+plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the Oregon sites in yellow on top of other sites
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
@@ -128,7 +128,7 @@ getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
 slotNames(HUCs) #get slots using method
 str(HUCs, 2)
-head(HUCS@data) #the data frame slot 
+head(HUCs@data) #the data frame slot 
 HUCs@bbox #call on slot to get bbox
 
 HUCs@polygons[[1]]
@@ -153,9 +153,8 @@ gArea(HUCs)
 
 # Reading in Spatial Data
 ogrDrivers()
-
-download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip", "/home/marc/citylim_2017.zip")
-unzip("citylim_2017.zip", exdir = "/home/marc") 
+download.file("ftp://ftp.gis.oregon.gov/adminbound/citylim_2017.zip","citylim_2017.zip")
+unzip("citylim_2017.zip", exdir = ".") 
 citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
 plot(citylims, axes=T, main='Oregon City Limits') # plot it!
 
@@ -171,56 +170,158 @@ print(fc_list)
 state_poly = readOGR(dsn=fgdb,layer="state_poly")
 plot(state_poly, axes=TRUE)
 cob_poly = readOGR(dsn=fgdb,layer="cob_poly")
-plot(cob_poly, add=TRUE, col='red')
+plot(cob_poly, add=TRUE, border='red')
 
 #######################
 # SpatialData in R - sf
 #######################
 
+# From CRAN:
+install.packages("sf")
+# From GitHub:
 library(devtools)
 # install_github("edzer/sfr")
 library(sf)
 
 methods(class = "sf")
 
+# Exercise 1
+library(RCurl)
 library(sf)
-counties_zip <- 'http://oe.oregonexplorer.info/ExternalContent/SpatialDataforDownload/orcnty2015.zip'
-download.file(counties_zip, '/home/marc/OR_counties.zip')
-unzip('/home/marc/OR_counties.zip')
-counties <- st_read('orcntypoly.shp')
+library(ggplot2)
+download <- getURL("https://www.epa.gov/sites/production/files/2014-10/wsa_siteinfo_ts_final.csv")
 
-class(counties)
+wsa <- read.csv(text = download)
+class(wsa)
 
-attr(counties, "sf_column")
+levels(wsa$ECOWSA9)
+wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 
-head(counties)
+wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
+str(wsa_plains)
 
-plot(counties[1], main='Oregon Counties', graticule = st_crs(counties), axes=TRUE)
+head(wsa_plains[,c(1,60)])
 
-cities_zip <- 'http://navigator.state.or.us/sdl/data/shapefile/m2/cities.zip'
-download.file(cities_zip, '/home/marc/OR_cities.zip')
-unzip('/home/marc/OR_cities.zip')
-cities <- st_read("cities.shp")
+plot(wsa_plains[c(46,56)], graticule = st_crs(wsa_plains), axes=TRUE)
 
-plot(cities[1], main='Oregon Cities', axes=TRUE, pch=3)
+plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
+plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
 
-city_buffers <- st_buffer(cities, 10000)
-plot(city_buffers, add=TRUE)
-library(sp)
-data(quakes)
-head(quakes)
+ggplot(wsa_plains) +
+  geom_sf() +
+  ggtitle("EPA WSA Sites in the Plains Ecoregions") +
+  theme_bw()
 
-class(quakes)
+# Exercise 2
+library(USAboundaries)
+states  <- us_states()
+levels(as.factor(states$state_abbr))
+states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
 
-quakes_sf = st_as_sf(quakes, coords = c("long", "lat"), crs = 4326,agr = "constant")
+st_crs(states)
+st_crs(wsa_plains)
+# They're not equal, which we verify with:
+st_crs(states) == st_crs(wsa_plains)
+# We'll tranfsorm the WSA sites to same CRS as states
+wsa_plains <- st_transform(wsa_plains, st_crs(states))
 
-str(quakes_sf)
-st_bbox(quakes_sf) 
-head(st_coordinates(quakes_sf))
+plot(states$geometry, axes=TRUE)
+plot(wsa_plains$geometry, col='blue',add=TRUE)
 
-plot(quakes_sf[,3],cex=log(quakes_sf$depth/100), pch=21, bg=24, lwd=.4, axes=T, 
-     main="Depths of Earthquakes off of Fiji") 
+plains_states <- states[wsa_plains,]
 
+plains_states <- states[wsa_plains,op = st_intersects]
+
+iowa = states[states$state_abbr=='IA',]
+iowa_sites <- st_intersection(wsa_plains, iowa)
+
+sel_list <- st_intersects(wsa_plains, iowa)
+
+sel_mat <- st_intersects(wsa_plains, iowa, sparse = FALSE)
+iowa_sites <- wsa_plains[sel_mat,]
+plot(plains_states$geometry, axes=T)
+plot(iowa_sites, add=T, col='blue')
+
+sel_mat <- st_disjoint(wsa_plains, iowa, sparse = FALSE)
+not_iowa_sites <- wsa_plains[sel_mat,]
+plot(plains_states$geometry, axes=T)
+plot(not_iowa_sites, add=T, col='red')
+
+# Exercise 3
+wsa_plains <- wsa_plains[c(1:4,60)]
+wsa_plains <- st_join(wsa_plains, plains_states)
+# verify your results
+head(wsa_plains)
+
+library(dataRetrieval)
+IowaNitrogen<- readWQPdata(statecode='IA', characteristicName="Nitrogen")
+head(IowaNitrogen)
+names(IowaNitrogen)
+
+siteInfo <- attr(IowaNitrogen, "siteInfo") 
+unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
+
+IowaSummary <- IowaNitrogen %>%
+  dplyr::filter(ResultMeasure.MeasureUnitCode %in% c("mg/l","mg/l      ")) %>%
+  dplyr::group_by(MonitoringLocationIdentifier) %>%
+  dplyr::summarise(count=n(),
+                   start=min(ActivityStartDateTime),
+                   end=max(ActivityStartDateTime),
+                   mean = mean(ResultMeasureValue, na.rm = TRUE)) %>%
+  dplyr::arrange(-count) %>%
+  dplyr::left_join(siteInfo, by = "MonitoringLocationIdentifier")
+
+iowa_wq = st_as_sf(IowaSummary, coords = c("dec_lon_va", "dec_lat_va"), crs = 4269,agr = "constant")
+
+plot(st_geometry(subset(states, state_abbr == 'IA')), axes=T)
+plot(st_geometry(subset(wsa_plains, STATE =='IA')), add=T, col='blue')
+plot(iowa_wq, add=T, col='red')
+
+wsa_iowa <- subset(wsa_plains, state_abbr=='IA')
+wsa_iowa <- st_transform(wsa_iowa, crs=26915)
+iowa_wq <- st_transform(iowa_wq, crs=26915)
+
+wsa_wq = st_join(wsa_iowa, iowa_wq, st_is_within_distance, dist = 50000)
+
+# Exercise 4
+download <- getURL("https://www.epa.gov/sites/production/files/2014-10/waterchemistry.csv")
+
+wsa_chem <- read.csv(text = download)
+wsa$COND <- wsa_chem$COND[match(wsa$SITE_ID, wsa_chem$SITE_ID)]
+
+wsa = st_as_sf(wsa, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
+states <- st_transform(states, st_crs(wsa))
+plot(states$geometry, axes=TRUE)
+plot(wsa$geometry, add=TRUE)
+
+avg_cond_state <- st_join(states, wsa) %>%
+  dplyr::group_by(name) %>%
+  dplyr::summarize(MeanCond = mean(COND, na.rm = TRUE))
+
+ggplot(avg_cond_state) +
+  geom_sf(aes(fill = MeanCond)) +
+  scale_fill_distiller("Conductivity", palette = "Greens") +
+  ggtitle("Averge Conductivity (uS/cm @ 25 C) per State") +
+  theme_bw()
+
+st_drivers()
+
+download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip", "ne_110m_admin_0_countries.zip")
+unzip("ne_110m_admin_0_countries.zip", exdir = ".") 
+countries <- st_read("ne_110m_admin_0_countries.shp") 
+plot(countries$geometry) # plot it!
+
+# Geodatabase Example - if you haven't already downloaded:
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+unzip("state_county_boundary.zip", exdir = "/home/marc")
+fgdb = "state_county_boundary.gdb"
+
+# List all feature classes in a file geodatabase
+st_layers(fgdb)
+
+# Read the feature class
+state_poly = st_read(dsn=fgdb,layer="state_poly")
+state_poly$SHAPE
 
 ###########################
 # SpatialData in R - Raster
@@ -251,10 +352,10 @@ plot(b)
 
 # Exercise 1
 
-US <- getData("GADM",country="USA",level=2)
+US <- getData("GADM",country="USA",level=1)
 states    <- c('California', 'Nevada', 'Utah','Montana', 'Idaho', 'Oregon', 'Washington')
 PNW <- US[US$NAME_1 %in% states,]
-plot(PNW, axes=TRUE)
+plot(PNW$NAME_1, axes=TRUE)
 
 library(ggplot2)
 ggplot(PNW) + geom_polygon(data=PNW, aes(x=long,y=lat,group=group),
@@ -395,7 +496,7 @@ plot(NLCD2011)
 e <- extract(NLCD2011, ThreeCounties, method = 'simple')
 class(e)
 length(e) 
-# This next section gets into fairly advance approaces in R using apply family of functions as well as melting (turning data to long form)
+# This next section gets into fairly advance approaches in R using apply family of functions as well as melting (turning data to long form)
 # and casting (putting back into wide form)
 et = lapply(e,table)
 library(reshape)
@@ -429,3 +530,276 @@ nlcd <- nlcd[c(18,2:17)]
 nlcd
 
 # Whew, that's it - is it a fair bit of code?  Sure.  But is it easily, quickly repeatable and reproducible now?  You bet.
+
+###########################
+# SpatialData in R - Interactive Mapping
+###########################
+
+# Exercise 1
+library(ggplot2)
+library(plotly)
+library(mapview)
+library(tmap)
+library(leaflet)
+library(tidyverse)
+library(sf)
+library(USAboundaries)
+states <- us_states()
+states <-states %>%
+  filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
+  mutate(perc_water = log10((awater)/(awater + aland) *100))
+
+states <- st_transform(states, 5070)
+# plot, ggplot
+g = ggplot(states) +
+  geom_sf(aes(fill = perc_water)) +
+  scale_fill_distiller("perc_water",palette = "Spectral", direction = 1) +
+  ggtitle("Percent Water by State")
+g
+
+ggplotly(g)
+
+# Exercise 2
+mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
+
+# An example that may be similar to what you try:
+mapview(srtm)
+mapview(states[states$name=='Oregon',]) + mapview(srtm) # can you figure out how to set the zoom when combining layers?
+
+###########################
+# SpatialData in R - Exploratory Spatial Data Analysis (ESDA)
+###########################
+
+library(rgdal)
+library(gstat)
+library(spdep)
+
+# The shapefile needs to be in the working directory to use '.' or you need to specify the full path in first parameter to readOGR
+wsa_plains <- readOGR(".","nplspltpl_bug")
+
+class(wsa_plains)
+dim(wsa_plains@data)
+names(wsa_plains)
+str(wsa_plains, max.level = 2)
+
+bubble(wsa_plains['COND'])
+
+coordinates(wsa_plains)
+
+hscat(COND~1,wsa_plains, c(0, 10000, 50000, 250000, 750000, 1500000, 3000000))
+
+hscat(log(COND) ~ 1,wsa_plains, c(0, 10000, 50000, 250000, 750000, 1500000, 3000000))
+hscat(log(COND) ~ 1,wsa_plains, c(0, 10000, 50000, 100000, 150000, 200000, 250000))
+hscat(log(COND) ~ 1,wsa_plains, c(0, 10000, 25000, 50000, 75000, 100000))
+hscat(log(PTL) ~ 1,wsa_plains, c(0, 10000, 50000, 250000, 750000, 1500000, 3000000))
+hscat(log(PTL) ~ 1,wsa_plains, c(0, 10000, 50000, 100000, 150000, 200000, 250000))
+hscat(log(PTL) ~ 1,wsa_plains, c(0, 10000, 25000, 50000, 75000, 100000))
+
+tpl <- subset(wsa_plains, ECOWSA9 == "TPL")
+coords_tpl <- coordinates(tpl)
+tpl_nb <- knn2nb(knearneigh(coords_tpl, k = 1), row.names=tpl$SITE_ID)
+tpl_nb1 <- knearneigh(coords_tpl, k = 1)
+#using the k=1 object to find the minimum distance at which all sites have a distance-based neighbor
+tpl_dist <- unlist(nbdists(tpl_nb,coords_tpl))
+
+summary(tpl_dist)#use max distance from summary to assign distance to create neighbors
+tplnb_270km <- dnearneigh(coords_tpl, d1=0, d2=271000, row.names=tpl$SITE_ID)
+summary(tplnb_270km)
+
+plot(tpl)
+plot(knn2nb(tpl_nb1), coords_tpl, add = TRUE)
+title(main = "TPL K nearest neighbours, k = 1")
+
+library(maptools)
+library(rgdal)
+library(spdep)
+library(stringr)
+library(sp)
+library(reshape) # for rename function
+library(tidyverse)
+
+# N.B. Assigning short name to long path to reduce typing
+shp.loc <- "//AA.AD.EPA.GOV/ORD/CIN/USERS/MAIN/L-P/mmcmanus/Net MyDocuments/AWRA GIS 2018/R and Spatial Data Workshop"
+
+shp <- readOGR(shp.loc, "ef_lmr_huc12")
+
+plot(shp)
+dim(shp@data)
+
+names(shp@data)
+
+head(shp@data) # check on row name being used
+# Code from Bivand book identifies classes within data frame @ data
+# Shows FEATUREID variable as interger
+sapply(slot(shp, "data"), class)
+
+# Assign row names based on FEATUREID
+row.names(shp@data) <- (as.character(shp@data$FEATUREID))
+head(shp@data)
+tail(shp@data)
+
+# Read in StreamCat data for Ohio River Hydroregion. Check getwd()
+scnlcd2011 <- read.csv("NLCD2011_Region05.csv")
+names(scnlcd2011)
+dim(scnlcd2011)
+
+class(scnlcd2011)
+
+str(scnlcd2011, max.level = 2)
+head(scnlcd2011)
+scnlcd2011 <- reshape::rename(scnlcd2011, c(COMID = "FEATUREID"))
+names(scnlcd2011)
+
+row.names(scnlcd2011) <- scnlcd2011$FEATUREID
+
+head(scnlcd2011)
+
+# gages$AVE <- gage_flow$AVE[match(gages$SOURCE_FEA,gage_flow$SOURCE_FEA)]
+# this matches the FEATUREID from the 815 polygons in shp to the FEATUREID from the df scnlcd2011
+efnlcd2011 <- scnlcd2011[match(shp$FEATUREID, scnlcd2011$FEATUREID),]
+dim(efnlcd2011)
+
+head(efnlcd2011) # FEATUREID is now row name
+row.names(efnlcd2011) <- efnlcd2011$FEATUREID
+head(efnlcd2011)
+str(efnlcd2011, max.level = 2)
+summary(efnlcd2011$PctCrop2011Cat)
+
+summary(efnlcd2011$PctDecid2011Cat)
+
+efnlcd2011 <- efnlcd2011 %>%
+  mutate(logCrop = log(PctCrop2011Cat + 0.50),
+         logDecid = log(PctDecid2011Cat + 0.50))
+
+names(efnlcd2011)
+
+sp@data = data.frame(sp@data, df[match(sp@data[,by], df[,by]),])
+shp@data = data.frame(shp@data, efnlcd2011[match(shp@data[,"FEATUREID"], efnlcd2011[,"FEATUREID"]),])
+
+head(shp@data)
+class(shp)
+
+names(shp@data)
+dim(shp@data)
+class(shp@data)
+class(shp)
+summary(shp)
+head(shp@data)
+summary(shp@data)
+
+ctchcoords <- coordinates(shp)
+class(ctchcoords)
+
+ef.nb1 <- poly2nb(shp, queen = FALSE)
+summary(ef.nb1)
+
+class(ef.nb1)
+
+plot(shp, border = "black")
+plot(ef.nb1, ctchcoords, add = TRUE, col = "blue")
+
+ef.nbwts.list <- nb2listw(ef.nb1, style = "W")
+names(ef.nbwts.list)
+
+moran.plot(shp$PctDecid2011Cat, listw = ef.nbwts.list, labels = shp$FEATUREID)
+
+moran.plot(shp$PctDecid2011Cat, listw = ef.nbwts.list, labels = shp$FEATUREID)
+
+unique(shp@data$huc12name)
+
+huc12_ds1 <- shp@data
+names(huc12_ds1)
+str(huc12_ds1) # check huc12names is a factor
+
+library(tidyverse)
+# from Jeff Hollister EPA NHEERL-AED
+# the indices [#] pull out the corresponding statistic from fivenum function
+# library(dplyr)
+huc12_ds2 <- huc12_ds1 %>%
+  group_by(huc12name) %>%
+  summarize(decidmin = fivenum(PctDecid2011Cat)[1],
+            decidq1 = fivenum(PctDecid2011Cat)[2],
+            decidmed = fivenum(PctDecid2011Cat)[3],
+            decidq3 = fivenum(PctDecid2011Cat)[4],
+            decidmax = fivenum(PctDecid2011Cat)[5],
+            cropmin = fivenum(PctCrop2011Cat)[1],
+            cropq1 = fivenum(PctCrop2011Cat)[2],
+            cropmed = fivenum(PctCrop2011Cat)[3],
+            cropq3 = fivenum(PctCrop2011Cat)[4],
+            cropmax = fivenum(PctCrop2011Cat)[5])
+
+# N.B. using tidyverse function defaults to creating an object that is:
+# "tbl_df"     "tbl"        "data.frame"
+class(huc12_ds2)
+
+# from Marcus Beck in 2016-05-16 email
+# devtools::install_github('USEPA/R-micromap-package-development', ref = 'development')
+devtools::install_github('USEPA/micromap')
+library(micromap)
+
+huc12 <- readOGR(shp.loc, "ef_lmr_WBD_Sub")
+plot(huc12)
+names(huc12@data)
+
+huc12.map.table<-create_map_table(huc12,'huc12name')#ID variable is huc12name
+head(huc12.map.table)
+
+mmplot(stat.data = as.data.frame(huc12_ds2),
+       map.data = huc12.map.table,
+       panel.types = c('dot_legend', 'labels', 'box_summary', 'box_summary', 'map'),
+       panel.data=list(NA,
+                       'huc12name',
+                       list('cropmin', 'cropq1', 'cropmed', 'cropq3', 'cropmax'),
+                       list('decidmin', 'decidq1', 'decidmed', 'decidq3', 'decidmax'),
+                       NA),
+       ord.by = 'cropmed',
+       rev.ord = TRUE,
+       grouping = 6,
+       median.row = FALSE,
+       map.link = c('huc12name', 'ID'))
+
+mmplot_lc <- mmplot(stat.data = as.data.frame(huc12_ds2),
+                    map.data = huc12.map.table,
+                    panel.types = c('dot_legend', 'labels', 'box_summary', 'box_summary', 'map'),
+                    panel.data=list(NA,
+                                    'huc12name',
+                                    list('cropmin', 'cropq1', 'cropmed', 'cropq3', 'cropmax'),
+                                    list('decidmin', 'decidq1', 'decidmed', 'decidq3', 'decidmax'),
+                                    NA),
+                    ord.by = 'cropmed',
+                    rev.ord = TRUE,
+                    grouping = 6,
+                    median.row = FALSE,
+                    map.link = c('huc12name', 'ID'),
+                    plot.height=6, plot.width=9,
+                    colors=brewer.pal(6, "Spectral"),
+                    
+                    panel.att=list(list(1, panel.width=.8, point.type=20, point.size=2,point.border=FALSE, xaxis.title.size=1),
+                                   list(2, header='WBD HUC12', panel.width=1.25, align='center', text.size=1.1),
+                                   list(3, header='2011 NLCD\nCropland',
+                                        graph.bgcolor='white',
+                                        xaxis.ticks=c( 0, 25, 50, 75, 100),
+                                        xaxis.labels=c(0, 25, 50, 75, 100),
+                                        xaxis.labels.size=1,
+                                        #xaxis.labels.angle=90,
+                                        xaxis.title='Percent',
+                                        xaxis.title.size=1,
+                                        graph.bar.size = .6),
+                                   list(4, header='2011 NLCD\nDeciduous Forest',
+                                        graph.bgcolor='white',
+                                        xaxis.ticks=c( 0, 25, 50, 75, 100),
+                                        xaxis.labels=c(0, 25, 50, 75, 100),
+                                        xaxis.labels.size=1,
+                                        #xaxis.labels.angle=90,
+                                        xaxis.title='Percent',
+                                        xaxis.title.size=1,
+                                        graph.bar.size = .6),
+                                   list(5, header='Micromaps',
+                                        inactive.border.color=gray(.7),
+                                        inactive.border.size=2)))
+
+
+print(mmplot_lc, name='mmplot_lc_v1_20180205.tiff',res=600)
+
+library(tmap)
+qtm(shp = shp, fill = c("PctDecid2011Cat", "PctCrop2011Cat"), fill.palette = c("Blues"), ncol =2)
