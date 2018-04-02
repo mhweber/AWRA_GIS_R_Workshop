@@ -249,7 +249,7 @@ Try working through this one on your own - the solution is posted in the [source
   1. Create a new `SpatialPolygonsDataFrame` from our earlier OR `SpatialPolygonsDataFrame` by subsetting like so:
 
 ```r
-ThreeCounties <- OR[OR$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
+ThreeCounties <- US[US$NAME_1 == 'Oregon' & US$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
 ```
 
   2. Crop the earlier srtm_crop_OR `RasterLayer` using the new ThreeCounties `SpatialPolygonsDataFrame`
@@ -267,6 +267,7 @@ download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/
               "NLCD2011.Rdata",
               method="auto",
               mode="wb")
+load('NLCD_OR.Rdata')
 ```
 
 Tabulating land use in a raster by spatial polygon regions is a bit trickier than a straight zonal statistics operation in R - some of this may seem a bit confusing, but try and take your time and work through the process. Ideas for tabulating lands use from [here](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/introductionTalk.html) and [here](http://zevross.com/blog/2015/03/30/map-and-analyze-raster-data-in-r/).  Again, try looking through these examples, ask questions, try writing your own approach to solve this based on these examples, but you'll likely want to work through the [source code](https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/SourceCode.R) and see if you can follow how it's working.

@@ -462,44 +462,37 @@ ndmi <- calc(x=july, fun=ndmiCalc)
 plot(ndmi)
 
 # Exercise 3
-
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
-              method="auto",
-              mode="wb")
-load('NLCD2011.Rdata')
-
-
 ThreeCounties <- US[US$NAME_1 == 'Oregon' & US$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
-ThreeCounties <- spTransform(ThreeCounties, CRS(projection(NLCD2011)))
-NLCD_ThreeCounties <- crop(NLCD2011, ThreeCounties)
-srtm_mask_Benton <- mask(srtm_crop_Benton, Benton)
-plot(srtm_mask_Benton, main="Elevation (m) in Benton County")
-plot(Benton, add=TRUE)
-
 srtm_crop_3counties <- crop(srtm_crop_OR, ThreeCounties)
 plot(srtm_crop_3counties, main = "Elevation (m) for Washington, \n Multnomah and Hood River Counties")
 plot(ThreeCounties, add=T)
 county_av_el <- extract(srtm_crop_3counties , ThreeCounties, fun=mean, na.rm = T, small = T, df = T)
 
+# Extra
+ThreeCounties$ID <- 1:nrow(ThreeCounties)
+county_av_el$NAME <- ThreeCounties$NAME_2[match(ThreeCounties$ID, row.names(county_av_el))]
+
 download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+              "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
-load("/home/marc/NLCD2011.Rdata")
+load("NLCD_OR_2011.Rdata")
 
 # Here we pull out the raster attribute table to a data frame to use later - when we manipule the raster in the raster package,
 # we lose the extra categories we'll want later
-rat <- as.data.frame(levels(NLCD2011[[1]]))
-
-projection(NLCD2011)
+ThreeCounties <- spTransform(ThreeCounties, CRS(projection(NLCD_OR_2011)))
+projection(NLCD_OR_2011)
 proj4string(ThreeCounties)
-ThreeCounties <- spTransform(ThreeCounties, CRS(projection(NLCD2011)))
+ThreeCounties <- spTransform(ThreeCounties, CRS(projection(NLCD_OR_2011)))
+
+NLCD_ThreeCounties <- crop(NLCD_OR_2011, ThreeCounties)
+rat <- as.data.frame(levels(NLCD_OR_2011[[1]]))
+
 
 # Aggregate so extract doesn't take quite so long - but this will take a few minutes as well...
-NLCD2011 <- aggregate(NLCD2011, 3, fun=modal, na.rm = T)
-plot(NLCD2011)
-e <- extract(NLCD2011, ThreeCounties, method = 'simple')
+NLCD_ThreeCounties <- aggregate(NLCD_ThreeCounties, 3, fun=modal, na.rm = T)
+plot(NLCD_ThreeCounties)
+e <- extract(NLCD_ThreeCounties, ThreeCounties, method = 'simple')
 class(e)
 length(e) 
 # This next section gets into fairly advance approaches in R using apply family of functions as well as melting (turning data to long form)
