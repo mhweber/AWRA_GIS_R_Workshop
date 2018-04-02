@@ -386,14 +386,15 @@ plot(OR, add=TRUE)
 
 srtm_mask_OR <- crop(srtm_crop_OR, OR)
 
-Benton <- OR[OR$NAME_2=='Benton',]
+US <- getData("GADM",country="USA",level=2)
+Benton <- US[US$NAME_1=='Oregon' & US$NAME_2=='Benton',]
 srtm_crop_Benton <- crop(srtm_crop_OR, Benton)
 srtm_mask_Benton <- mask(srtm_crop_Benton, Benton)
 plot(srtm_mask_Benton, main="Elevation (m) in Benton County")
 plot(Benton, add=TRUE)
 
 typeof(values(srtm_crop_OR))
-values(srtm_crop_OR) <- as.numeric(values(srtm_crop_OR))
+# values(srtm_crop_OR) <- as.numeric(values(srtm_crop_OR))
 typeof(values(srtm_crop_OR))
 
 cellStats(srtm_crop_OR, stat=mean)
@@ -469,9 +470,9 @@ download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/
 load('NLCD2011.Rdata')
 
 
-
-ThreeCounties <- OR[OR$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
-NLCD2011 <- crop(OR_NLCD, ThreeCounties)
+ThreeCounties <- US[US$NAME_1 == 'Oregon' & US$NAME_2 %in% c('Washington','Multnomah','Hood River'),]
+ThreeCounties <- spTransform(ThreeCounties, CRS(projection(NLCD2011)))
+NLCD_ThreeCounties <- crop(NLCD2011, ThreeCounties)
 srtm_mask_Benton <- mask(srtm_crop_Benton, Benton)
 plot(srtm_mask_Benton, main="Elevation (m) in Benton County")
 plot(Benton, add=TRUE)
