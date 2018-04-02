@@ -122,7 +122,7 @@ plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
-load("/home/marc/GitProjects/gis_in_action_r_spatial/files/HUCs.RData")
+load("files/HUCs.RData")
 class(HUCs)
 getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
@@ -355,12 +355,17 @@ plot(b)
 US <- getData("GADM",country="USA",level=1)
 states    <- c('California', 'Nevada', 'Utah','Montana', 'Idaho', 'Oregon', 'Washington')
 PNW <- US[US$NAME_1 %in% states,]
-plot(PNW$NAME_1, axes=TRUE)
+plot(PNW, axes=TRUE)
 
 library(ggplot2)
 ggplot(PNW) + geom_polygon(data=PNW, aes(x=long,y=lat,group=group),
                            fill="cadetblue", color="grey") + coord_equal()
 
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/SRTM_OR.RData?raw=true",
+              "SRTM_OR.RData",
+              method="auto",
+              mode="wb")
+load("files/SRTM_OR.RData")
 srtm <- getData('SRTM', lon=-116, lat=42)
 plot(srtm)
 plot(PNW, add=TRUE)

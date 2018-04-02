@@ -62,7 +62,7 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
               "NLCD2011.Rdata",
               method="auto",
               mode="wb")
@@ -452,7 +452,7 @@ Now let's load the Rdata object we downloaded at beginning of this session - Rda
 Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`
 
 ```r
-load("/home/marc/GitProjects/gis_in_action_r_spatial/files/HUCs.RData")
+load("files/HUCs.RData")
 class(HUCs)
 getClass("SpatialPolygonsDataFrame")
 summary(HUCs)

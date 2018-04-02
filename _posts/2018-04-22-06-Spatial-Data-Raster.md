@@ -102,9 +102,14 @@ We can also load some raster data using `getData` - with `getData`, you can load
 - World Climate Data (Tmin, Tmax, Precip, BioClim)
 - Global adm. boundaries (different levels)
 
-Let's first load some elevation data from SRTM - we need to pass lat and lon, we'll base roughly on PNW states we just defined:
+Let's first load some elevation data from SRTM - we need to pass lat and lon, we'll base roughly on PNW states we just defined.  NOTE: pulling in each SRTM scene takes a few minutes, and mosaicking together may require more memory than some will have available on their machines, so I've included step to download and load an .Rdata object with the mosaicked and cropped SRTM scenes at beginning.
 
 ```r
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/SRTM_OR.RData?raw=true",
+              "SRTM_OR.RData",
+              method="auto",
+              mode="wb")
+load("files/SRTM_OR.RData")
 srtm <- getData('SRTM', lon=-116, lat=42)
 plot(srtm)
 plot(PNW, add=TRUE)
