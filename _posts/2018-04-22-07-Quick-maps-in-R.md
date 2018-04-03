@@ -64,6 +64,7 @@ ggplotly(g)
 ```r
 mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
 ```
+![mapview](/AWRA_GIS_R_Workshop/figure/mapview.png)
 
 Spend some time playing with parameters in mapview - examine the interactive plot - try different backgrounds, see how you can toggle individual features on and off.  `mapview` can plot rasters as well - try generating a simple map like the one above using one of the raster layers from the raster section.  After you plot a raster, see if you can plot multiple layers - `mapview` makes it easy to plot multiple layers together as described [here](https://github.com/r-spatial/mapview/blob/develop/vignettes/articles/mapview_02-advanced.Rmd)
 
@@ -79,6 +80,7 @@ m <- leaflet() %>%
   addMarkers(lng=-123.290698, lat=44.565578, popup="Here's where I work")
 m  # Print the map
 ```
+![leaflet](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
 You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons. Note that you need to set the CRS for states to WGS84 or NAD83 to plot in `leaflet` as well as transform from `sf` to `sp` object - below we do all that in chained dplyr steps.
 ```r
@@ -89,17 +91,31 @@ state_map <- states %>%
   addTiles() %>%
   addPolygons()
 ```
+![leaflet_states](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
 Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map and explore other provider tiles, and try if you want setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
 
 ## Exercise 4
 ### tmap
-`tmap` is an R package designed for creating thematic maps and based on the layered grammar of graphics approach Hadley Wickham uses with `ggplot2`.  It has a lot of really fantastic functionality - we'll just touch on very simple examples with datasets we've used so far.
+`tmap` is an R package designed for creating thematic maps and based on the layered grammar of graphics approach Hadley Wickham uses with `ggplot2`.  It has a lot of really fantastic functionality - we'll just touch on very simple examples with datasets we've used so far but I'd encourage exploring this package further.
 
+```r
+# just fill
+tm_shape(states) + tm_fill()
+# borders
+tm_shape(states) + tm_borders()
+# borders and fill
+tm_shape(states) + tm_borders() + tm_fill()
+tm_shape(states) + tm_borders() + tm_fill(col='perc_water')
+```
+![tmap](/AWRA_GIS_R_Workshop/figure/tmap.png)
 
-
-
-
+You can save a map object and then use layering similar to ggplot2
+```r
+map_states <- tm_shape(states) + tm_borders()
+map_states + tm_shape(wsa_plains) + tm_dots()
+```
+![tmap2](/AWRA_GIS_R_Workshop/figure/tmap2.png)
 
 ## R Mapping Resources<a name="#R-Mapping-Resources"></a>:
 

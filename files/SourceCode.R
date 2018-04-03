@@ -599,7 +599,16 @@ leaflet() %>% addTiles() %>%
             title = "Precip")
 
 # Exercise 4
+# just fill
+tm_shape(states) + tm_fill()
+# borders
+tm_shape(states) + tm_borders()
+# borders and fill
+tm_shape(states) + tm_borders() + tm_fill()
+tm_shape(states) + tm_borders() + tm_fill(col='perc_water')
 
+map_states <- tm_shape(states) + tm_borders()
+map_states + tm_shape(wsa_plains) + tm_dots()
 
 ###########################
 # SpatialData in R - Exploratory Spatial Data Analysis (ESDA)
