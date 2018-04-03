@@ -452,7 +452,7 @@ Now let's load the Rdata object we downloaded at beginning of this session - Rda
 Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`
 
 ```r
-load("files/HUCs.RData")
+load("HUCs.RData")
 class(HUCs)
 getClass("SpatialPolygonsDataFrame")
 summary(HUCs)

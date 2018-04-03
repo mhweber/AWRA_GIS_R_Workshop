@@ -402,11 +402,13 @@ state_poly$SHAPE
 
 ## R `sf` Resources<a name="R-sf-Resources"></a>:
 
+- [Simple Features for R](https://r-spatial.github.io/sf/index.html)
+
 - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
 
 - [Spatial Data in R: New Directions](https://edzer.github.io/UseR2017/)
     
-- [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/)
+- [Geocomputation with R](https://geocompr.robinlovelace.net/)
     
 - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
     

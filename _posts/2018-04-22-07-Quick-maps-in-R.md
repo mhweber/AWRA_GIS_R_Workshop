@@ -33,9 +33,9 @@ library(sf)
 library(USAboundaries)
 library(rbokeh)
 states <- us_states()
-states <-states %>%
-  filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
-  mutate(perc_water = log10((awater)/(awater + aland) *100))
+states <- states %>%
+  dplyr::filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
+  dplyr::mutate(perc_water = log10((awater)/(awater + aland)) *100)
 
 states <- st_transform(states, 5070)
 # plot, ggplot
@@ -70,7 +70,7 @@ Spend some time playing with parameters in mapview - examine the interactive plo
 
 ## Exercise 3
 ### leaflet
-`Leaflet` is an extremely popular open-source javascript library for interactive web mapping, and the `leaflet` R package allows R users to create `Leaflet` maps from R.
+`Leaflet` is an extremely popular open-source javascript library for interactive web mapping, and the `leaflet` R package allows R users to create `Leaflet` maps from R. Note that `mapview` is using `Leaflet` under the hood and simplifies the mapping process.
 
 The simplest of leaflet maps
 ```r
@@ -80,17 +80,22 @@ m <- leaflet() %>%
 m  # Print the map
 ```
 
-You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons.
+You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons. Note that you need to set the CRS for states to WGS84 or NAD83 to plot in `leaflet` as well as transform from `sf` to `sp` object - below we do all that in chained dplyr steps.
 ```r
-leaflet(states) %>%
+state_map <- states %>%
+  st_transform(crs = 4326) %>%
+  as("Spatial") %>%
+  leaflet() %>%
   addTiles() %>%
   addPolygons()
 ```
 
-Your turn - try adding our srtm raster data to a leaflet map and explore other provider tiles and try setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
+Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map and explore other provider tiles, and try if you want setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
 
 ## Exercise 4
 ### tmap
+`tmap` is an R package designed for creating thematic maps and based on the layered grammar of graphics approach Hadley Wickham uses with `ggplot2`.  It has a lot of really fantastic functionality - we'll just touch on very simple examples with datasets we've used so far.
+
 
 
 
@@ -98,7 +103,13 @@ Your turn - try adding our srtm raster data to a leaflet map and explore other p
 
 ## R Mapping Resources<a name="#R-Mapping-Resources"></a>:
 
+- [mapview](https://r-spatial.github.io/mapview/)
+
 - [Leaflet for R](https://rstudio.github.io/leaflet/)
 
+- [mapview](https://r-spatial.github.io/mapview/)
 
+- [tmap](https://github.com/mtennekes/tmap)
+
+- [Geocomputation with R 9.2 Static maps](https://github.com/mtennekes/tmap)
 

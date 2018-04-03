@@ -365,7 +365,7 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "SRTM_OR.RData",
               method="auto",
               mode="wb")
-load("files/SRTM_OR.RData")
+load("SRTM_OR.RData")
 srtm <- getData('SRTM', lon=-116, lat=42)
 plot(srtm)
 plot(PNW, add=TRUE)
@@ -540,13 +540,14 @@ library(plotly)
 library(mapview)
 library(tmap)
 library(leaflet)
-library(tidyverse)
+library(dplyr)
 library(sf)
 library(USAboundaries)
+library(plotly)
 states <- us_states()
-states <-states %>%
-  filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
-  mutate(perc_water = log10((awater)/(awater + aland) *100))
+states <- states %>%
+  dplyr::filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
+  dplyr::mutate(perc_water = log10((awater)/(awater + aland)) *100)
 
 states <- st_transform(states, 5070)
 # plot, ggplot
@@ -555,6 +556,11 @@ g = ggplot(states) +
   scale_fill_distiller("perc_water",palette = "Spectral", direction = 1) +
   ggtitle("Percent Water by State")
 g
+# NOTE - if you have an error here, it' may be because you don't have
+# the development version of ggplot installed.  Additionally, scales
+# package was producing error for me and re-installing from CRAN
+# solved the problem.  See Winsont Chang's commment here:
+# https://github.com/hadley/scales/issues/101
 
 ggplotly(g)
 
@@ -562,8 +568,38 @@ ggplotly(g)
 mapview(states, zcol = 'perc_water', alpha.regions = 0.2, burst = 'name')
 
 # An example that may be similar to what you try:
-mapview(srtm)
-mapview(states[states$name=='Oregon',]) + mapview(srtm) # can you figure out how to set the zoom when combining layers?
+mapview(srtm_crop_OR)
+mapview(states[states$name=='Oregon',]) + mapview(srtm_crop_OR) # can you figure out how to set the zoom when combining layers?
+mapview(states)
+
+# Exercise 3
+
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=-123.290698, lat=44.565578, popup="Here's where I work")
+m  # Print the map
+
+state_map <- states %>%
+  st_transform(crs = 4326) %>%
+  as("Spatial") %>%
+  leaflet() %>%
+  addTiles() %>%
+  addPolygons()
+state_map # Print the map
+
+# Plotting raster data with leaflet
+wc <- getData("worldclim", var='prec', res=10)
+# wc is a raster stack of years - pick a year, here using double-
+# bracket notation to select
+wc <- wc[[1]]
+pal <- colorNumeric("RdYlBu", values(wc), na.color = "transparent")
+leaflet() %>% addTiles() %>%
+  addRasterImage(wc, colors = pal, opacity = 0.8) %>%
+  addLegend(pal = pal, values = values(wc),
+            title = "Precip")
+
+# Exercise 4
+
 
 ###########################
 # SpatialData in R - Exploratory Spatial Data Analysis (ESDA)
