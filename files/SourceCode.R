@@ -627,6 +627,7 @@ names(wsa_plains)
 str(wsa_plains, max.level = 2)
 
 bubble(wsa_plains['COND'])
+summary(wsa_plains@data$COND)
 
 coordinates(wsa_plains)
 
@@ -662,10 +663,7 @@ library(sp)
 library(reshape) # for rename function
 library(tidyverse)
 
-# N.B. Assigning short name to long path to reduce typing
-shp.loc <- "//AA.AD.EPA.GOV/ORD/CIN/USERS/MAIN/L-P/mmcmanus/Net MyDocuments/AWRA GIS 2018/R and Spatial Data Workshop"
-
-shp <- readOGR(shp.loc, "ef_lmr_huc12")
+shp <- readOGR('.', "ef_lmr_huc12")
 
 plot(shp)
 dim(shp@data)
@@ -712,14 +710,12 @@ summary(efnlcd2011$PctCrop2011Cat)
 summary(efnlcd2011$PctDecid2011Cat)
 
 efnlcd2011 <- efnlcd2011 %>%
-  mutate(logCrop = log(PctCrop2011Cat + 0.50),
+  dplyr::mutate(logCrop = log(PctCrop2011Cat + 0.50),
          logDecid = log(PctDecid2011Cat + 0.50))
 
 names(efnlcd2011)
 
-sp@data = data.frame(sp@data, df[match(sp@data[,by], df[,by]),])
 shp@data = data.frame(shp@data, efnlcd2011[match(shp@data[,"FEATUREID"], efnlcd2011[,"FEATUREID"]),])
-
 head(shp@data)
 class(shp)
 
@@ -755,7 +751,6 @@ huc12_ds1 <- shp@data
 names(huc12_ds1)
 str(huc12_ds1) # check huc12names is a factor
 
-library(tidyverse)
 # from Jeff Hollister EPA NHEERL-AED
 # the indices [#] pull out the corresponding statistic from fivenum function
 # library(dplyr)
@@ -781,7 +776,7 @@ class(huc12_ds2)
 devtools::install_github('USEPA/micromap')
 library(micromap)
 
-huc12 <- readOGR(shp.loc, "ef_lmr_WBD_Sub")
+huc12 <- readOGR('.', "ef_lmr_WBD_Sub")
 plot(huc12)
 names(huc12@data)
 
