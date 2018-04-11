@@ -1,10 +1,10 @@
 ---
-title: "Installing spatial libraries"
+title: "Installing necessary R packages"
 author: "Marc Weber"
 layout: post_page
 ---
   
-First we need to install several R libraries.  R operates on user-contributed libraries, and we'll be jumping into use of several of these spatial libraries in this workshop.  Several libraries we'll be making use of are `sp`, `rgdal`, `rgeos`, `raster`, and the new `sf` simple features library by Edzer Pebesma.  You should be able to use the packages tab in RStudio (see below) to install binaries in a straightforward way.  Mac and Linux users may have certain pre-requisites to fill, we'll assume you can navigate these on your own or can assist as needed (one of us is using a Linux system).
+First we need to install several R packages.  R operates on user-contributed packages, and we'll be jumping into use of several of these spatial packages in this workshop.  Several packages we'll be making use of are `sp`, `rgdal`, `rgeos`, `raster`, and the new `sf` simple features library by Edzer Pebesma.  You should be able to use the packages tab in RStudio (see below) to install binaries in a straightforward way.  Mac and Linux users may have certain pre-requisites to fill, we'll assume you can navigate these on your own or can assist as needed.
 
 ![RStudio Console](/AWRA_GIS_R_Workshop/figure/packages.png)
 
@@ -22,10 +22,19 @@ install.packages("reshape")
 install.packages("tidyverse")
 install.packages("micromap")
 install.packages("tmap")
-install.packages("geoknife")
 install.packages("RCurl")
 install.packages("ggplot2")
 install.packages("dataRetrieval")
+install.packages("maps")
+install.packages("USAboundaries")
+install.packages("rasterVis")
+install.packages("landsat")
+install.packages("plotly")
+install.packages("leaflet")
+install.packages("rbokeh"
+
+
+
 {% endhighlight %}
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency.  
