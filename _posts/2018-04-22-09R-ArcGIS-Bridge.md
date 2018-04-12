@@ -35,7 +35,8 @@ arc.write(path = tempfile("ca_new", fileext=".shp"), data = ozone.dataframe)
 ```
 
 **Installation instructions**
-	- [ArcMap Installation Video](https://community.esri.com/videos/4134-installing-the-r-arcgis-bridge-for-arcmap-1031)
+
+  - [ArcMap Installation Video](https://community.esri.com/videos/4134-installing-the-r-arcgis-bridge-for-arcmap-1031)
 	- [ArcGIS Pro Version 1.1-1.4 Installation Video](https://community.esri.com/videos/4135-installing-the-r-arcgis-bridge-for-arcgis-pro-11-141)
 	- [ArcGIS Pro Version 2.0+ Installation Video](https://community.esri.com/videos/4136-installing-the-r-arcgis-bridge-for-arcgis-pro-20)
 
