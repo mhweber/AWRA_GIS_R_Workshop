@@ -31,7 +31,8 @@ library(leaflet)
 library(tidyverse)
 library(sf)
 library(USAboundaries)
-library(rbokeh)
+library(ggmap)
+
 states <- us_states()
 states <- states %>%
   dplyr::filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
@@ -81,6 +82,33 @@ m <- leaflet() %>%
 m  # Print the map
 ```
 ![leaflet](/AWRA_GIS_R_Workshop/figure/leaflet.png)
+
+Here's a fun example looking at where we all came from for this workshop:
+```r
+# character vector cities
+cities1 <- c("Stephenville, TX", "Tallahassee, FL" ,"Knoxville, TN",
+            "Corvallis, OR","Tampa, FL","Homestead, FL", "Fredericksburg, VA","San Diego, CA",
+            "Helena, MT","Bedford, NH","Ann Arbor, MI","Morgantown, WV","Raleigh, NC","Boulder, CO")
+cities2 <- c("Beirut, Lebannon", "Kingstown, St Vincent")
+cities3 <- c("Saint Petersburg, FL")
+
+places1 <- geocode(cities1)
+places2 <- geocode(cities2)
+places3 <- geocode(cities3)
+
+places <- rbind(places1, places2, places3)
+cities <- c(cities1, cities2, cities3)
+locs <- data.frame(cities, places)
+str(places)
+
+
+m <- leaflet(locs) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=locs$lon, lat=locs$lat, popup=locs$cities)
+m  # Print the map
+# play with provider tiles
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
 
 You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons. Note that you need to set the CRS for states to WGS84 or NAD83 to plot in `leaflet` as well as transform from `sf` to `sp` object - below we do all that in chained dplyr steps.
 ```r

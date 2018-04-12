@@ -1,5 +1,5 @@
 ---
-title: "Lesson 6 - R ArcGIS Bridge Demo"
+title: "Lesson 6 - R ArcGIS Bridge Overview and Demo"
 author: Marc Weber
 layout: post_page
 ---

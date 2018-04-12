@@ -38,7 +38,7 @@ install.packages("rasterVis")
 install.packages("landsat")
 install.packages("plotly")
 install.packages("leaflet")
-install.packages("rbokeh"
+install.packages("ggmap")
 ```r
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency.  
