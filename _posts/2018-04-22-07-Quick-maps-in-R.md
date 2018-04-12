@@ -121,7 +121,7 @@ state_map <- states %>%
 ```
 ![leaflet_states](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
-Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map and explore other provider tiles, and try if you want setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
+Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map, or try adding one of the raster layers from previous section.  Note that with any of the rasters from previous section you'll need to decrease resolution - see hint [here](https://rstudio.github.io/leaflet/raster.html). Try Exploring other provider tiles, but ote that some of the providers do require an API key. 
 
 ## Exercise 4
 ### tmap

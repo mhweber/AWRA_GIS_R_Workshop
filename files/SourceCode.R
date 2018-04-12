@@ -622,6 +622,11 @@ leaflet() %>% addTiles() %>%
   addLegend(pal = pal, values = values(wc),
             title = "Precip")
 
+# Plotting example raster data from previous exercies after after decreasing cell resolution (see https://rstudio.github.io/leaflet/raster.html)
+t <- aggregate(srtm_crop_OR, fact=10)
+leaflet() %>% addTiles() %>%
+  addRasterImage(t)
+
 # Exercise 4
 # just fill
 tm_shape(states) + tm_fill()
