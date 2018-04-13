@@ -83,21 +83,16 @@ m  # Print the map
 ```
 ![leaflet](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
-Here's a fun example looking at where we all came from for this workshop:
+Here's a fun example using geocoding with the `ggmap` package and looking at where we all came from for this workshop - note that I'm using the the Data Science Toolkit (dsk) API rather than Google Maps API - I found the Google Maps API to be finicky trying to pass city names from multiple states and countries (had to separate out into separate vectors) whereas the dsk API had no trouble at all:
 ```r
 # character vector cities
-cities1 <- c("Stephenville, TX", "Tallahassee, FL" ,"Knoxville, TN",
-            "Corvallis, OR","Tampa, FL","Homestead, FL", "Fredericksburg, VA","San Diego, CA",
-            "Helena, MT","Bedford, NH","Ann Arbor, MI","Morgantown, WV","Raleigh, NC","Boulder, CO")
-cities2 <- c("Beirut, Lebannon", "Kingstown, St Vincent")
-cities3 <- c("Saint Petersburg, FL")
+cities <- c("Stephenville, TX", "Tallahassee, FL" ,"Knoxville, TN","Corvallis, OR","Tampa,FL","Homestead", 
+            "Fredericksburg, VA","San Diego, CA","Helena, MT","Bedford, NH","Ann Arbor, MI","Morgantown, WV",
+            "Raleigh, NC","Boulder, CO","Saint Petersburg, FL", "Beirut, Lebanon", "Kingstown, St Vincent")
 
-places1 <- geocode(cities1)
-places2 <- geocode(cities2)
-places3 <- geocode(cities3)
+places <- geocode(cities, source = "dsk")
 
-places <- rbind(places1, places2, places3)
-cities <- c(cities1, cities2, cities3)
+
 locs <- data.frame(cities, places)
 str(places)
 
