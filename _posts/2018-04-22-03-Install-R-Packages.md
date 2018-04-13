@@ -9,7 +9,7 @@ First we need to install several R packages.  R operates on user-contributed pac
 ![RStudio Console](/AWRA_GIS_R_Workshop/figure/packages.png)
 
 Install all of the following packages in R:
-{% highlight r %}
+```r
 install.packages("rgdal")
 install.packages("rgeos")
 install.packages("raster")
@@ -32,10 +32,7 @@ install.packages("landsat")
 install.packages("plotly")
 install.packages("leaflet")
 install.packages("rbokeh"
-
-
-
-{% endhighlight %}
+```
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency.  
 
