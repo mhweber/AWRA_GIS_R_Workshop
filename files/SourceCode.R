@@ -579,6 +579,25 @@ m <- leaflet() %>%
   addMarkers(lng=-123.290698, lat=44.565578, popup="Here's where I work")
 m  # Print the map
 
+# character vector cities
+cities <- c("Stephenville, TX", "Tallahassee, FL" ,"Knoxville, TN","Corvallis, OR","Tampa,FL","Homestead", 
+            "Fredericksburg, VA","San Diego, CA","Helena, MT","Bedford, NH","Ann Arbor, MI","Morgantown, WV",
+            "Raleigh, NC","Boulder, CO","Saint Petersburg, FL", "Beirut, Lebanon", "Kingstown, St Vincent")
+
+places <- geocode(cities, source = "dsk")
+
+
+locs <- data.frame(cities, places)
+str(places)
+
+
+m <- leaflet(locs) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=locs$lon, lat=locs$lat, popup=locs$cities)
+m  # Print the map
+# play with provider tiles
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+
 state_map <- states %>%
   st_transform(crs = 4326) %>%
   as("Spatial") %>%
@@ -597,6 +616,11 @@ leaflet() %>% addTiles() %>%
   addRasterImage(wc, colors = pal, opacity = 0.8) %>%
   addLegend(pal = pal, values = values(wc),
             title = "Precip")
+
+# Plotting example raster data from previous exercies after after decreasing cell resolution (see https://rstudio.github.io/leaflet/raster.html)
+t <- aggregate(srtm_crop_OR, fact=10)
+leaflet() %>% addTiles() %>%
+  addRasterImage(t)
 
 # Exercise 4
 # just fill

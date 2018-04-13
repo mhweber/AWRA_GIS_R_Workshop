@@ -31,7 +31,8 @@ library(leaflet)
 library(tidyverse)
 library(sf)
 library(USAboundaries)
-library(rbokeh)
+library(ggmap)
+
 states <- us_states()
 states <- states %>%
   dplyr::filter(!name %in% c('Alaska','Hawaii', 'Puerto Rico')) %>%
@@ -82,6 +83,28 @@ m  # Print the map
 ```
 ![leaflet](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
+Here's a fun example using geocoding with the `ggmap` package and looking at where we all came from for this workshop - note that I'm using the the Data Science Toolkit (dsk) API rather than Google Maps API - I found the Google Maps API to be finicky trying to pass city names from multiple states and countries (had to separate out into separate vectors) whereas the dsk API had no trouble at all:
+```r
+# character vector cities
+cities <- c("Stephenville, TX", "Tallahassee, FL" ,"Knoxville, TN","Corvallis, OR","Tampa,FL","Homestead", 
+            "Fredericksburg, VA","San Diego, CA","Helena, MT","Bedford, NH","Ann Arbor, MI","Morgantown, WV",
+            "Raleigh, NC","Boulder, CO","Saint Petersburg, FL", "Beirut, Lebanon", "Kingstown, St Vincent")
+
+places <- geocode(cities, source = "dsk")
+
+
+locs <- data.frame(cities, places)
+str(places)
+
+
+m <- leaflet(locs) %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=locs$lon, lat=locs$lat, popup=locs$cities)
+m  # Print the map
+# play with provider tiles
+m %>% addProviderTiles(providers$Esri.NatGeoWorldMap)
+```
+
 You can add vector (point, line, and polygon) and raster data to leaflet maps.  Add our states polygons. Note that you need to set the CRS for states to WGS84 or NAD83 to plot in `leaflet` as well as transform from `sf` to `sp` object - below we do all that in chained dplyr steps.
 ```r
 state_map <- states %>%
@@ -93,7 +116,7 @@ state_map <- states %>%
 ```
 ![leaflet_states](/AWRA_GIS_R_Workshop/figure/leaflet.png)
 
-Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map and explore other provider tiles, and try if you want setting some diffrent tiles to make a simple interactive map. Note that some of the providers do require an API key.
+Your turn - try adding worldclim raster data using `raster` `getData` function to a leaflet map, or try adding one of the raster layers from previous section.  Note that with any of the rasters from previous section you'll need to decrease resolution - see hint [here](https://rstudio.github.io/leaflet/raster.html). Try Exploring other provider tiles, but ote that some of the providers do require an API key. 
 
 ## Exercise 4
 ### tmap

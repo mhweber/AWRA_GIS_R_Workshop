@@ -4,26 +4,38 @@ author: "Marc Weber"
 layout: post_page
 ---
   
-First we need to install several R packages.  R operates on user-contributed packages, and we'll be jumping into use of several of these spatial packages in this workshop.  Several packages we'll be making use of are `sp`, `rgdal`, `rgeos`, `raster`, and the new `sf` simple features library by Edzer Pebesma.  You should be able to use the packages tab in RStudio (see below) to install binaries in a straightforward way.  Mac and Linux users may have certain pre-requisites to fill, we'll assume you can navigate these on your own or can assist as needed.
+First we need to install several R packages.  Note the use of the terms `package` and `library` in R - you encounter both, and if you want to delve into semantics of which to use see [this post on R-bloggers](https://www.r-bloggers.com/packages-v-libraries-in-r/).  R operates on user-contributed packages, and we'll be jumping into use of several of these spatial packages in this workshop.  Several packages we'll be making use of are `sp`, `rgdal`, `rgeos`, `raster`, and the new `sf` simple features package by Edzer Pebesma.  You should be able to use the packages tab in RStudio (see below) to install packages in a straightforward way.  Mac and Linux users may have certain pre-requisites to fill, we'll assume you can navigate these on your own or can assist as needed.
 
 ![RStudio Console](/AWRA_GIS_R_Workshop/figure/packages.png)
 
+<<<<<<< HEAD
 Install all of the following packages in R:
 ```r
+=======
+Install all of the following packages in R - note that for both `sf` and `tidyverse` - and specificallly `ggplot2` in `tidyverse`, I've indicated the alternative install from GitHub rather than CRAN.  This is optional, as is installing devtools, and you will be fine with the CRAN version of packages, except that you will not be able to reproduce one of the example plots in the `sf` section that uses `sf_geom` funtion from the development version of `ggplot2`. Note that `tidyverse` is a 'meta-package' that includes several specific packages such as `ggplot2`, `dplyr`, and `tidyr`.
+```r
+install.packages("devtools") # optional but needed for using install_github
+>>>>>>> 2efad4a3b3a41c2d4c97ad2ba6edd5c39a2c53f5
 install.packages("rgdal")
 install.packages("rgeos")
 install.packages("raster")
-install.packages("sf")
+# From CRAN:
+# install.packages("sf")
+# From GitHub:
+library(devtools)
+install_github("edzer/sfr")
 install.packages("gstat")
 install.packages("spdep")
 install.packages("maptools")
 install.packages("stringr")
 install.packages("reshape")
-install.packages("tidyverse")
+# From CRAN:
+# install.packages("tidyverse")
+# From GitHub:
+devtools::install_github("hadley/tidyverse")
 install.packages("micromap")
 install.packages("tmap")
 install.packages("RCurl")
-install.packages("ggplot2")
 install.packages("dataRetrieval")
 install.packages("maps")
 install.packages("USAboundaries")
@@ -31,8 +43,13 @@ install.packages("rasterVis")
 install.packages("landsat")
 install.packages("plotly")
 install.packages("leaflet")
+<<<<<<< HEAD
 install.packages("rbokeh"
 ```
+=======
+install.packages("ggmap")
+```r
+>>>>>>> 2efad4a3b3a41c2d4c97ad2ba6edd5c39a2c53f5
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency.  
 
