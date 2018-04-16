@@ -263,8 +263,8 @@ Next, let's try to tabulate NLCD land cover for the same three counties.  We'll 
 
 If you haven't downloaded already, download the NLCD2011 data for exercise:
 ```r
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD_OR_2011.RData?raw=true",
+              "NLCD_OR_2011.RData",
               method="auto",
               mode="wb")
 load('NLCD_OR.Rdata')

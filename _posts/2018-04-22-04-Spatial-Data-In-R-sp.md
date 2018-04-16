@@ -62,8 +62,8 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD_OR_2011.RData?raw=true",
+              "NLCD_OR_2011.RData",
               method="auto",
               mode="wb")
 unzip("WorkshopData.zip", exdir = "/home/marc")              

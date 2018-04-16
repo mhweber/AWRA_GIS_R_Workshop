@@ -21,8 +21,8 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD_OR_2011.RData?raw=true",
+              "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
 unzip("WorkshopData.zip", exdir = "/home/marc")
@@ -472,7 +472,7 @@ county_av_el <- extract(srtm_crop_3counties , ThreeCounties, fun=mean, na.rm = T
 ThreeCounties$ID <- 1:nrow(ThreeCounties)
 county_av_el$NAME <- ThreeCounties$NAME_2[match(ThreeCounties$ID, row.names(county_av_el))]
 
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD_OR_2011.Rdata?raw=true",
               "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
