@@ -15,6 +15,8 @@ So, to begin, what is R and why should we use R for spatial analysis?  Let's bre
 - R does not alter underlying data - manipulation and visualization in memory
 - R is great for repetative graphics
 
+![History of R](/AWRA_GIS_R_Workshop/figure/History of R.png)
+
 Second, why use R for spatial, or GIS, workflows?
 
 - Spatial and statistical analysis in one environment
