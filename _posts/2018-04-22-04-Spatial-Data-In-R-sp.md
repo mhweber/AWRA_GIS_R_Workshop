@@ -344,7 +344,7 @@ class(StreamGages)
 head(StreamGages)
 ```
 
-A very common task you might do in R in taking a spreadsheet of data with coordinate information and turning it into a spatial object to do further GIS operations on.  Here, we've read a speadsheet in an R data frame. Data frames, as we saw earlier, consist of rows of observations  on columns of values for variables of interest
+A common GIS task you might do in R is taking a spreadsheet of data with coordinate information and turning it into a spatial object to do further GIS operations on.  Here, we've read a speadsheet into an R data frame. Data frames, as we saw earlier, consist of rows of observations  on columns of values for variables of interest
 
 As with anything in R, there are several ways to go about this, but the basics are we need to pull the coordinate columns of the data frame into a matrix which becomes the coordinates slot of a spatial object, and then give the `SpatialPointsDataFrame` we create a coordinate reference system.
 

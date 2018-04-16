@@ -25,7 +25,7 @@ Edzar Pebesma has extensive documentation, blog posts and vignettes available fo
 - [Reading in Spatial Data with `sf`](#reading-in-Spatial-Data-sf): Reading in spatial data sets using rgdal
 - [R `sf` Resources](#R-sf-Resources)
 
-First, if not already installed, install `sf`.  You can either install from CRAN or you can install the most current development version from Github - both methods shown below
+First, if not already installed, install `sf`.  You can either install from CRAN or you can install the most current development version from Github - both methods shown below.
 
 ```r
 # From CRAN:
