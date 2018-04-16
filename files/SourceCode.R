@@ -100,9 +100,8 @@ StreamGages <- read.csv('StreamGages.csv')
 class(StreamGages)
 head(StreamGages)
 
-coordinates(StreamGages) <- ~LON_SITE + LAT_SITE
-llCRS <- CRS("+proj=longlat +datum=NAD83")
-proj4string(StreamGages) <- llCRS
+coordinates(StreamGages) <- c("LON_SITE","LAT_SITE")
+proj4string(StreamGages) <- "+proj=longlat +datum=NAD83"
 summary(StreamGages)
 
 bbox(StreamGages)
@@ -122,7 +121,7 @@ plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
-load("files/HUCs.RData")
+load("HUCs.RData")
 class(HUCs)
 getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
@@ -131,9 +130,12 @@ str(HUCs, 2)
 head(HUCs@data) #the data frame slot 
 HUCs@bbox #call on slot to get bbox
 
-HUCs@polygons[[1]]
+
 slotNames(HUCs@polygons[[1]])
+# Each polygon element has 5 of it's own slots:
+str(HUCs@polygons[[1]])
 HUCs@polygons[[1]]@labpt
+# Get the area of a particular feature
 HUCs@polygons[[1]]@Polygons[[1]]@area
 
 # How would we code a way to extract the HUCs polygon with the smallest area? 
@@ -274,7 +276,7 @@ IowaSummary <- IowaNitrogen %>%
 iowa_wq = st_as_sf(IowaSummary, coords = c("dec_lon_va", "dec_lat_va"), crs = 4269,agr = "constant")
 
 plot(st_geometry(subset(states, state_abbr == 'IA')), axes=T)
-plot(st_geometry(subset(wsa_plains, STATE =='IA')), add=T, col='blue')
+plot(st_geometry(subset(wsa_plains, stusps =='IA')), add=T, col='blue')
 plot(iowa_wq, add=T, col='red')
 
 wsa_iowa <- subset(wsa_plains, state_abbr=='IA')

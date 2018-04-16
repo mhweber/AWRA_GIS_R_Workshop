@@ -224,7 +224,7 @@ plot(not_iowa_sites, add=T, col='red')
 
 ## Exercise 3
 ### Spatial operations - joins
-Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. By default `st_joins` will perform an left join by default and use st_intersect by default as well for the spatial topological operation.  Note that you can also do an inner join as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
+Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. By default `st_joins` will perform a left join and use st_intersect as well for the spatial topological operation.  Note that you can also do an inner join as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
 
 For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently need - to assign attribute information from some spatial unit for points within the unit.
 
@@ -296,7 +296,7 @@ Let's plot it with our other data and see what we've got - tip for subsetting wh
 
 ```r
 plot(st_geometry(subset(states, state_abbr == 'IA')), axes=T)
-plot(st_geometry(subset(wsa_plains, STATE =='IA')), add=T, col='blue')
+plot(st_geometry(subset(wsa_plains, stusps =='IA')), add=T, col='blue')
 plot(iowa_wq, add=T, col='red')
 ```
 
@@ -317,7 +317,8 @@ You'll see if you do `head` on your data there are a LOT of fields in there now 
 ## Exercise 4
 ### Spatial operations - aggregation
 
-Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in the previous spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - see if you can figure out how on your own!
+Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in the previous spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - take a few minutes and see if you can figure out how on your own! The answer is in the SourceCode.R file, but try a bit on your own first, and then if needed run and try to follow the anwer code in SourceCode.R file.
+
 
 For performing spatial aggregation, the idea is to take some spatial data, and summarize that data in relation to another spatial grouping variable (think city populations averaged by state).  Using some of the data we've used in previous steps, we can accomplish this in a couple of ways.
 
