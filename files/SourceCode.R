@@ -78,11 +78,6 @@ str(p)
 p$names[1:10]
 p$x[1:50]
 
-L1 <-Line(cbind(p$x[1:8],p$y[1:8]))
-Ls1 <- Lines(list(L1), ID="Baker")
-SL1 <- SpatialLines(list(Ls1))
-str(SL1)
-plot(SL1) 
 
 library(maptools)
 counties <- map('county','oregon', plot=F, col='transparent',fill=TRUE)

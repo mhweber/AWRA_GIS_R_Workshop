@@ -41,7 +41,7 @@ R runs on contributed packages - it has core functionality, but all the spatial 
 ## Lesson Goals
 - Understanding of spatial data in R and `sp` (spatial) objects in R
 - Introduction to R packages for spatial analysis
-- Learn to read vector spatial data into R
+- Learn to read vector spatial data into `sp` objects
 - Perform some simple exploratory spatial data analysis with vector data in R
 
 ## Quick Links to Exercises and Material
@@ -308,17 +308,6 @@ p$x[1:50]
 
 Spatial classes provided in `sp` package have mostly standardized spatial data in R and provide a solid way to represent and work with spatial data in R. 
 
-Let's create a basic `sp` SpatialLines object from coordinates we were looking at in `maps` package..
-
-```r
-L1 <-Line(cbind(p$x[1:8],p$y[1:8]))
-Ls1 <- Lines(list(L1), ID="Baker")
-SL1 <- SpatialLines(list(Ls1))
-str(SL1)
-plot(SL1) 
-```
-
-Bottom line segment of Baker county...compare with earlier map and see if you understand why...
 
 The `maptools` package provides convenience function for making spatial objects from  map objects.  Try the following code and see if you can follow each step...
 
