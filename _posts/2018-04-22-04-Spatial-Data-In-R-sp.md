@@ -9,11 +9,13 @@ So, to begin, what is R and why should we use R for spatial analysis?  Let's bre
 
 - A language and environment for statistical computing and graphics
 - R is lightweight, free, open-source and cross-platform
-- Works with contriburted packages - [currently](https://cran.r-project.org/web/packages/) 12,325 -extensibility
+- Works with contributed packages - [currently](https://cran.r-project.org/web/packages/) 12,325 -extensibility
 - Automation and recording of workflow (reproducibility)
-- Optimized work flow - data manipulation, analysis andvisualization all in one place
+- Optimized work flow - data manipulation, analysis and visualization all in one place
 - R does not alter underlying data - manipulation and visualization in memory
 - R is great for repetative graphics
+
+![History of R](/AWRA_GIS_R_Workshop/figure/History of R.png)
 
 Second, why use R for spatial, or GIS, workflows?
 
@@ -25,11 +27,12 @@ Second, why use R for spatial, or GIS, workflows?
 Some drawbacks to using R for GIS work
 
 - R not as good for interactive use as desktop GIS applications like ArcGIS or QGIS (i.e. editing features, panning, zooming, and analysis on selected subsets of features)
-- No on-the-fly data conversion between formats
 - Explicit coordinate system handling by the user, no on-the-fly projection support
 - In memory analysis does not scale well with large GIS vector and tabular data
 - Steep learning curve
 - Up to you to find packages to do what you need - help not always great
+
+An ideal solution for many tasks is using R in conjunction with traditional GIS software.
 
 R runs on contributed packages - it has core functionality, but all the spatial work we would do in R is contained in user-contributed packages.  Primary ones you'll want to familiarize yourself with are `sp', 'rgdal', 'sf', 'rgeos', 'raster' - there are many, many more. A good source to learn about available R spatial packages is:
 
@@ -62,8 +65,8 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD_OR_2011.RData?raw=true",
+              "NLCD_OR_2011.RData",
               method="auto",
               mode="wb")
 unzip("WorkshopData.zip", exdir = "/home/marc")              
@@ -349,9 +352,8 @@ A common GIS task you might do in R is taking a spreadsheet of data with coordin
 As with anything in R, there are several ways to go about this, but the basics are we need to pull the coordinate columns of the data frame into a matrix which becomes the coordinates slot of a spatial object, and then give the `SpatialPointsDataFrame` we create a coordinate reference system.
 
 ```r
-coordinates(StreamGages) <- ~LON_SITE + LAT_SITE
-llCRS <- CRS("+proj=longlat +datum=NAD83")
-proj4string(StreamGages) <- llCRS
+coordinates(StreamGages) <- c("LON_SITE","LAT_SITE")
+proj4string(StreamGages) <- "+proj=longlat +datum=NAD83"
 ```
  
 See how it looks
@@ -423,7 +425,7 @@ Dealing with coordinate reference systems and projections is a big part of worki
         - To get the CRS: projection(x)
         - To transform CRS: projectRaster(x)
 
-We can use the generic plot function in R to produce a quick plot add axes as well-axes option puts box around region
+We can use the generic plot function in R to produce a quick plot as wellas add axes - axes option puts box around region
 ```r
 plot(StreamGages, axes=TRUE, col='blue') 
 ```
@@ -462,8 +464,9 @@ head(HUCs@data) #the data frame slot
 HUCs@bbox #call on slot to get bbox
 ```
 
-What are the following lines of code doing? - welcome to the wonderful world of slots in R
+Try to figure out what the following lines of code doing - welcome to the wonderful world of slots in R. Take a minute and look at and run examples at bottom of help when you run help(slotNames) - it will help make more sense of things.
 ```r
+# Each polygon element has 5 of it's own slots:
 HUCs@polygons[[1]]
 slotNames(HUCs@polygons[[1]])
 HUCs@polygons[[1]]@labpt

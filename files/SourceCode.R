@@ -21,8 +21,8 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "HUCs.RData",
               method="auto",
               mode="wb")
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
-              "NLCD2011.Rdata",
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/NLCD_OR_2011.RData?raw=true",
+              "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
 unzip("WorkshopData.zip", exdir = "/home/marc")
@@ -100,9 +100,8 @@ StreamGages <- read.csv('StreamGages.csv')
 class(StreamGages)
 head(StreamGages)
 
-coordinates(StreamGages) <- ~LON_SITE + LAT_SITE
-llCRS <- CRS("+proj=longlat +datum=NAD83")
-proj4string(StreamGages) <- llCRS
+coordinates(StreamGages) <- c("LON_SITE","LAT_SITE")
+proj4string(StreamGages) <- "+proj=longlat +datum=NAD83"
 summary(StreamGages)
 
 bbox(StreamGages)
@@ -131,9 +130,12 @@ str(HUCs, 2)
 head(HUCs@data) #the data frame slot 
 HUCs@bbox #call on slot to get bbox
 
-HUCs@polygons[[1]]
+
 slotNames(HUCs@polygons[[1]])
+# Each polygon element has 5 of it's own slots:
+str(HUCs@polygons[[1]])
 HUCs@polygons[[1]]@labpt
+# Get the area of a particular feature
 HUCs@polygons[[1]]@Polygons[[1]]@area
 
 # How would we code a way to extract the HUCs polygon with the smallest area? 
@@ -274,7 +276,7 @@ IowaSummary <- IowaNitrogen %>%
 iowa_wq = st_as_sf(IowaSummary, coords = c("dec_lon_va", "dec_lat_va"), crs = 4269,agr = "constant")
 
 plot(st_geometry(subset(states, state_abbr == 'IA')), axes=T)
-plot(st_geometry(subset(wsa_plains, STATE =='IA')), add=T, col='blue')
+plot(st_geometry(subset(wsa_plains, stusps =='IA')), add=T, col='blue')
 plot(iowa_wq, add=T, col='red')
 
 wsa_iowa <- subset(wsa_plains, state_abbr=='IA')
@@ -472,7 +474,7 @@ county_av_el <- extract(srtm_crop_3counties , ThreeCounties, fun=mean, na.rm = T
 ThreeCounties$ID <- 1:nrow(ThreeCounties)
 county_av_el$NAME <- ThreeCounties$NAME_2[match(ThreeCounties$ID, row.names(county_av_el))]
 
-download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD2011.Rdata?raw=true",
+download.file("https://github.com/mhweber/gis_in_action_r_spatial/blob/gh-pages/files/NLCD_OR_2011.Rdata?raw=true",
               "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
