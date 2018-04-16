@@ -122,7 +122,7 @@ plot(StreamGages[StreamGages$STATE=='OR',],add=TRUE,col="Yellow") #plot just the
 plot(StreamGages[StreamGages$STATE=='WA',],add=TRUE,col="Red")
 plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
-load("files/HUCs.RData")
+load("HUCs.RData")
 class(HUCs)
 getClass("SpatialPolygonsDataFrame")
 summary(HUCs)
