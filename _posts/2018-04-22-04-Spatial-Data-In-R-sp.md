@@ -144,6 +144,26 @@ First off, R has several main data types:
 * S4 (some S4 objects)
 * others you won't run into at user level
 
+We can ask what data type something is using `typeof`:
+
+```r
+typeof(iris)
+```
+```r
+[1] "list"
+```
+```r
+typeof(iris$Sepal.Length)
+```
+```r
+[1] "double"
+```
+```r
+typeof(iris$Specis)
+```
+```r
+[1] "integer"
+```
 
 To access particular columns in a data, we use the `$` operator and see the value for `Species` for each observation in `iris:
 ```r
