@@ -239,6 +239,10 @@ class(wsa)
 levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 
+wsa_plains <- wsa %>%
+  # select a just the plains states using dplyr::filter
+  dplyr::filter(ECOWSA9 %in% c("TPL","NPL","SPL"))
+
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
 

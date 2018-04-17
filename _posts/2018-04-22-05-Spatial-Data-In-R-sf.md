@@ -71,6 +71,7 @@ To begin exploring, let's read in some spatial data. We'll grab EPA Wadeable Str
 library(RCurl)
 library(sf)
 library(ggplot2)
+library(dplyr)
 download <- getURL("https://www.epa.gov/sites/production/files/2014-10/wsa_siteinfo_ts_final.csv")
 
 wsa <- read.csv(text = download)
@@ -90,8 +91,29 @@ levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 ```
 
-Because this dataframe has coordinate information, we can then promotote it to an `sf` spatial object.
+And now that we've done this subsetting, I want to show you how to do another way using the `dplyr` package.  
 
+Remember at the beginning I said one of the advantages of `sf` is that it fits into the `tidyverse` way of operating and really streamlines our ability to work with spatial data in R.  One concrete example, which we'll build on in this section, is that we can manipulate and reshape `sf` spatial data directly using `dplyr` and `tidyr` verbs.  
+
+Let's do the same subsetting step above using `dplyr` - for some of you this will be familiar territory, for others it may be confusing - the idea with `dplyr` and 'chained' operations is that it allows you to do more expressive sequences of operations on data in the order you typically think about doing it, rather than created convoluted nested statements in R.
+```r
+wsa_plains <- wsa %>%
+  # select a just the plains states using dplyr::filter
+  dplyr::filter(ECOWSA9 %in% c("TPL","NPL","SPL"))
+```
+
+### dplyr
+In this section we'll use dplyr several times, so let's just review the 'verbs' in `dplyr` - and keep in mind, they operate on the attribute data in our `sf` data frame and leave the geometries untouched.
+* select() keeps only certain variables
+* rename() renames a variable and leaves all others unchanged
+* filter() returns rows that match a certain condition(s)
+* mutate() adds new variables based on existing variables
+* transmute() creates new variables and drops existing variables
+* arrange() sorts the data frame the by a variable(s)
+* slice() selects rows based on row number
+* sample_n() samples n features randomly
+
+Because this dataframe has coordinate information, we can then promotote it to an `sf` spatial object.
 ```r
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
@@ -137,7 +159,7 @@ plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
-And `ggplot2` now supports directly plotting `sf` features using `sf_geom`:
+And `ggplot2` now supports directly plotting `sf` features using `sf_geom` - another step forward in streamling our work with spatial data in `sf`:
 
 ```r
 ggplot(wsa_plains) +
@@ -431,6 +453,10 @@ state_poly$SHAPE
 - [Geocomputation with R](https://geocompr.robinlovelace.net/)
     
 - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
+
+- [Simple Features: Building Spatial Data Pipelines in R](https://www.azavea.com/blog/2017/08/30/spatial-analysis-pipelines-in-r-with-simple-features/)
+
+- [Tidy spatial data in R: using dplyr, tidyr, and ggplot2 with sf](http://strimas.com/r/tidy-sf/)
     
     
     
