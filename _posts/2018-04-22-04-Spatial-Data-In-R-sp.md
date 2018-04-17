@@ -123,8 +123,35 @@ str(iris)
 ## $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
 ## $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
+As we can see, `iris` is a data frame and is used extensively for beginning tutorials on learning R. Data frames consist of rows of observations  on columns of values for variables of interest - they are one of the fundamental and most important data structures in R. 
 
-As we can see, `iris` is a data frame and is used extensively for beginning tutorials on learning R. Data frames consist of rows of observations  on columns of values for variables of interest - they are one of the fundamental and most important data structures in R.
+But as we see in the result of str(iris) above, following the information that iris is a data frame with 150 observations of 5 variables, we get information on each of the variables, in this case that 4 are numeric and one is a factor with three levels.
+
+First off, R has several main data types: 
+*logical
+*integer
+*double
+*complex
+*character
+*raw
+*list
+*NULL
+*closure (function)
+*special
+*builtin (basic functions and operators)
+*environment
+*S4 (some S4 objects)
+*others you won't run into at user level
+
+
+To access particular columns in a data, we use the `$` operator and see the value for `Species` for each observation in `iris:
+```r
+iris$Species
+```
+
+
+
+To view particular rows or columns of data we use 
 
 ### Overview of Classes and Methods
 

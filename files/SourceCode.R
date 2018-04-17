@@ -33,6 +33,8 @@ setwd("/home/marc/GitProjects")
 class(iris)
 str(iris)
 
+iris$Species
+
 # Exercise 1
 
 library(sp)
