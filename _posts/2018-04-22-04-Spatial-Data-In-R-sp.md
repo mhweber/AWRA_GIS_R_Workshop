@@ -129,20 +129,20 @@ But as we see in the result of str(iris) above, following the information that i
 
 First off, R has several main data types:
 
-*logical
-*integer
-*double
-*complex
-*character
-*raw
-*list
-*NULL
-*closure (function)
-*special
-*builtin (basic functions and operators)
-*environment
-*S4 (some S4 objects)
-*others you won't run into at user level
+* logical
+* integer
+* double
+* complex
+* character
+* raw
+* list
+* NULL
+* closure (function)
+* special
+* builtin (basic functions and operators)
+* environment
+* S4 (some S4 objects)
+* others you won't run into at user level
 
 
 To access particular columns in a data, we use the `$` operator and see the value for `Species` for each observation in `iris:
