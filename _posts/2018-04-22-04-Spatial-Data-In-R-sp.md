@@ -657,6 +657,8 @@ plot(cob_poly, add=TRUE, border='red')
     
 - [The R Spatial Cheat Sheet](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html_)
 
+- [DataCamp Spatial Analysis in R Course](https://www.datacamp.com/courses/working-with-geospatial-data-in-r)
+
 
 
 
