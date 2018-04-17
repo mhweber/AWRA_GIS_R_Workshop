@@ -116,12 +116,12 @@ str(iris)
 ```
 
 ```r
-## 'data.frame':	150 obs. of  5 variables:
-## $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-## $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-## $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-## $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-## $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+'data.frame':	150 obs. of  5 variables:
+$ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+$ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+$ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+$ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+$ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
 ```
 As we can see, `iris` is a data frame and is used extensively for beginning tutorials on learning R. Data frames consist of rows of observations  on columns of values for variables of interest - they are one of the fundamental and most important data structures in R. 
 
@@ -145,7 +145,6 @@ First off, R has several main data types:
 * others you won't run into at user level
 
 We can ask what data type something is using `typeof`:
-
 ```r
 typeof(iris)
 ```
@@ -164,6 +163,8 @@ typeof(iris$Specis)
 ```r
 [1] "integer"
 ```
+
+We see a couple interesting things here - `iris`, which we just said is a data frame, is a data type of `list`.  `Sepal.Length` is data type `double`, and in `str(iris)` we saw it was numeric - that makes sense - but we see that `Species` is data typ `integer`, and in `str(iris)` we were told this variable was a factor with three levels.  What's going on here?
 
 To access particular columns in a data, we use the `$` operator and see the value for `Species` for each observation in `iris:
 ```r
