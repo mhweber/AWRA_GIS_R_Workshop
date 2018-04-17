@@ -237,7 +237,9 @@ data(nor2k)
 plot(nor2k,axes=TRUE)
 ```
 
-Take a few minutes to examine the nor2k `SpatialPointsDataFrame` and try using methods we've seen such as `class()`, `str()`, `typeof()`, `proj4string()`, etc.  A hint - which we’ll use more - to access slots in a new style S4 object, use the @ symbol.
+Take a few minutes to examine the nor2k `SpatialPointsDataFrame` and try using methods we've seen such as `class()`, `str()`, `typeof()`, `proj4string()`, etc.  
+
+A big part of working with spatial data in `sp` is understanding slots, and understanding how we access slots. The easiest way to access particular slots in an `sp` object is to use the @ symbol.  You can also use the slotNames method. Take a few minutes using both to explore the structure of this simple `sp` object.
 
 ## Exercise 2
 ### Building and Manipulating Spatial Data in R
@@ -440,7 +442,7 @@ plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
 Now let's load the Rdata object we downloaded at beginning of this session - Rdata files are just a handy way of saving and reloading your workspace - remember, R works with objects in memory, you can save them out in this format or share with others this way.
 
-Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`
+Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`.  For a more complex object like a `SptialPolygonsDataframe` there is a hierarchy of slots we need to understand.
 
 ```r
 load("HUCs.RData")
@@ -453,12 +455,13 @@ head(HUCs@data) #the data frame slot
 HUCs@bbox #call on slot to get bbox
 ```
 
-Try to figure out what the following lines of code doing - welcome to the wonderful world of slots in R. Take a minute and look at and run examples at bottom of help when you run help(slotNames) - it will help make more sense of things.
+Try to figure out what the following lines of code doing - welcome to the wonderful world of slots in R. Take a minute to look at and run examples at bottom of help when you run help(slotNames) - it will help make more sense of things.
 ```r
 # Each polygon element has 5 of it's own slots:
 HUCs@polygons[[1]]
 slotNames(HUCs@polygons[[1]])
 HUCs@polygons[[1]]@labpt
+# This is how we access the area of the first feature in HUCs
 HUCs@polygons[[1]]@Polygons[[1]]@area
 ```
 
@@ -466,8 +469,10 @@ What are the slots within each element of the HUCs SpatialPolygonDataFrame objec
 
 What method do you use to list them?
 
+What is the length of HUCs@polygons?
+
 How would we code a way to extract the HUCs polygon with the smallest area? 
-Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file.
+Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file. Many of you are likely not familiar with the apply family of functions in R - it is well worth getting to know them.  [This answer](https://stackoverflow.com/questions/3505701/grouping-functions-tapply-by-aggregate-and-the-apply-family) to a question on Stackoverflow is a fanctastic description.
 
 
 Using the `over` function, we can find out what HUC every stream gage is in quite easily:
@@ -475,19 +480,33 @@ Using the `over` function, we can find out what HUC every stream gage is in quit
 ```r
 StreamGages <- spTransform(StreamGages, CRS(proj4string(HUCs)))
 gage_HUC <- over(StreamGages,HUCs, df=TRUE)
+# We have a data frame of results, next we match it back to our StreaGages 
 StreamGages$HUC <- gage_HUC$HUC_8[match(row.names(StreamGages),row.names(gage_HUC))]
 head(StreamGages@data)
 ```
 
 There's a fair bit to unpack there, so ask questions!
 
-A method for getting total area of our HUCs might use the `rgeos` package and the `getArea` function. Below we load the `rgeos` function, and in order to get area we have to have HUCs in a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
+We can join tabular attributes to our spatial data - let's say we have flow data for our gages we want to join
+```r
+gage_flow <- read.csv("Gages_flowdata.csv")
+StreamGages$AVE <- gage_flow$AVE[match(StreamGages$SOURCE_FEA,gage_flow$SOURCE_FEA)] # add a field for average flow
+```
+
+We can use `over` to do a summary like 'calculate the average flow within all HUCs of the gage average stream flows' or get total flow - look at head of the two results:
+```r
+HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
+HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
+```
+A method for getting total area of our HUCs might use the `rgeos` package and the `getArea` function. Below we load the `rgeos` function, and the gArea function expects a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
 
 ```r
 library(rgeos)
 HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
 ```
+
+See the SourceCode.R file if you want for an extra example of performing a dissolve operation on the HUCS data.
 
 ## Reading in Spatial Data<a name="reading-in-Spatial-Data"></a>
 You'll typically want to read and write shapefiles and geodatabase features when working in R - `rgdal` is the workhorse for this.  To see what vector data formats you can read / write using rdal, type:

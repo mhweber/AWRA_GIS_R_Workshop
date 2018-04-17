@@ -141,12 +141,31 @@ min_area(HUCs)
 
 StreamGages <- spTransform(StreamGages, CRS(proj4string(HUCs)))
 gage_HUC <- over(StreamGages,HUCs, df=TRUE)
+# We have a data frame of results, next we match it back to our StreaGages 
 StreamGages$HUC <- gage_HUC$HUC_8[match(row.names(StreamGages),row.names(gage_HUC))]
 head(StreamGages@data)
+
+gage_flow <- read.csv("Gages_flowdata.csv")
+StreamGages$AVE <- gage_flow$AVE[match(StreamGages$SOURCE_FEA,gage_flow$SOURCE_FEA)] # add a field for average flow
+
+HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
+HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
 
 library(rgeos)
 HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
+
+#idea from here: http://www.nceas.ucsb.edu/scicomp/usecases/PolygonDissolveOperationsR
+plot(HUCs, axes=T)
+#get the center label points for all HUCs using coordinates method
+lps <- coordinates(HUCs)
+head(lps)
+#create four bins of longitude values using coordinate data from HUCs
+IDFourBins <- cut(lps[,1], quantile(lps[,1]), include.lowest=TRUE)
+#we'll use the maptools package for union function
+library(maptools)
+HUCDissolve   <- unionSpatialPolygons(HUCs ,IDFourBins)
+plot(HUCDissolve, axes=T)
 
 # Reading in Spatial Data
 ogrDrivers()
