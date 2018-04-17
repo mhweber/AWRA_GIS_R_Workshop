@@ -85,7 +85,7 @@ getwd()
 Which should return something like:
 
 ```r
-## [1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
+[1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
 ```
 
 To see what is in the directory:
@@ -108,7 +108,7 @@ class(iris)
 ```
 
 ```r
-## [1] "data.frame"
+[1] "data.frame"
 ```
 
 ```r
@@ -166,14 +166,35 @@ typeof(iris$Specis)
 
 We see a couple interesting things here - `iris`, which we just said is a data frame, is a data type of `list`.  `Sepal.Length` is data type `double`, and in `str(iris)` we saw it was numeric - that makes sense - but we see that `Species` is data typ `integer`, and in `str(iris)` we were told this variable was a factor with three levels.  What's going on here?
 
-To access particular columns in a data, we use the `$` operator and see the value for `Species` for each observation in `iris:
+First off, `class` refers to the abstract type of an object in R, whereas `typeof` or `mode` refer to how an object is stored in memory. So iris is an object of class data.frame, but it is stored in memory as a list (i.e. each column is an item in a list).  Note that this allows data frames to have columns of different classes, whereas a matrix needs to be all of the same mode.
+
+For our `Species` column, We see it's `mode` is numeric, it's `typeof` is `integer`, and it's class is `factor`.  Nominal variables in R are treated as a vector of integers 1:k where k is the number of unique values ofthat nominal variable and a mapping of the character strings to these integer values.  This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!:
+```r
+levels(iris$Species)
+levels(iris$Species)[1] <- 'sibirica'
+```
+
+See if you can explain how that re-asignment we just did worked.
+
+To access particular columns in a data, as we saw above, we use the `$` operator - we can see the value for `Species` for each observation in `iris by doing:
 ```r
 iris$Species
 ```
 
-
-
-To view particular rows or columns of data we use 
+To access particular columns or rows of a data frame, we use indexing:
+```r
+iris[1,3] # the 1st row and the 3rd column
+```
+```r
+[1] 1.4
+```
+```r
+iris[4,5] # the 4th row and the 5th column
+```
+```r
+[1] sibirica
+Levels: sibirica versicolor virginica
+```
 
 ### Overview of Classes and Methods
 
@@ -220,24 +241,24 @@ getClass("Spatial")
 ```
 
 ```r
-## Class "Spatial" [package "sp"]
-## 
-## Slots:
-##                               
-## Name:         bbox proj4string
-## Class:      matrix         CRS
-## 
-## Known Subclasses: 
-## Class "SpatialPoints", directly
-## Class "SpatialGrid", directly
-## Class "SpatialLines", directly
-## Class "SpatialPolygons", directly
-## Class "SpatialPointsDataFrame", by class "SpatialPoints", distance 2
-## Class "SpatialPixels", by class "SpatialPoints", distance 2
-## Class "SpatialGridDataFrame", by class "SpatialGrid", distance 2
-## Class "SpatialLinesDataFrame", by class "SpatialLines", distance 2
-## Class "SpatialPixelsDataFrame", by class "SpatialPoints", distance 3
-## Class "SpatialPolygonsDataFrame", by class "SpatialPolygons", distance 2
+Class "Spatial" [package "sp"]
+ 
+Slots:
+                               
+Name:         bbox proj4string
+Class:      matrix         CRS
+ 
+Known Subclasses: 
+Class "SpatialPoints", directly
+Class "SpatialGrid", directly
+Class "SpatialLines", directly
+Class "SpatialPolygons", directly
+Class "SpatialPointsDataFrame", by class "SpatialPoints", distance 2
+Class "SpatialPixels", by class "SpatialPoints", distance 2
+Class "SpatialGridDataFrame", by class "SpatialGrid", distance 2
+Class "SpatialLinesDataFrame", by class "SpatialLines", distance 2
+Class "SpatialPixelsDataFrame", by class "SpatialPoints", distance 3
+Class "SpatialPolygonsDataFrame", by class "SpatialPolygons", distance 2
 ```
 
 Next we'll delve a bit deeper into the spatial objects inhereting from the base spatial class and try creating some simple objects.  Here's a schematic of how spatial lines and polygons inherit from the base spatial class - again, from the Bivand book:
@@ -251,17 +272,17 @@ getClass("SpatialPolygons")
 ```
 
 ```r
-## Class "SpatialPolygons" [package "sp"]
-## 
-## Slots:
-##                               
-## Name:     polygons   plotOrder        bbox proj4string
-## Class:        list     integer      matrix         CRS
-## 
-## Extends: "Spatial" 
-## 
-## Known Subclasses: 
-## Class "SpatialPolygonsDataFrame", directly, with explicit coerce
+Class "SpatialPolygons" [package "sp"]
+
+Slots:
+                              
+Name:     polygons   plotOrder        bbox proj4string
+Class:        list     integer      matrix         CRS
+
+Extends: "Spatial" 
+
+Known Subclasses: 
+Class "SpatialPolygonsDataFrame", directly, with explicit coerce
 ```
 
 Also, there are a number of spatial methods you can use with classes in `sp` - here are some useful ones to familarize yourself with:
@@ -402,32 +423,24 @@ summary(StreamGages)
 ```
 
 ```r
-## Object of class SpatialPointsDataFrame
-## Coordinates:
-##                 min        max
-## LON_SITE -124.66912 -110.44111
-## LAT_SITE   41.42768   49.00075
-## Is projected: FALSE
-## proj4string :
-## [+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0]
-## Number of points: 2771
-## Data attributes:
-##   SOURCE_FEA              EVENTTYPE                                           STATION_NM  
-##  Min.   :  10361700   StreamGage:2771   ABERDEEN-SPRINGFIELD CANAL NR SPRINGFIELD ID:   1 ##  
-##  1st Qu.:  12331050                     ABERDEEN WASTE NR ABERDEEN ID               :   1 ##  
-##  Median :  13069000                     ABERNATHY CREEK NEAR LONGVIEW, WA           :   1 ##  
-##  Mean   :  14573679                     AENEAS LAKE NEAR TONASKET, WA               :   1 ##  
-##  3rd Qu.:  13349362                     AGENCY CREEK NEAR JOCKO, MT                 :   1 ##  
-##  Max.   :1315377299                     Agency Creek near Jocko MT (2)              :   1 ##  
-##                                         (Other)                                     :2765 ##  
-##      STATE     
-##  WA     :1054  
-##  ID     : 800  
-##  OR     : 622  
-##  MT     : 220  
-##  WY     :  52  
-##  NV     :  19  
-##  (Other):   4  
+Object of class SpatialPointsDataFrame
+Coordinates:
+                min        max
+LON_SITE -124.66912 -110.44111
+LAT_SITE   41.42768   49.00075
+Is projected: FALSE 
+proj4string :
+[+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0]
+Number of points: 2771
+Data attributes:
+   SOURCE_FEA             EVENTTYPE                                           STATION_NM       STATE     
+ Min.   :1.036e+07   StreamGage:2771   ABERDEEN-SPRINGFIELD CANAL NR SPRINGFIELD ID:   1   WA     :1054  
+ 1st Qu.:1.233e+07                     ABERDEEN WASTE NR ABERDEEN ID               :   1   ID     : 800  
+ Median :1.307e+07                     ABERNATHY CREEK NEAR LONGVIEW, WA           :   1   OR     : 622  
+ Mean   :1.457e+07                     AENEAS LAKE NEAR TONASKET, WA               :   1   MT     : 220  
+ 3rd Qu.:1.335e+07                     Agency Creek near Jocko MT (2)              :   1   WY     :  52  
+ Max.   :1.315e+09                     AGENCY CREEK NEAR JOCKO, MT                 :   1   NV     :  19  
+                                       (Other)                                     :2765   (Other):   4  
 ```
 
 Summary method gives a description of the spatial object in R. Summary works on pretty much all objects in R - for spatial data, gives us basic information about the projection, coordinates, and data for an `sp` object if it's a spatial data frame object.

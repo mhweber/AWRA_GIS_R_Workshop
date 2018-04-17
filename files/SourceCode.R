@@ -33,6 +33,12 @@ setwd("/home/marc/GitProjects")
 class(iris)
 str(iris)
 
+typeof(iris)
+typeof(iris$Sepal.Length)
+typeof(iris$Species)
+
+levels(iris$Species)
+levels(iris$Species)[1] <- 'sibirica'
 iris$Species
 
 # Exercise 1
