@@ -39,7 +39,10 @@ typeof(iris$Species)
 
 levels(iris$Species)
 levels(iris$Species)[1] <- 'sibirica'
+
 iris$Species
+iris[1,3]
+iris[4,5]
 
 # Exercise 1
 

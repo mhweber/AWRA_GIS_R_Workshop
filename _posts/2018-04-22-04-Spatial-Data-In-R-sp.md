@@ -164,11 +164,13 @@ typeof(iris$Specis)
 [1] "integer"
 ```
 
-We see a couple interesting things here - `iris`, which we just said is a data frame, is a data type of `list`.  `Sepal.Length` is data type `double`, and in `str(iris)` we saw it was numeric - that makes sense - but we see that `Species` is data typ `integer`, and in `str(iris)` we were told this variable was a factor with three levels.  What's going on here?
+We see a couple interesting things here - `iris`, which we just said is a data frame, is a data type of `list`.  `Sepal.Length` is data type `double`, and in `str(iris)` we saw it was numeric - that makes sense - but we see that `Species` is data type `integer`, and in `str(iris)` we were told this variable was a factor with three levels.  What's going on here?
 
-First off, `class` refers to the abstract type of an object in R, whereas `typeof` or `mode` refer to how an object is stored in memory. So iris is an object of class data.frame, but it is stored in memory as a list (i.e. each column is an item in a list).  Note that this allows data frames to have columns of different classes, whereas a matrix needs to be all of the same mode.
+First off, `class` refers to the abstract type of an object in R, whereas `typeof` or `mode` refer to how an object is stored in memory. So iris is an object of class `data.frame`, but it is stored in memory as a list (i.e. each column is an item in a list).  Note that this allows data frames to have columns of different classes, whereas a matrix needs to be all of the same mode.
 
-For our `Species` column, We see it's `mode` is numeric, it's `typeof` is `integer`, and it's class is `factor`.  Nominal variables in R are treated as a vector of integers 1:k where k is the number of unique values ofthat nominal variable and a mapping of the character strings to these integer values.  This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!:
+For our `Species` column, We see it's `mode` is numeric, it's `typeof` is `integer`, and it's class is `factor`.  Nominal variables in R are treated as a vector of integers 1:k,  where k is the number of unique values of that nominal variable and a mapping of the character strings to these integer values.  
+
+This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!:
 ```r
 levels(iris$Species)
 levels(iris$Species)[1] <- 'sibirica'
@@ -176,7 +178,7 @@ levels(iris$Species)[1] <- 'sibirica'
 
 See if you can explain how that re-asignment we just did worked.
 
-To access particular columns in a data, as we saw above, we use the `$` operator - we can see the value for `Species` for each observation in `iris by doing:
+To access particular columns in a data frame, as we saw above, we use the `$` operator - we can see the value for `Species` for each observation in `iris by doing:
 ```r
 iris$Species
 ```
