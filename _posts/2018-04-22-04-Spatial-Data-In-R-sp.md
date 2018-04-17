@@ -198,6 +198,14 @@ iris[4,5] # the 4th row and the 5th column
 Levels: sibirica versicolor virginica
 ```
 
+A handy function is `names`, which you can use to get or to set data frame variable names:
+```r
+names(iris)
+names(iris)[1] <- 'Length of Sepal'
+```
+
+Explain what this last line did
+
 ### Overview of Classes and Methods
 
 - Class: object types
@@ -535,6 +543,17 @@ What method do you use to list them?
 
 What is the length of HUCs@polygons?
 
+Note that we can also make use of the `gArea` function in the `rgeos` package. Below we load the `rgeos` function, and the gArea function expects a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
+
+```r
+library(rgeos)
+HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
+gArea(HUCs) #Total area of all features
+gArea(HUCs[1,]) # Area of the first feature, equivalent to:
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,]) # Area of the second feature, equivalent to:
+HUCs@polygons[[2]]@area
+```
 How would we code a way to extract the HUCs polygon with the smallest area? 
 Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file. Many of you are likely not familiar with the apply family of functions in R - it is well worth getting to know them.  [This answer](https://stackoverflow.com/questions/3505701/grouping-functions-tapply-by-aggregate-and-the-apply-family) to a question on Stackoverflow is a fanctastic description.
 
@@ -561,13 +580,6 @@ We can use `over` to do a summary like 'calculate the average flow within all HU
 ```r
 HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
 HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
-```
-A method for getting total area of our HUCs might use the `rgeos` package and the `getArea` function. Below we load the `rgeos` function, and the gArea function expects a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
-
-```r
-library(rgeos)
-HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
-gArea(HUCs)
 ```
 
 See the SourceCode.R file if you want for an extra example of performing a dissolve operation on the HUCS data.

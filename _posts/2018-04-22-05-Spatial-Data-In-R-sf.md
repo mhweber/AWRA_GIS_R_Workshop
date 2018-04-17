@@ -4,9 +4,11 @@ author: Marc Weber
 layout: post_page
 ---
 
-The `sf` Simple Features for R package by Edzer Pebesma is a represents a changes of gears from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data - packages are already being updated around `sf`, and it fits in with the "tidy" approach to data of Hadley Wickham's `tidyverse`.  The simple feature model will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-known binary formats.
+The `sf` Simple Features for R package by Edzer Pebesma is a move from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data - packages are already being updated around `sf`, and it fits in with the "tidy" approach to data of Hadley Wickham's `tidyverse`.  The simple feature model will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-known binary formats.
 
-The big difference is the use of S3 classes in R rather than the S4, or new style classes of `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation as well as very speedy I/O along with [GEOS](https://trac.osgeo.org/geos), and also which is quite nice can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS). Additionally, as mentioned above, `sf` fits into the `tidyverse` design, and the list-column for geometry are officially considered a `tidy` data form.  See Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) for the description of `tidy` aspects of `sf`.
+The big difference is the use of S3 classes in R rather than the S4, or new style classes, used in `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation and I/O, and can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS). Additionally, as mentioned above, `sf` fits into the `tidyverse` design, and the list-column for geometry are officially considered a `tidy` data form.  See Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) for the description of `tidy` aspects of `sf`.
+
+Just as in `PostGIS`, all functions and methods in `sf` are prefixed with `st_`, which stands for 'spatial and temporal'.  An advantage of this prefixing is all commands are easy to find with command-line completion in `sf`.
 
 Edzar Pebesma has extensive documentation, blog posts and vignettes available for `sf` here:
 [Simple Features for R](https://github.com/edzer/sfr).  Additionally, see Edzar's [r-spatial blog](http://r-spatial.org/) which has numerous announcements, discussion pieces and tutorials on spatial work in R focused. 
@@ -46,19 +48,19 @@ methods(class = "sf")
 ```
 
 ```
-##  [1] [                 aggregate         cbind            
-##  [4] coerce            initialize        plot             
-##  [7] print             rbind             show             
-## [10] slotsFromS3       st_agr            st_agr<-         
-## [13] st_as_sf          st_bbox           st_boundary      
-## [16] st_buffer         st_cast           st_centroid      
-## [19] st_convex_hull    st_crs            st_crs<-         
-## [22] st_difference     st_drop_zm        st_geometry      
-## [25] st_geometry<-     st_intersection   st_is            
-## [28] st_linemerge      st_polygonize     st_precision     
-## [31] st_segmentize     st_simplify       st_sym_difference
-## [34] st_transform      st_triangulate    st_union         
-## see '?methods' for accessing help and source code
+[1] [                 aggregate         cbind            
+[4] coerce            initialize        plot             
+[7] print             rbind             show             
+[10] slotsFromS3       st_agr            st_agr<-         
+[13] st_as_sf          st_bbox           st_boundary      
+[16] st_buffer         st_cast           st_centroid      
+[19] st_convex_hull    st_crs            st_crs<-         
+[22] st_difference     st_drop_zm        st_geometry      
+[25] st_geometry<-     st_intersection   st_is            
+[28] st_linemerge      st_polygonize     st_precision     
+[31] st_segmentize     st_simplify       st_sym_difference
+[34] st_transform      st_triangulate    st_union         
+see '?methods' for accessing help and source code
 ```
 
 ## Exercise 1
@@ -78,7 +80,7 @@ class(wsa)
 Just a data frame that includes location and other identifying information about river and stream sampled sites from 2000 to 2004.
 
 ```
-## [1] "data.frame"
+[1] "data.frame"
 ```
 
 Before we go any further, let's subset our data to just the US plains ecoregions using the 'ECOWSA9' variable in the wsa dataset.
@@ -104,20 +106,20 @@ head(wsa_plains[,c(1,60)])
 ```
 
 ```
-##Simple feature collection with 6 features and 1 field
-##Attribute-geometry relationship: 1 constant, 0 aggregate, 0 identity
-##geometry type:  POINT
-##dimension:      XY
-##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
-##epsg (SRID):    4269
-##proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
-##        SITE_ID                    geometry
-##13        CC0001  POINT(-104.76432 39.35901)
-##14 IAW02344-0096 POINT(-94.089731 41.950878)
-##15 IAW02344-0096 POINT(-94.089731 41.950878)
-##16 IAW02344-0097 POINT(-95.400885 41.332723)
-##17 IAW02344-0097 POINT(-95.400885 41.332723)
-##18 IAW02344-0098   POINT(-91.92294 42.70254)
+Simple feature collection with 6 features and 1 field
+Attribute-geometry relationship: 1 constant, 0 aggregate, 0 identity
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+epsg (SRID):    4269
+proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
+        SITE_ID                    geometry
+13        CC0001  POINT(-104.76432 39.35901)
+14 IAW02344-0096 POINT(-94.089731 41.950878)
+15 IAW02344-0096 POINT(-94.089731 41.950878)
+16 IAW02344-0097 POINT(-95.400885 41.332723)
+17 IAW02344-0097 POINT(-95.400885 41.332723)
+18 IAW02344-0098   POINT(-91.92294 42.70254)
 ```
 
 We can do simple plotting just as with `sp` spatial objects. `sf` by default creates a multi-panel lattice plot much like the `sp` package `spplot` function - either plot particular columns in multiple plots or specify the `geometry` column to make a single simple plot.  Note how it's easy to use graticules as a parameter for `plot` in `sf`. 
@@ -145,6 +147,22 @@ ggplot(wsa_plains) +
 ```
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
+
+### A quick note on converting between `sp` and `sf`
+Converstion to and from `sp` and `sf` is quite easy (in principle!), example with our nor2k data:
+```r
+class(nor2k)
+nor2k_sf <- st_as_sf(nor2k)
+```
+
+Wait a minute, I just said it was easy - why are we getting this error?  This is a typical example of working with R - the thing you're trying to do ends up being the exception to the rule!  Take a minute and see if you can figure out why we're getting this problem and what we need to do to fix it - answer in SourceCode.R.  Once converted, let's convert it back to an `sp` SpatialPointsDataFrame.
+```r
+class(nor2k_sf)
+nor2k_sp <- as(nor2k_sf, "Spatial")
+class(nor2k_sp)
+```
+
+See [sp-sf Migration](https://github.com/r-spatial/sf/wiki/Migrating) also listed at end of this section under [R `sf` Resources](#R-sf-Resources) for table of equivalent `sf` commands for `sp` commands (as well as `sf` equivalents for `rgeos` and `rgdal` commands)
 
 ## Exercise 2
 ### Spatial operations - spatial subsetting and intersecting
@@ -236,26 +254,26 @@ head(wsa_plains)
 ```
 
 ```
-##simple feature collection with 6 features and 16 fields
-##geometry type:  POINT
-##dimension:      XY
-##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
-##epsg (SRID):    4326
-##proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##         SITE_ID YEAR VISIT_NO               SITENAME statefp  statens    affgeoid geoid stusps     name lsad        aland
-##13        CC0001 2004        1           CHERRY CREEK      08 01779779 0400000US08    08     CO Colorado   00 268429343790
-##14 IAW02344-0096 2004        1          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##15 IAW02344-0096 2004        2          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##16 IAW02344-0097 2004        1 WEST NISHNABOTNA RIVER      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##17 IAW02344-0097 2004        2       WEST NISHNABOTNA      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##18 IAW02344-0098 2004        1  UNN TRIB. OTTER CREEK      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##       awater state_name state_abbr jurisdiction_type                   geometry
-##13 1175112870   Colorado         CO             state POINT (-104.7643 39.35901)
-##14 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
-##15 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
-##16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
-##17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
-##18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
+simple feature collection with 6 features and 16 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+         SITE_ID YEAR VISIT_NO               SITENAME statefp  statens    affgeoid geoid stusps     name lsad        aland
+13        CC0001 2004        1           CHERRY CREEK      08 01779779 0400000US08    08     CO Colorado   00 268429343790
+14 IAW02344-0096 2004        1          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+15 IAW02344-0096 2004        2          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+16 IAW02344-0097 2004        1 WEST NISHNABOTNA RIVER      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+17 IAW02344-0097 2004        2       WEST NISHNABOTNA      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+18 IAW02344-0098 2004        1  UNN TRIB. OTTER CREEK      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+       awater state_name state_abbr jurisdiction_type                   geometry
+13 1175112870   Colorado         CO             state POINT (-104.7643 39.35901)
+14 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+15 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
 ```
 Let's dive a little deeper with spatial joins and bring in some water quality data using the [dataRetrieval](https://github.com/USGS-R/dataRetrieval) package to access data via web services on the [Water Quality Portal](https://www.waterqualitydata.us/). Steps shown here follow examples in the [tutorial](http://usgs-r.github.io/dataRetrieval).
  
@@ -389,10 +407,10 @@ st_layers(fgdb)
 ```
 
 ```r
-##  layer_name     geometry_type features fields
-##1 state_poly     Multi Polygon     2825      4
-##2   cob_poly     Multi Polygon       75      5
-##3    cob_arc Multi Line String      399      8
+  layer_name     geometry_type features fields
+1 state_poly     Multi Polygon     2825      4
+2   cob_poly     Multi Polygon       75      5
+3    cob_arc Multi Line String      399      8
 ```
 ```r
 # Read the feature class
@@ -400,13 +418,15 @@ state_poly = st_read(dsn=fgdb,layer="state_poly")
 state_poly$SHAPE
 ```
 
-## R `sf` Resources<a name="R-sf-Resources"></a>:
+ R `sf` Resources<a name="R-sf-Resources"></a>:
 
 - [Simple Features for R](https://r-spatial.github.io/sf/index.html)
 
 - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
 
 - [Spatial Data in R: New Directions](https://edzer.github.io/UseR2017/)
+
+- [sp-sf Migration](https://github.com/r-spatial/sf/wiki/Migrating)
     
 - [Geocomputation with R](https://geocompr.robinlovelace.net/)
     

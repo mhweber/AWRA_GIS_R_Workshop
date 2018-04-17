@@ -44,6 +44,9 @@ iris$Species
 iris[1,3]
 iris[4,5]
 
+names(iris)
+names(iris)[1] <- 'Length of Sepal'
+
 # Exercise 1
 
 library(sp)
@@ -144,6 +147,14 @@ HUCs@polygons[[1]]@labpt
 # Get the area of a particular feature
 HUCs@polygons[[1]]@Polygons[[1]]@area
 
+library(rgeos)
+HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
+gArea(HUCs)
+gArea(HUCs[1,])
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,])
+HUCs@polygons[[2]]@area
+
 # How would we code a way to extract the HUCs polygon with the smallest area? 
 # Look at the min_area function that is included in the HUCs.RData file
 min_area
@@ -165,6 +176,10 @@ HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
 library(rgeos)
 HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
+gArea(HUCs[1,])
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,])
+HUCs@polygons[[2]]@area
 
 #idea from here: http://www.nceas.ucsb.edu/scicomp/usecases/PolygonDissolveOperationsR
 plot(HUCs, axes=T)
@@ -238,6 +253,15 @@ ggplot(wsa_plains) +
   geom_sf() +
   ggtitle("EPA WSA Sites in the Plains Ecoregions") +
   theme_bw()
+
+class(nor2k)
+nor2k_sf <- st_as_sf(nor2k)
+nor2k@bbox <- nor2k@bbox[1:2,]
+nor2k_sf <- st_as_sf(nor2k)
+
+class(nor2k_sf)
+nor2k_sp <- as(nor2k_sf, "Spatial")
+class(nor2k_sp)
 
 # Exercise 2
 library(USAboundaries)
