@@ -127,7 +127,8 @@ As we can see, `iris` is a data frame and is used extensively for beginning tuto
 
 But as we see in the result of str(iris) above, following the information that iris is a data frame with 150 observations of 5 variables, we get information on each of the variables, in this case that 4 are numeric and one is a factor with three levels.
 
-First off, R has several main data types: 
+First off, R has several main data types:
+
 *logical
 *integer
 *double
