@@ -128,8 +128,8 @@ plot(wsa_plains[c(46,56)], graticule = st_crs(wsa_plains), axes=TRUE)
 
 ![WSASites](/AWRA_GIS_R_Workshop/figure/WSASites.png)
 
-Try some of these variations and see if they make sense to you.
 
+Try some of these variations and see if they make sense to you.
 ```r
 plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
@@ -145,6 +145,7 @@ ggplot(wsa_plains) +
 ```
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
+
 
 ## Exercise 2
 ### Spatial operations - spatial subsetting and intersecting
@@ -223,9 +224,10 @@ plot(not_iowa_sites, add=T, col='red')
 
 ## Exercise 3
 ### Spatial operations - joins
-Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. By default `st_joins` will perform a left join and use st_intersect as well for the spatial topological operation.  Note that you can also do an inner join as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
+Spatial joining in R is an incredibly handy thing and is simple with `st_joins`. Many of us are likely old hands at doing attribute joins of shapefiles with other tabular data in GIS software like ArcGIS or QGis.
+By default `st_joins` will perform a left join (return all rows in the left, 'joined to' table regardless of whether there are matches in the right, 'joined' table). `st_joins` also uses st_intersect for the spatial operation.  Note that you can also do an inner join (a match in both tables) as well as use other topological operations for the join such as `st_touches`, `st_disjoint`, `st_equals`, etc.
 
-For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently need - to assign attribute information from some spatial unit for points within the unit.
+For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently face - assign attribute information from some spatial unit for points within the unit.
 
 ```r
 # Use column indexing to subset just a couple attribute columns - need to keep geometry column!
@@ -411,6 +413,8 @@ state_poly$SHAPE
 - [Geocomputation with R](https://geocompr.robinlovelace.net/)
     
 - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
+
+- [Introduction to Mapping and Spatial Analysis with R](https://cengel.github.io/rspatial/)
     
     
     
