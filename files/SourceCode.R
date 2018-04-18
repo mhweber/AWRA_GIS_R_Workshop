@@ -33,6 +33,20 @@ setwd("/home/marc/GitProjects")
 class(iris)
 str(iris)
 
+typeof(iris)
+typeof(iris$Sepal.Length)
+typeof(iris$Species)
+
+levels(iris$Species)
+levels(iris$Species)[1] <- 'sibirica'
+
+iris$Species
+iris[1,3]
+iris[4,5]
+
+names(iris)
+names(iris)[1] <- 'Length of Sepal'
+
 # Exercise 1
 
 library(sp)
@@ -133,6 +147,14 @@ HUCs@polygons[[1]]@labpt
 # Get the area of a particular feature
 HUCs@polygons[[1]]@Polygons[[1]]@area
 
+library(rgeos)
+HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
+gArea(HUCs)
+gArea(HUCs[1,])
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,])
+HUCs@polygons[[2]]@area
+
 # How would we code a way to extract the HUCs polygon with the smallest area? 
 # Look at the min_area function that is included in the HUCs.RData file
 min_area
@@ -141,12 +163,35 @@ min_area(HUCs)
 
 StreamGages <- spTransform(StreamGages, CRS(proj4string(HUCs)))
 gage_HUC <- over(StreamGages,HUCs, df=TRUE)
+# We have a data frame of results, next we match it back to our StreaGages 
 StreamGages$HUC <- gage_HUC$HUC_8[match(row.names(StreamGages),row.names(gage_HUC))]
 head(StreamGages@data)
+
+gage_flow <- read.csv("Gages_flowdata.csv")
+StreamGages$AVE <- gage_flow$AVE[match(StreamGages$SOURCE_FEA,gage_flow$SOURCE_FEA)] # add a field for average flow
+
+HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
+HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
 
 library(rgeos)
 HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
 gArea(HUCs)
+gArea(HUCs[1,])
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,])
+HUCs@polygons[[2]]@area
+
+#idea from here: http://www.nceas.ucsb.edu/scicomp/usecases/PolygonDissolveOperationsR
+plot(HUCs, axes=T)
+#get the center label points for all HUCs using coordinates method
+lps <- coordinates(HUCs)
+head(lps)
+#create four bins of longitude values using coordinate data from HUCs
+IDFourBins <- cut(lps[,1], quantile(lps[,1]), include.lowest=TRUE)
+#we'll use the maptools package for union function
+library(maptools)
+HUCDissolve   <- unionSpatialPolygons(HUCs ,IDFourBins)
+plot(HUCDissolve, axes=T)
 
 # Reading in Spatial Data
 ogrDrivers()
@@ -194,6 +239,10 @@ class(wsa)
 levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 
+wsa_plains <- wsa %>%
+  # select a just the plains states using dplyr::filter
+  dplyr::filter(ECOWSA9 %in% c("TPL","NPL","SPL"))
+
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
 
@@ -208,6 +257,15 @@ ggplot(wsa_plains) +
   geom_sf() +
   ggtitle("EPA WSA Sites in the Plains Ecoregions") +
   theme_bw()
+
+class(nor2k)
+nor2k_sf <- st_as_sf(nor2k)
+nor2k@bbox <- nor2k@bbox[1:2,]
+nor2k_sf <- st_as_sf(nor2k)
+
+class(nor2k_sf)
+nor2k_sp <- as(nor2k_sf, "Spatial")
+class(nor2k_sp)
 
 # Exercise 2
 library(USAboundaries)
@@ -280,7 +338,13 @@ iowa_wq <- st_transform(iowa_wq, crs=26915)
 
 wsa_wq = st_join(wsa_iowa, iowa_wq, st_is_within_distance, dist = 50000)
 
+
 # Exercise 4
+
+wsa_wq_mean <- wsa_wq %>%
+  dplyr::group_by(SITE_ID) %>%
+  dplyr::summarize(MeanCond = mean(mean, na.rm = TRUE))
+
 download <- getURL("https://www.epa.gov/sites/production/files/2014-10/waterchemistry.csv")
 
 wsa_chem <- read.csv(text = download)

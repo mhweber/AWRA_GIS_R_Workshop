@@ -4,9 +4,11 @@ author: Marc Weber
 layout: post_page
 ---
 
-The `sf` Simple Features for R package by Edzer Pebesma is a represents a changes of gears from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data - packages are already being updated around `sf`, and it fits in with the "tidy" approach to data of Hadley Wickham's `tidyverse`.  The simple feature model will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-known binary formats.
+The `sf` Simple Features for R package by Edzer Pebesma is a move from the `sp` S4 or new style class representation of spatial data in R, and instead provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R. Without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data - packages are already being updated around `sf`, and it fits in with the "tidy" approach to data of Hadley Wickham's `tidyverse`.  The simple feature model will be familiar to folks who use [PostGIS](https://en.wikipedia.org/wiki/PostGIS), [MySQL Spatial Extensions](https://en.wikipedia.org/wiki/MySQL), [Oracle Spatial](https://en.wikipedia.org/wiki/Oracle_Spatial_and_Graph), the [OGR component of the GDAL library](https://en.wikipedia.org/wiki/GDAL), [GeoJSON](https://datatracker.ietf.org/doc/rfc7946/) and [GeoPandas](http://geopandas.org/) in Python.  Simple features are represented with Well-Known text - [WKT](https://en.wikipedia.org/wiki/Well-known_text) - and well-known binary formats.
 
-The big difference is the use of S3 classes in R rather than the S4, or new style classes of `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation as well as very speedy I/O along with [GEOS](https://trac.osgeo.org/geos), and also which is quite nice can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS). Additionally, as mentioned above, `sf` fits into the `tidyverse` design, and the list-column for geometry are officially considered a `tidy` data form.  See Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) for the description of `tidy` aspects of `sf`.
+The big difference is the use of S3 classes in R rather than the S4, or new style classes, used in `sp` with the use of slots.  Simple features are simply `data.frame` objects that have a geometry list-column.  `sf` interfaces with [GEOS](https://trac.osgeo.org/geos) for topolgoical operations, uses [GDAL](https://en.wikipedia.org/wiki/GDAL) for data creation and I/O, and can directly read and write to spatial databases such as [PostGIS](https://en.wikipedia.org/wiki/PostGIS). Additionally, as mentioned above, `sf` fits into the `tidyverse` design, and the list-column for geometry are officially considered a `tidy` data form.  See Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) for the description of `tidy` aspects of `sf`.
+
+Just as in `PostGIS`, all functions and methods in `sf` are prefixed with `st_`, which stands for 'spatial and temporal'.  An advantage of this prefixing is all commands are easy to find with command-line completion in `sf`.
 
 Edzar Pebesma has extensive documentation, blog posts and vignettes available for `sf` here:
 [Simple Features for R](https://github.com/edzer/sfr).  Additionally, see Edzar's [r-spatial blog](http://r-spatial.org/) which has numerous announcements, discussion pieces and tutorials on spatial work in R focused. 
@@ -46,19 +48,19 @@ methods(class = "sf")
 ```
 
 ```
-##  [1] [                 aggregate         cbind            
-##  [4] coerce            initialize        plot             
-##  [7] print             rbind             show             
-## [10] slotsFromS3       st_agr            st_agr<-         
-## [13] st_as_sf          st_bbox           st_boundary      
-## [16] st_buffer         st_cast           st_centroid      
-## [19] st_convex_hull    st_crs            st_crs<-         
-## [22] st_difference     st_drop_zm        st_geometry      
-## [25] st_geometry<-     st_intersection   st_is            
-## [28] st_linemerge      st_polygonize     st_precision     
-## [31] st_segmentize     st_simplify       st_sym_difference
-## [34] st_transform      st_triangulate    st_union         
-## see '?methods' for accessing help and source code
+[1] [                 aggregate         cbind            
+[4] coerce            initialize        plot             
+[7] print             rbind             show             
+[10] slotsFromS3       st_agr            st_agr<-         
+[13] st_as_sf          st_bbox           st_boundary      
+[16] st_buffer         st_cast           st_centroid      
+[19] st_convex_hull    st_crs            st_crs<-         
+[22] st_difference     st_drop_zm        st_geometry      
+[25] st_geometry<-     st_intersection   st_is            
+[28] st_linemerge      st_polygonize     st_precision     
+[31] st_segmentize     st_simplify       st_sym_difference
+[34] st_transform      st_triangulate    st_union         
+see '?methods' for accessing help and source code
 ```
 
 ## Exercise 1
@@ -69,6 +71,7 @@ To begin exploring, let's read in some spatial data. We'll grab EPA Wadeable Str
 library(RCurl)
 library(sf)
 library(ggplot2)
+library(dplyr)
 download <- getURL("https://www.epa.gov/sites/production/files/2014-10/wsa_siteinfo_ts_final.csv")
 
 wsa <- read.csv(text = download)
@@ -78,7 +81,7 @@ class(wsa)
 Just a data frame that includes location and other identifying information about river and stream sampled sites from 2000 to 2004.
 
 ```
-## [1] "data.frame"
+[1] "data.frame"
 ```
 
 Before we go any further, let's subset our data to just the US plains ecoregions using the 'ECOWSA9' variable in the wsa dataset.
@@ -88,8 +91,31 @@ levels(wsa$ECOWSA9)
 wsa_plains <- wsa[wsa$ECOWSA9 %in% c("TPL","NPL","SPL"),]
 ```
 
-Because this dataframe has coordinate information, we can then promotote it to an `sf` spatial object.
+And now that we've done this subsetting, I want to show you how to do another way using the `dplyr` package.  
 
+Remember at the beginning I said one of the advantages of `sf` is that it fits into the `tidyverse` way of operating and really streamlines our ability to work with spatial data in R.  One concrete example, which we'll build on in this section, is that we can manipulate and reshape `sf` spatial data directly using `dplyr` and `tidyr` verbs.  
+
+Let's do the same subsetting step above using `dplyr` - for some of you this will be familiar territory, for others it may be confusing - the idea with `dplyr` and 'chained' operations is that it allows you to do more expressive sequences of operations on data in the order you typically think about doing it, rather than created convoluted nested statements in R.
+```r
+wsa_plains <- wsa %>%
+  # select a just the plains states using dplyr::filter
+  dplyr::filter(ECOWSA9 %in% c("TPL","NPL","SPL"))
+```
+
+### dplyr
+In this section we'll use dplyr several times, so let's just review the 'verbs' in `dplyr` - these methods operate just on the attribute data in our `sf` data frame and leave the geometries untouched.
+* select() keeps only certain variables
+* rename() renames a variable and leaves all others unchanged
+* filter() returns rows that match a certain condition(s)
+* mutate() adds new variables based on existing variables
+* transmute() creates new variables and drops existing variables
+* arrange() sorts the data frame the by a variable(s)
+* slice() selects rows based on row number
+* sample_n() samples n features randomly
+
+Others, such as `summarise`, will actually aggregate (union) underlying geometry - again, see Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) at end for details.
+
+Because both the wsa and wsa_plains dataframes have coordinate information, we can then promotote either of them to an `sf` spatial object.
 ```r
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
@@ -104,20 +130,20 @@ head(wsa_plains[,c(1,60)])
 ```
 
 ```
-##Simple feature collection with 6 features and 1 field
-##Attribute-geometry relationship: 1 constant, 0 aggregate, 0 identity
-##geometry type:  POINT
-##dimension:      XY
-##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
-##epsg (SRID):    4269
-##proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
-##        SITE_ID                    geometry
-##13        CC0001  POINT(-104.76432 39.35901)
-##14 IAW02344-0096 POINT(-94.089731 41.950878)
-##15 IAW02344-0096 POINT(-94.089731 41.950878)
-##16 IAW02344-0097 POINT(-95.400885 41.332723)
-##17 IAW02344-0097 POINT(-95.400885 41.332723)
-##18 IAW02344-0098   POINT(-91.92294 42.70254)
+Simple feature collection with 6 features and 1 field
+Attribute-geometry relationship: 1 constant, 0 aggregate, 0 identity
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+epsg (SRID):    4269
+proj4string:    +proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs
+        SITE_ID                    geometry
+13        CC0001  POINT(-104.76432 39.35901)
+14 IAW02344-0096 POINT(-94.089731 41.950878)
+15 IAW02344-0096 POINT(-94.089731 41.950878)
+16 IAW02344-0097 POINT(-95.400885 41.332723)
+17 IAW02344-0097 POINT(-95.400885 41.332723)
+18 IAW02344-0098   POINT(-91.92294 42.70254)
 ```
 
 We can do simple plotting just as with `sp` spatial objects. `sf` by default creates a multi-panel lattice plot much like the `sp` package `spplot` function - either plot particular columns in multiple plots or specify the `geometry` column to make a single simple plot.  Note how it's easy to use graticules as a parameter for `plot` in `sf`. 
@@ -135,7 +161,7 @@ plot(wsa_plains[c(38,46)],graticule = st_crs(wsa_plains), axes=TRUE)
 plot(wsa_plains['geometry'], main='Keeping things simple',graticule = st_crs(wsa_plains), axes=TRUE)
 ```
 
-And `ggplot2` now supports directly plotting `sf` features using `sf_geom`:
+And `ggplot2` now supports directly plotting `sf` features using `sf_geom` - another step forward in streamling our work with spatial data in `sf`:
 
 ```r
 ggplot(wsa_plains) +
@@ -146,6 +172,24 @@ ggplot(wsa_plains) +
 
 ![WSASites_ggplot](/AWRA_GIS_R_Workshop/figure/WSASites_ggplot.png)
 
+### A quick note on converting between `sp` and `sf`
+Converstion to and from `sp` and `sf` is quite easy (in principle!), example with our nor2k data:
+```r
+class(nor2k)
+nor2k_sf <- st_as_sf(nor2k)
+```
+```r
+Error: is.numeric(bb) && length(bb) == 4 is not TRUE
+```
+
+Wait a minute, I just said it was easy - why are we getting this error?  This is a typical example of working in R - the thing you're trying to do ends up being the exception to the rule!  Take a minute and see if you can figure out why we're getting this problem and what we need to do to fix it - answer is in SourceCode.R.  Once converted, let's convert it back to an `sp` SpatialPointsDataFrame.
+```r
+class(nor2k_sf)
+nor2k_sp <- as(nor2k_sf, "Spatial")
+class(nor2k_sp)
+```
+
+See [sp-sf Migration](https://github.com/r-spatial/sf/wiki/Migrating) also listed at end of this section under [R `sf` Resources](#R-sf-Resources) for table of equivalent `sf` commands for `sp` commands (as well as `sf` equivalents for `rgeos` and `rgdal` commands)
 
 ## Exercise 2
 ### Spatial operations - spatial subsetting and intersecting
@@ -173,6 +217,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
 
+###Spatial subsetting 
 Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
 ```r
@@ -229,6 +274,7 @@ By default `st_joins` will perform a left join (return all rows in the left, 'jo
 
 For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently face - assign attribute information from some spatial unit for points within the unit.
 
+So we're asking, in code below, what is the state for each WSA site based on where it lands?
 ```r
 # Use column indexing to subset just a couple attribute columns - need to keep geometry column!
 wsa_plains <- wsa_plains[c(1:4,60)]
@@ -238,26 +284,26 @@ head(wsa_plains)
 ```
 
 ```
-##simple feature collection with 6 features and 16 fields
-##geometry type:  POINT
-##dimension:      XY
-##bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
-##epsg (SRID):    4326
-##proj4string:    +proj=longlat +datum=WGS84 +no_defs
-##         SITE_ID YEAR VISIT_NO               SITENAME statefp  statens    affgeoid geoid stusps     name lsad        aland
-##13        CC0001 2004        1           CHERRY CREEK      08 01779779 0400000US08    08     CO Colorado   00 268429343790
-##14 IAW02344-0096 2004        1          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##15 IAW02344-0096 2004        2          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##16 IAW02344-0097 2004        1 WEST NISHNABOTNA RIVER      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##17 IAW02344-0097 2004        2       WEST NISHNABOTNA      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##18 IAW02344-0098 2004        1  UNN TRIB. OTTER CREEK      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
-##       awater state_name state_abbr jurisdiction_type                   geometry
-##13 1175112870   Colorado         CO             state POINT (-104.7643 39.35901)
-##14 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
-##15 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
-##16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
-##17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
-##18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
+simple feature collection with 6 features and 16 fields
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -104.7643 ymin: 39.35901 xmax: -91.92294 ymax: 42.70254
+epsg (SRID):    4326
+proj4string:    +proj=longlat +datum=WGS84 +no_defs
+         SITE_ID YEAR VISIT_NO               SITENAME statefp  statens    affgeoid geoid stusps     name lsad        aland
+13        CC0001 2004        1           CHERRY CREEK      08 01779779 0400000US08    08     CO Colorado   00 268429343790
+14 IAW02344-0096 2004        1          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+15 IAW02344-0096 2004        2          BEAVER BRANCH      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+16 IAW02344-0097 2004        1 WEST NISHNABOTNA RIVER      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+17 IAW02344-0097 2004        2       WEST NISHNABOTNA      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+18 IAW02344-0098 2004        1  UNN TRIB. OTTER CREEK      19 01779785 0400000US19    19     IA     Iowa   00 144667643793
+       awater state_name state_abbr jurisdiction_type                   geometry
+13 1175112870   Colorado         CO             state POINT (-104.7643 39.35901)
+14 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+15 1077808017       Iowa         IA             state POINT (-94.08973 41.95088)
+16 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+17 1077808017       Iowa         IA             state POINT (-95.40089 41.33272)
+18 1077808017       Iowa         IA             state POINT (-91.92294 42.70254)
 ```
 Let's dive a little deeper with spatial joins and bring in some water quality data using the [dataRetrieval](https://github.com/USGS-R/dataRetrieval) package to access data via web services on the [Water Quality Portal](https://www.waterqualitydata.us/). Steps shown here follow examples in the [tutorial](http://usgs-r.github.io/dataRetrieval).
  
@@ -273,7 +319,7 @@ siteInfo <- attr(IowaNitrogen, "siteInfo")
 unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
 ```
 
-Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions?
+Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions? Take a few minutes and try to follow what each of the chained operations are doing on this Iowa nitrogen data.
 
 ```r
 IowaSummary <- IowaNitrogen %>%
@@ -303,6 +349,7 @@ plot(iowa_wq, add=T, col='red')
 
 ![Iowa_WQ_sites.png](/AWRA_GIS_R_Workshop/figure/Iowa_WQ_sites.png)
 
+### Proximity analysis
 Now let's try to join this water quality nitrogen data in a given proximity to WSA sampled sites. We'll first need to transform the data to a projected coordinate system since we'll be using distance in our join this time.  `sf` can make use of both `proj4` strings and epsg codes - to find the epsg code for UTM zone 15 in Iowa which we're using here just search on [spatialreference.org](http://spatialreference.org/). Note our projection is in meters so we set our distance very high - obviously we wouldn't join water quality sites tens to hundreds of kilometers away to other sites using euclidean distance for a real application - this is just for illustrative purposes to show how we can do distance based joins in `sf`.
 
 ```r
@@ -391,10 +438,10 @@ st_layers(fgdb)
 ```
 
 ```r
-##  layer_name     geometry_type features fields
-##1 state_poly     Multi Polygon     2825      4
-##2   cob_poly     Multi Polygon       75      5
-##3    cob_arc Multi Line String      399      8
+  layer_name     geometry_type features fields
+1 state_poly     Multi Polygon     2825      4
+2   cob_poly     Multi Polygon       75      5
+3    cob_arc Multi Line String      399      8
 ```
 ```r
 # Read the feature class
@@ -402,19 +449,26 @@ state_poly = st_read(dsn=fgdb,layer="state_poly")
 state_poly$SHAPE
 ```
 
-## R `sf` Resources<a name="R-sf-Resources"></a>:
+ R `sf` Resources<a name="R-sf-Resources"></a>:
 
 - [Simple Features for R](https://r-spatial.github.io/sf/index.html)
 
 - [GitHub Simple Features Repo](https://github.com/edzer/sfr)
 
 - [Spatial Data in R: New Directions](https://edzer.github.io/UseR2017/)
+
+- [sp-sf Migration](https://github.com/r-spatial/sf/wiki/Migrating)
     
 - [Geocomputation with R](https://geocompr.robinlovelace.net/)
     
 - [First Impressions From SF](https://geographicdatascience.com/2017/01/06/first-impressions-from-sf-the-simple-features-r-package/)
 
 - [Introduction to Mapping and Spatial Analysis with R](https://cengel.github.io/rspatial/)
+
+- [Simple Features: Building Spatial Data Pipelines in R](https://www.azavea.com/blog/2017/08/30/spatial-analysis-pipelines-in-r-with-simple-features/)
+
+- [Tidy spatial data in R: using dplyr, tidyr, and ggplot2 with sf](http://strimas.com/r/tidy-sf/)
+
     
     
     

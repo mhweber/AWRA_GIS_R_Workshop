@@ -85,7 +85,7 @@ getwd()
 Which should return something like:
 
 ```r
-## [1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
+[1] "/home/marc/GitProjects/AWRA_GIS_R_Workshop"
 ```
 
 To see what is in the directory:
@@ -108,7 +108,7 @@ class(iris)
 ```
 
 ```r
-## [1] "data.frame"
+[1] "data.frame"
 ```
 
 ```r
@@ -116,15 +116,95 @@ str(iris)
 ```
 
 ```r
-## 'data.frame':	150 obs. of  5 variables:
-## $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-## $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-## $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
-## $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
-## $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+'data.frame':	150 obs. of  5 variables:
+$ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+$ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+$ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+$ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+$ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+```
+As we can see, `iris` is a data frame and is used extensively for beginning tutorials on learning R. Data frames consist of rows of observations  on columns of values for variables of interest - they are one of the fundamental and most important data structures in R. 
+
+But as we see in the result of str(iris) above, following the information that iris is a data frame with 150 observations of 5 variables, we get information on each of the variables, in this case that 4 are numeric and one is a factor with three levels.
+
+First off, R has several main data types:
+
+* logical
+* integer
+* double
+* complex
+* character
+* raw
+* list
+* NULL
+* closure (function)
+* special
+* builtin (basic functions and operators)
+* environment
+* S4 (some S4 objects)
+* others you won't run into at user level
+
+We can ask what data type something is using `typeof`:
+```r
+typeof(iris)
+```
+```r
+[1] "list"
+```
+```r
+typeof(iris$Sepal.Length)
+```
+```r
+[1] "double"
+```
+```r
+typeof(iris$Specis)
+```
+```r
+[1] "integer"
 ```
 
-As we can see, `iris` is a data frame and is used extensively for beginning tutorials on learning R. Data frames consist of rows of observations  on columns of values for variables of interest - they are one of the fundamental and most important data structures in R.
+We see a couple interesting things here - `iris`, which we just said is a data frame, is a data type of `list`.  `Sepal.Length` is data type `double`, and in `str(iris)` we saw it was numeric - that makes sense - but we see that `Species` is data type `integer`, and in `str(iris)` we were told this variable was a factor with three levels.  What's going on here?
+
+First off, `class` refers to the abstract type of an object in R, whereas `typeof` or `mode` refer to how an object is stored in memory. So iris is an object of class `data.frame`, but it is stored in memory as a list (i.e. each column is an item in a list).  Note that this allows data frames to have columns of different classes, whereas a matrix needs to be all of the same mode.
+
+For our `Species` column, We see it's `mode` is numeric, it's `typeof` is `integer`, and it's class is `factor`.  Nominal variables in R are treated as a vector of integers 1:k,  where k is the number of unique values of that nominal variable and a mapping of the character strings to these integer values.  
+
+This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!:
+```r
+levels(iris$Species)
+levels(iris$Species)[1] <- 'sibirica'
+```
+
+See if you can explain how that re-asignment we just did worked.
+
+To access particular columns in a data frame, as we saw above, we use the `$` operator - we can see the value for `Species` for each observation in `iris by doing:
+```r
+iris$Species
+```
+
+To access particular columns or rows of a data frame, we use indexing:
+```r
+iris[1,3] # the 1st row and the 3rd column
+```
+```r
+[1] 1.4
+```
+```r
+iris[4,5] # the 4th row and the 5th column
+```
+```r
+[1] sibirica
+Levels: sibirica versicolor virginica
+```
+
+A handy function is `names`, which you can use to get or to set data frame variable names:
+```r
+names(iris)
+names(iris)[1] <- 'Length of Sepal'
+```
+
+Explain what this last line did
 
 ### Overview of Classes and Methods
 
@@ -171,24 +251,24 @@ getClass("Spatial")
 ```
 
 ```r
-## Class "Spatial" [package "sp"]
-## 
-## Slots:
-##                               
-## Name:         bbox proj4string
-## Class:      matrix         CRS
-## 
-## Known Subclasses: 
-## Class "SpatialPoints", directly
-## Class "SpatialGrid", directly
-## Class "SpatialLines", directly
-## Class "SpatialPolygons", directly
-## Class "SpatialPointsDataFrame", by class "SpatialPoints", distance 2
-## Class "SpatialPixels", by class "SpatialPoints", distance 2
-## Class "SpatialGridDataFrame", by class "SpatialGrid", distance 2
-## Class "SpatialLinesDataFrame", by class "SpatialLines", distance 2
-## Class "SpatialPixelsDataFrame", by class "SpatialPoints", distance 3
-## Class "SpatialPolygonsDataFrame", by class "SpatialPolygons", distance 2
+Class "Spatial" [package "sp"]
+ 
+Slots:
+                               
+Name:         bbox proj4string
+Class:      matrix         CRS
+ 
+Known Subclasses: 
+Class "SpatialPoints", directly
+Class "SpatialGrid", directly
+Class "SpatialLines", directly
+Class "SpatialPolygons", directly
+Class "SpatialPointsDataFrame", by class "SpatialPoints", distance 2
+Class "SpatialPixels", by class "SpatialPoints", distance 2
+Class "SpatialGridDataFrame", by class "SpatialGrid", distance 2
+Class "SpatialLinesDataFrame", by class "SpatialLines", distance 2
+Class "SpatialPixelsDataFrame", by class "SpatialPoints", distance 3
+Class "SpatialPolygonsDataFrame", by class "SpatialPolygons", distance 2
 ```
 
 Next we'll delve a bit deeper into the spatial objects inhereting from the base spatial class and try creating some simple objects.  Here's a schematic of how spatial lines and polygons inherit from the base spatial class - again, from the Bivand book:
@@ -202,17 +282,17 @@ getClass("SpatialPolygons")
 ```
 
 ```r
-## Class "SpatialPolygons" [package "sp"]
-## 
-## Slots:
-##                               
-## Name:     polygons   plotOrder        bbox proj4string
-## Class:        list     integer      matrix         CRS
-## 
-## Extends: "Spatial" 
-## 
-## Known Subclasses: 
-## Class "SpatialPolygonsDataFrame", directly, with explicit coerce
+Class "SpatialPolygons" [package "sp"]
+
+Slots:
+                              
+Name:     polygons   plotOrder        bbox proj4string
+Class:        list     integer      matrix         CRS
+
+Extends: "Spatial" 
+
+Known Subclasses: 
+Class "SpatialPolygonsDataFrame", directly, with explicit coerce
 ```
 
 Also, there are a number of spatial methods you can use with classes in `sp` - here are some useful ones to familarize yourself with:
@@ -237,7 +317,9 @@ data(nor2k)
 plot(nor2k,axes=TRUE)
 ```
 
-Take a few minutes to examine the nor2k `SpatialPointsDataFrame` and try using methods we've seen such as `class()`, `str()`, `typeof()`, `proj4string()`, etc.  A hint - which we’ll use more - to access slots in a new style S4 object, use the @ symbol.
+Take a few minutes to examine the nor2k `SpatialPointsDataFrame` and try using methods we've seen such as `class()`, `str()`, `typeof()`, `proj4string()`, etc.  
+
+A big part of working with spatial data in `sp` is understanding slots, and understanding how we access slots. The easiest way to access particular slots in an `sp` object is to use the @ symbol.  You can also use the slotNames method. Take a few minutes using both to explore the structure of this simple `sp` object.
 
 ## Exercise 2
 ### Building and Manipulating Spatial Data in R
@@ -351,32 +433,24 @@ summary(StreamGages)
 ```
 
 ```r
-## Object of class SpatialPointsDataFrame
-## Coordinates:
-##                 min        max
-## LON_SITE -124.66912 -110.44111
-## LAT_SITE   41.42768   49.00075
-## Is projected: FALSE
-## proj4string :
-## [+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0]
-## Number of points: 2771
-## Data attributes:
-##   SOURCE_FEA              EVENTTYPE                                           STATION_NM  
-##  Min.   :  10361700   StreamGage:2771   ABERDEEN-SPRINGFIELD CANAL NR SPRINGFIELD ID:   1 ##  
-##  1st Qu.:  12331050                     ABERDEEN WASTE NR ABERDEEN ID               :   1 ##  
-##  Median :  13069000                     ABERNATHY CREEK NEAR LONGVIEW, WA           :   1 ##  
-##  Mean   :  14573679                     AENEAS LAKE NEAR TONASKET, WA               :   1 ##  
-##  3rd Qu.:  13349362                     AGENCY CREEK NEAR JOCKO, MT                 :   1 ##  
-##  Max.   :1315377299                     Agency Creek near Jocko MT (2)              :   1 ##  
-##                                         (Other)                                     :2765 ##  
-##      STATE     
-##  WA     :1054  
-##  ID     : 800  
-##  OR     : 622  
-##  MT     : 220  
-##  WY     :  52  
-##  NV     :  19  
-##  (Other):   4  
+Object of class SpatialPointsDataFrame
+Coordinates:
+                min        max
+LON_SITE -124.66912 -110.44111
+LAT_SITE   41.42768   49.00075
+Is projected: FALSE 
+proj4string :
+[+proj=longlat +datum=NAD83 +ellps=GRS80 +towgs84=0,0,0]
+Number of points: 2771
+Data attributes:
+   SOURCE_FEA             EVENTTYPE                                           STATION_NM       STATE     
+ Min.   :1.036e+07   StreamGage:2771   ABERDEEN-SPRINGFIELD CANAL NR SPRINGFIELD ID:   1   WA     :1054  
+ 1st Qu.:1.233e+07                     ABERDEEN WASTE NR ABERDEEN ID               :   1   ID     : 800  
+ Median :1.307e+07                     ABERNATHY CREEK NEAR LONGVIEW, WA           :   1   OR     : 622  
+ Mean   :1.457e+07                     AENEAS LAKE NEAR TONASKET, WA               :   1   MT     : 220  
+ 3rd Qu.:1.335e+07                     Agency Creek near Jocko MT (2)              :   1   WY     :  52  
+ Max.   :1.315e+09                     AGENCY CREEK NEAR JOCKO, MT                 :   1   NV     :  19  
+                                       (Other)                                     :2765   (Other):   4  
 ```
 
 Summary method gives a description of the spatial object in R. Summary works on pretty much all objects in R - for spatial data, gives us basic information about the projection, coordinates, and data for an `sp` object if it's a spatial data frame object.
@@ -440,7 +514,7 @@ plot(StreamGages[StreamGages$STATE=='ID',],add=TRUE,col="Green")
 
 Now let's load the Rdata object we downloaded at beginning of this session - Rdata files are just a handy way of saving and reloading your workspace - remember, R works with objects in memory, you can save them out in this format or share with others this way.
 
-Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`
+Let's look at a `SptialPolygonsDataframe` of HUCs and dig into slot structure for polygon data in `sp`.  For a more complex object like a `SptialPolygonsDataframe` there is a hierarchy of slots we need to understand.
 
 ```r
 load("HUCs.RData")
@@ -453,12 +527,13 @@ head(HUCs@data) #the data frame slot
 HUCs@bbox #call on slot to get bbox
 ```
 
-Try to figure out what the following lines of code doing - welcome to the wonderful world of slots in R. Take a minute and look at and run examples at bottom of help when you run help(slotNames) - it will help make more sense of things.
+Try to figure out what the following lines of code doing - welcome to the wonderful world of slots in R. Take a minute to look at and run examples at bottom of help when you run help(slotNames) - it will help make more sense of things.
 ```r
 # Each polygon element has 5 of it's own slots:
 HUCs@polygons[[1]]
 slotNames(HUCs@polygons[[1]])
 HUCs@polygons[[1]]@labpt
+# This is how we access the area of the first feature in HUCs
 HUCs@polygons[[1]]@Polygons[[1]]@area
 ```
 
@@ -466,8 +541,21 @@ What are the slots within each element of the HUCs SpatialPolygonDataFrame objec
 
 What method do you use to list them?
 
+What is the length of HUCs@polygons?
+
+Note that we can also make use of the `gArea` function in the `rgeos` package. Below we load the `rgeos` function, and the gArea function expects a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
+
+```r
+library(rgeos)
+HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
+gArea(HUCs) #Total area of all features
+gArea(HUCs[1,]) # Area of the first feature, equivalent to:
+HUCs@polygons[[1]]@area
+gArea(HUCs[2,]) # Area of the second feature, equivalent to:
+HUCs@polygons[[2]]@area
+```
 How would we code a way to extract the HUCs polygon with the smallest area? 
-Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file.
+Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file. Many of you are likely not familiar with the apply family of functions in R - it is well worth getting to know them.  [This answer](https://stackoverflow.com/questions/3505701/grouping-functions-tapply-by-aggregate-and-the-apply-family) to a question on Stackoverflow is a fanctastic description.
 
 
 Using the `over` function, we can find out what HUC every stream gage is in quite easily:
@@ -475,19 +563,26 @@ Using the `over` function, we can find out what HUC every stream gage is in quit
 ```r
 StreamGages <- spTransform(StreamGages, CRS(proj4string(HUCs)))
 gage_HUC <- over(StreamGages,HUCs, df=TRUE)
+# We have a data frame of results, next we match it back to our StreaGages 
 StreamGages$HUC <- gage_HUC$HUC_8[match(row.names(StreamGages),row.names(gage_HUC))]
 head(StreamGages@data)
 ```
 
 There's a fair bit to unpack there, so ask questions!
 
-A method for getting total area of our HUCs might use the `rgeos` package and the `getArea` function. Below we load the `rgeos` function, and in order to get area we have to have HUCs in a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
-
+We can join tabular attributes to our spatial data - let's say we have flow data for our gages we want to join
 ```r
-library(rgeos)
-HUCs <- spTransform(HUCs,CRS("+init=epsg:2991"))
-gArea(HUCs)
+gage_flow <- read.csv("Gages_flowdata.csv")
+StreamGages$AVE <- gage_flow$AVE[match(StreamGages$SOURCE_FEA,gage_flow$SOURCE_FEA)] # add a field for average flow
 ```
+
+We can use `over` to do a summary like 'calculate the average flow within all HUCs of the gage average stream flows' or get total flow - look at head of the two results:
+```r
+HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
+HUC.Flow <- over(HUCs,StreamGages[5],fn = sum)
+```
+
+See the SourceCode.R file if you want for an extra example of performing a dissolve operation on the HUCS data.
 
 ## Reading in Spatial Data<a name="reading-in-Spatial-Data"></a>
 You'll typically want to read and write shapefiles and geodatabase features when working in R - `rgdal` is the workhorse for this.  To see what vector data formats you can read / write using rdal, type:
@@ -561,6 +656,8 @@ plot(cob_poly, add=TRUE, border='red')
 - [Using R as a GIS Tutorial](https://github.com/Pakillo/R-GIS-tutorial/blob/master/R-GIS_tutorial.md)
     
 - [The R Spatial Cheat Sheet](http://www.maths.lancs.ac.uk/~rowlings/Teaching/UseR2012/cheatsheet.html_)
+
+- [DataCamp Spatial Analysis in R Course](https://www.datacamp.com/courses/working-with-geospatial-data-in-r)
 
 
 

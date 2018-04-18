@@ -11,7 +11,7 @@ If don’t already have ArcGIS, you can get a free 21 day trial [here](http://ww
 **Using R and ArcGIS together**:
 The most effective way to leverage the combined value of ArcGIS and R is to use the R-ArcGIS bridge, an open source project providing a seamless two-way data bridge between R and ArcGIS. The bridge also allows R scripts to be run from ArcGIS as geoprocessing tools.
 The R-ArcGIS bridge works with versions beginning at R 3.2.2 , ArcMap 10.3.1, ArcGIS Pro 1.1, or later.
-The bridge supports feature, raster, and tabular data from ArcGIS. This can be data on your local disk as well as URLs to feature services and image services. The bridge support data objects of the most common spatial packages: sp, sf, and raster, along with R data frame objects. The usage is very similar to standard R syntax. 
+The bridge supports feature, raster, and tabular data from ArcGIS. This can be data on your local disk as well as URLs to feature services and image services. The bridge supports data objects of the most common spatial packages: sp, sf, and raster, along with R data frame objects. The usage is very similar to standard R syntax. 
 
 **Open ArcGIS data**:
 ```r
