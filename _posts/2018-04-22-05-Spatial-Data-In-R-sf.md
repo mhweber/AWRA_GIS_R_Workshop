@@ -103,7 +103,7 @@ wsa_plains <- wsa %>%
 ```
 
 ### dplyr
-In this section we'll use dplyr several times, so let's just review the 'verbs' in `dplyr` - and keep in mind, they operate on the attribute data in our `sf` data frame and leave the geometries untouched.
+In this section we'll use dplyr several times, so let's just review the 'verbs' in `dplyr` - these methods operate just on the attribute data in our `sf` data frame and leave the geometries untouched.
 * select() keeps only certain variables
 * rename() renames a variable and leaves all others unchanged
 * filter() returns rows that match a certain condition(s)
@@ -113,7 +113,9 @@ In this section we'll use dplyr several times, so let's just review the 'verbs' 
 * slice() selects rows based on row number
 * sample_n() samples n features randomly
 
-Because this dataframe has coordinate information, we can then promotote it to an `sf` spatial object.
+Others, such as `summarise`, will actually aggregate (union) underlying geometry - again, see Edzer Pebesma's [Spatial Data in R: New Directions post](https://edzer.github.io/UseR2017/#tidyverse-list-columns) at end for details.
+
+Because both the wsa and wsa_plains dataframes have coordinate information, we can then promotote either of them to an `sf` spatial object.
 ```r
 wsa_plains = st_as_sf(wsa_plains, coords = c("LON_DD", "LAT_DD"), crs = 4269,agr = "constant")
 str(wsa_plains)
@@ -176,8 +178,11 @@ Converstion to and from `sp` and `sf` is quite easy (in principle!), example wit
 class(nor2k)
 nor2k_sf <- st_as_sf(nor2k)
 ```
+```r
+Error: is.numeric(bb) && length(bb) == 4 is not TRUE
+```
 
-Wait a minute, I just said it was easy - why are we getting this error?  This is a typical example of working with R - the thing you're trying to do ends up being the exception to the rule!  Take a minute and see if you can figure out why we're getting this problem and what we need to do to fix it - answer in SourceCode.R.  Once converted, let's convert it back to an `sp` SpatialPointsDataFrame.
+Wait a minute, I just said it was easy - why are we getting this error?  This is a typical example of working in R - the thing you're trying to do ends up being the exception to the rule!  Take a minute and see if you can figure out why we're getting this problem and what we need to do to fix it - answer is in SourceCode.R.  Once converted, let's convert it back to an `sp` SpatialPointsDataFrame.
 ```r
 class(nor2k_sf)
 nor2k_sp <- as(nor2k_sf, "Spatial")
@@ -212,6 +217,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
 
+###Spatial subsetting 
 Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
 ```r
@@ -267,6 +273,7 @@ Spatial joining in R is an incredibly handy thing and is simple with `st_joins`.
 
 For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently need - to assign attribute information from some spatial unit for points within the unit.
 
+So we're asking, in code below, what is the state for each WSA site based on where it lands?
 ```r
 # Use column indexing to subset just a couple attribute columns - need to keep geometry column!
 wsa_plains <- wsa_plains[c(1:4,60)]
@@ -311,7 +318,7 @@ siteInfo <- attr(IowaNitrogen, "siteInfo")
 unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
 ```
 
-Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions?
+Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions? Take a few minutes and try to follow what each of the chained operations are doing on this Iowa nitrogen data.
 
 ```r
 IowaSummary <- IowaNitrogen %>%
@@ -341,6 +348,7 @@ plot(iowa_wq, add=T, col='red')
 
 ![Iowa_WQ_sites.png](/AWRA_GIS_R_Workshop/figure/Iowa_WQ_sites.png)
 
+### Proximity analysis
 Now let's try to join this water quality nitrogen data in a given proximity to WSA sampled sites. We'll first need to transform the data to a projected coordinate system since we'll be using distance in our join this time.  `sf` can make use of both `proj4` strings and epsg codes - to find the epsg code for UTM zone 15 in Iowa which we're using here just search on [spatialreference.org](http://spatialreference.org/). Note our projection is in meters so we set our distance very high - obviously we wouldn't join water quality sites tens to hundreds of kilometers away to other sites using euclidean distance for a real application - this is just for illustrative purposes to show how we can do distance based joins in `sf`.
 
 ```r

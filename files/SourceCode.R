@@ -338,7 +338,13 @@ iowa_wq <- st_transform(iowa_wq, crs=26915)
 
 wsa_wq = st_join(wsa_iowa, iowa_wq, st_is_within_distance, dist = 50000)
 
+
 # Exercise 4
+
+wsa_wq_mean <- wsa_wq %>%
+  dplyr::group_by(SITE_ID) %>%
+  dplyr::summarize(MeanCond = mean(mean, na.rm = TRUE))
+
 download <- getURL("https://www.epa.gov/sites/production/files/2014-10/waterchemistry.csv")
 
 wsa_chem <- read.csv(text = download)
