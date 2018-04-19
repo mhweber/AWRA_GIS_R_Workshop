@@ -13,7 +13,7 @@ So, to begin, what is R and why should we use R for spatial analysis?  Let's bre
 - Automation and recording of workflow (reproducibility)
 - Optimized work flow - data manipulation, analysis and visualization all in one place
 - R does not alter underlying data - manipulation and visualization in memory
-- R is great for repetative graphics
+- R is great for repetetive graphics
 
 ![History of R](/AWRA_GIS_R_Workshop/figure/History of R.png)
 
@@ -170,7 +170,7 @@ First off, `class` refers to the abstract type of an object in R, whereas `typeo
 
 For our `Species` column, We see it's `mode` is numeric, it's `typeof` is `integer`, and it's class is `factor`.  Nominal variables in R are treated as a vector of integers 1:k,  where k is the number of unique values of that nominal variable and a mapping of the character strings to these integer values.  
 
-This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!:
+This allows us to quickly see see all the unique values of a particular nominal variable or quickly re-asign a level of a nominal variable to a new value - remember, everything in R is in memory, so don't worry about tweaking the data!
 ```r
 levels(iris$Species)
 levels(iris$Species)[1] <- 'sibirica'
