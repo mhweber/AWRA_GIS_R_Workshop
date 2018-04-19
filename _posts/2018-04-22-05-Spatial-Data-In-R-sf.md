@@ -204,15 +204,47 @@ states <- states[!states$state_abbr %in% c('AK','PR','HI'),]
 
 st_crs(states)
 st_crs(wsa_plains)
-# They're not equal, which we verify with:
-st_crs(states) == st_crs(wsa_plains)
-# We'll tranfsorm the WSA sites to same CRS as states
-wsa_plains <- st_transform(wsa_plains, st_crs(states))
+```
 
-# Now we can plot together in base R
+They're not equal, which we verify with:
+```r
+st_crs(states) == st_crs(wsa_plains)
+```
+
+We'll tranfsorm the WSA sites to same CRS as states
+```r
+wsa_plains <- st_transform(wsa_plains, st_crs(states))
+```
+
+Now we can plot together in base R
+```r
 plot(states$geometry, axes=TRUE)
 plot(wsa_plains$geometry, col='blue',add=TRUE)
 ```
+
+### Quick exercise - `sf` geometry
+As I mentioned earlier, feature geometry in `sf` is a list-column.
+
+We access the geometry column using:
+states$geometry
+
+We know each element in the column is a list.
+
+The geometry column is presented as _well-known text_, in the form of:
+Multipolygon(polygon1, polygon2).
+
+polygon1 might have 1 more holes, and could be represented itself as (poly1, hole1, hole2).
+
+Each polygon and it's holes are held together by a set of parantheses, so:
+Multipolygon(((polygon1))) indicates the exterior ring coordinates, without holes, of the first polygonn.
+
+See [Edzer's simple feature geometry list-column explanation](https://r-spatial.github.io/sf/articles/sf1.html#sfc-simple-feature-geometry-list-column) for more details.
+
+Knowing all this, see if you can figure out how we would:
+* Show the geometry of the first multipolygon feature in states
+* Show the coordinates of the 1st polygon of the first multipolygon in states
+* Show the first 3 coordinate pairs of the first polygon of the second multi-polygon feature in states
+* Plot just the first multipolygon feature in states
 
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 

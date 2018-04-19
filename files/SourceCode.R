@@ -25,11 +25,11 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "NLCD_OR_2011.Rdata",
               method="auto",
               mode="wb")
-unzip("WorkshopData.zip", exdir = "/home/marc")
+unzip("WorkshopData.zip", exdir = ".")
 
 getwd()
 dir()
-setwd("/home/marc/GitProjects")
+setwd("/home/marc/GitProjects") # use your own directory path
 class(iris)
 str(iris)
 
@@ -282,6 +282,15 @@ wsa_plains <- st_transform(wsa_plains, st_crs(states))
 
 plot(states$geometry, axes=TRUE)
 plot(wsa_plains$geometry, col='blue',add=TRUE)
+
+
+states$geometry[[1]]
+st_geometry(states)[[1]]
+states$geometry[[1]][[1]]
+st_geometry(states)[[1]][[1]]
+#or
+st_geometry(states)[[2]][[1]][[1]][1:3,]
+plot(states$geometry[[1]])
 
 plains_states <- states[wsa_plains,]
 

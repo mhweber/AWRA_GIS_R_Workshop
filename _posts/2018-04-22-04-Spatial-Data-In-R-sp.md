@@ -69,7 +69,7 @@ download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/file
               "NLCD_OR_2011.RData",
               method="auto",
               mode="wb")
-unzip("WorkshopData.zip", exdir = "/home/marc")              
+unzip("WorkshopData.zip", exdir = ".")              
 ```
 
 
