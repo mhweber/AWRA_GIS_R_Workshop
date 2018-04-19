@@ -543,7 +543,7 @@ What method do you use to list them?
 
 What is the length of HUCs@polygons?
 
-Note that we can also make use of the `gArea` function in the `rgeos` package. Below we load the `rgeos` function, and the gArea function expects a planar CRS.  Let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
+Note that we can also make use of the `gArea` function in the `rgeos` package. `gArea` expects a planar CRS, so let's transform to Oregon Lambert, but let' use the epsg code (which we can look up on [spatialreference.org](http://spatialreference.org/)) rather than passing a projection string to `spTransform`:
 
 ```r
 library(rgeos)
