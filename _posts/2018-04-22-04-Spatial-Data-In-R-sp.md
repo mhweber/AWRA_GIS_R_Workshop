@@ -488,7 +488,7 @@ Dealing with coordinate reference systems and projections is a big part of worki
         - To get the CRS: projection(x)
         - To transform CRS: projectRaster(x)
 
-We can use the generic plot function in R to produce a quick plot as wellas add axes - axes option puts box around region
+We can use the generic plot function in R to produce a quick plot as well as add axes - axes option puts box around region
 ```r
 plot(StreamGages, axes=TRUE, col='blue') 
 ```
