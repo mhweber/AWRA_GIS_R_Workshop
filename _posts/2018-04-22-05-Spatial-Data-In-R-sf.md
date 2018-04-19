@@ -221,6 +221,7 @@ Now we can plot together in base R
 plot(states$geometry, axes=TRUE)
 plot(wsa_plains$geometry, col='blue',add=TRUE)
 ```
+![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
 ### Quick exercise - `sf` geometry
 As I mentioned earlier, feature geometry in `sf` is a list-column.
@@ -245,9 +246,6 @@ Knowing all this, see if you can figure out how we would:
 * Show the coordinates of the 1st polygon of the first multipolygon in states
 * Show the first 3 coordinate pairs of the first polygon of the second multi-polygon feature in states
 * Plot just the first multipolygon feature in states
-
-![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
-
 
 ### Spatial subsetting 
 Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
