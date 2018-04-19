@@ -217,7 +217,7 @@ plot(wsa_plains$geometry, col='blue',add=TRUE)
 ![States_WSASites.png](/AWRA_GIS_R_Workshop/figure/States_WSASites.png)
 
 
-###Spatial subsetting 
+### Spatial subsetting 
 Spatial subsetting is an essential spatial task and can be performed just like attribute subsetting in `sf`.  Say we want to pull out just the states that intersect our 'wsa_plains' sites that we've subset via an attribute query - it's as simple as:
 
 ```r
@@ -274,7 +274,7 @@ By default `st_joins` will perform a left join (return all rows in the left, 'jo
 
 For this simple example, we'll strip out the state and most other attributes from our WSA sites we've been using, and then use the states `sf` file in a spatial join to get state for each site spatially.  This is a typical task many of us frequently face - assign attribute information from some spatial unit for points within the unit.
 
-So we're asking, in code below, what is the state for each WSA site based on where it lands?
+So we're asking, in code below, "what state is each WSA site in?", based on where it is located.
 ```r
 # Use column indexing to subset just a couple attribute columns - need to keep geometry column!
 wsa_plains <- wsa_plains[c(1:4,60)]
@@ -319,7 +319,7 @@ siteInfo <- attr(IowaNitrogen, "siteInfo")
 unique(IowaNitrogen$ResultMeasure.MeasureUnitCode)
 ```
 
-Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the dplyr functions are being called here - why might that be needed as oppossed to typical way of calling functions? Take a few minutes and try to follow what each of the chained operations are doing on this Iowa nitrogen data.
+Next we need to take this raw data and do some filtering and summarizing to get data we can use for mapping and joining with the WSA data we've been using so far. Spend a little time and see if you can follow what we're doing below - notice the way the `dplyr` functions are being called here - why might that be needed as oppossed to typical way of calling functions? Take a few minutes and try to follow what each of the chained operations are doing on this Iowa nitrogen data.
 
 ```r
 IowaSummary <- IowaNitrogen %>%
@@ -365,7 +365,11 @@ You'll see if you do `head` on your data there are a LOT of fields in there now 
 ## Exercise 4
 ### Spatial operations - aggregation
 
-Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  What happened in the previous spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  So let's aggregate results using dplyr - take a few minutes and see if you can figure out how on your own! The answer is in the SourceCode.R file, but try a bit on your own first, and then if needed run and try to follow the anwer code in SourceCode.R file.
+Now that we've joined water quality data based on proximity to our WSA sample sites, we can aggregate the results for each WSA site.  
+
+What happened in the previous spatial join step we performed was that we generated a new record for every water quality site within the proximity we gave to our WSA sites - check the number of records in the wsa_iowa data versus the number of records in our join result - we haved repeated records for unique WSA sites.  
+
+So let's aggregate results using dplyr - take a few minutes and see if you can figure out how on your own! The answer is in the SourceCode.R file, but try a bit on your own first, and then if needed run and try to follow the anwer code in SourceCode.R file.
 
 
 For performing spatial aggregation, the idea is to take some spatial data, and summarize that data in relation to another spatial grouping variable (think city populations averaged by state).  Using some of the data we've used in previous steps, we can accomplish this in a couple of ways.
