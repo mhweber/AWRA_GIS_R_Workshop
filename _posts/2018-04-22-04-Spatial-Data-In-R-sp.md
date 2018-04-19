@@ -554,10 +554,11 @@ HUCs@polygons[[1]]@area
 gArea(HUCs[2,]) # Area of the second feature, equivalent to:
 HUCs@polygons[[2]]@area
 ```
+
 How would we code a way to extract the HUCs polygon with the smallest area? 
 Hint - apply family of functions and slots - try on your own and then take a look at the function that I included as part of HUCs.RData file. Many of you are likely not familiar with the apply family of functions in R - it is well worth getting to know them.  [This answer](https://stackoverflow.com/questions/3505701/grouping-functions-tapply-by-aggregate-and-the-apply-family) to a question on Stackoverflow is a fanctastic description.
 
-
+### Spatial Overlay
 Using the `over` function, we can find out what HUC every stream gage is in quite easily:
 
 ```r
@@ -570,12 +571,14 @@ head(StreamGages@data)
 
 There's a fair bit to unpack there, so ask questions!
 
+### Joining
 We can join tabular attributes to our spatial data - let's say we have flow data for our gages we want to join
 ```r
 gage_flow <- read.csv("Gages_flowdata.csv")
 StreamGages$AVE <- gage_flow$AVE[match(StreamGages$SOURCE_FEA,gage_flow$SOURCE_FEA)] # add a field for average flow
 ```
 
+### Overlay and aggregation
 We can use `over` to do a summary like 'calculate the average flow within all HUCs of the gage average stream flows' or get total flow - look at head of the two results:
 ```r
 HUC.Flow <- over(HUCs,StreamGages[5],fn = mean)
