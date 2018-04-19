@@ -12,7 +12,6 @@ Install all of the following packages in R:
 Install all of the following packages in R - note that for both `sf` and `tidyverse` - and specificallly `ggplot2` in `tidyverse`, I've indicated the alternative install from GitHub rather than CRAN.  This is optional, as is installing devtools, and you will be fine with the CRAN version of packages, except that you will not be able to reproduce one of the example plots in the `sf` section that uses `sf_geom` funtion from the development version of `ggplot2`. Note that `tidyverse` is a 'meta-package' that includes several specific packages such as `ggplot2`, `dplyr`, and `tidyr`.
 ```r
 install.packages("devtools") # optional but needed for using install_github
->>>>>>> 2efad4a3b3a41c2d4c97ad2ba6edd5c39a2c53f5
 install.packages("rgdal")
 install.packages("rgeos")
 install.packages("raster")
@@ -40,7 +39,7 @@ install.packages("rasterVis")
 install.packages("landsat")
 install.packages("plotly")
 install.packages("leaflet")
-```r
+```
 
 Installing `rgdal` will install the foundation spatial package, `sp`, as a dependency, and installing `tidyverse` will install both `ggplot2` and `dplyr`.
 
@@ -50,7 +49,7 @@ For Linux users, to install simple features for R (`sf`), you need GDAL >= 2.0.0
 
 You basically want to add [ubuntugis-unstable](http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu/) to the package repositories and then get those three dependencies:
 
-```
+```r
 sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 sudo apt-get install libgdal-dev libgeos-dev libproj-dev
 ```
@@ -61,7 +60,7 @@ The Simple features for R package , `sf`, also needs udunits and udunits2 which 
 
 The following should resolve:
 
-```
+```r
 sudo apt-get install libudunits2-dev
 ```
 
