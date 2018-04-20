@@ -34,7 +34,7 @@ Some drawbacks to using R for GIS work
 
 An ideal solution for many tasks is using R in conjunction with traditional GIS software.
 
-R runs on contributed packages - it has core functionality, but all the spatial work we would do in R is contained in user-contributed packages.  Primary ones you'll want to familiarize yourself with are `sp', 'rgdal', 'sf', 'rgeos', 'raster' - there are many, many more. A good source to learn about available R spatial packages is:
+R runs on contributed packages - it has core functionality, but all the spatial work we would do in R is contained in user-contributed packages.  Primary ones you'll want to familiarize yourself with are `sp`, `rgdal`, `sf`, `rgeos`, `raster` - there are many, many more. A good source to learn about available R spatial packages is:
 
 [CRAN Task View: Analysis of Spatial Data](https://cran.r-project.org/web/views/Spatial.html)
 
