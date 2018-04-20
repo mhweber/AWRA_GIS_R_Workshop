@@ -200,7 +200,7 @@ unzip("citylim_2017.zip", exdir = ".")
 citylims <- readOGR(".", "citylim_2017") # our first parameter is directory, in this case '.' for working directory, and no extension on file!
 plot(citylims, axes=T, main='Oregon City Limits') # plot it!
 
-download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","state_county_boundary.zip")
 unzip("state_county_boundary.zip", exdir = "/home/marc")
 fgdb = "state_county_boundary.gdb"
 
@@ -382,7 +382,7 @@ countries <- st_read("ne_110m_admin_0_countries.shp")
 plot(countries$geometry) # plot it!
 
 # Geodatabase Example - if you haven't already downloaded:
-download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","state_county_boundary.zip")
 unzip("state_county_boundary.zip", exdir = "/home/marc")
 fgdb = "state_county_boundary.gdb"
 
@@ -711,6 +711,12 @@ map_states + tm_shape(wsa_plains) + tm_dots()
 library(rgdal)
 library(gstat)
 library(spdep)
+
+download.file("https://github.com/mhweber/AWRA_GIS_R_Workshop/blob/gh-pages/files/ESDA.zip?raw=true",
+              "ESDA.zip",
+              method="auto",
+              mode="wb")
+unzip("ESDA.zip", exdir = ".")
 
 # The shapefile needs to be in the working directory to use '.' or you need to specify the full path in first parameter to readOGR
 wsa_plains <- readOGR(".","nplspltpl_bug")

@@ -609,7 +609,7 @@ plot(citylims, axes=T, main='Oregon City Limits') # plot it!
 Reading in geodatabases:
 ```r
 # Geodatabase Example
-download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","/home/marc/state_county_boundary.zip")
+download.file("https://www.blm.gov/or/gis/files/web_corp/state_county_boundary.zip","state_county_boundary.zip")
 unzip("state_county_boundary.zip", exdir = "/home/marc")
 fgdb = "state_county_boundary.gdb"
 
